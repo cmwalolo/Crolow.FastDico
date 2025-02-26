@@ -29,7 +29,7 @@ public class DawgSearch : IDawgSearch
             currentNode = target.First();
         }
 
-        return currentNode.Control == 1; // Return true if the node is terminal
+        return currentNode.IsEnd; // Return true if the node is terminal
     }
 
     // Search for all words beginning with a given prefix
