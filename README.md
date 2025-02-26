@@ -1,5 +1,6 @@
 # A .NET implementation of a DAWG and GADDAG dictionary. 
 ## Ultra compact on disk and in memory.
+## Ultra fast tree navigation. 
 
 The implementations includes : 
 - Dawg and GadDag Compiler
@@ -10,5 +11,5 @@ The implementations includes :
     - Wildcard search (seemless ? or *)
     - Anagram search 
     - Anagram & smaller search.
-- Basic implementation of word board game... To be continued or not ... or make it :-)
+- Basic implementation of a board wordgame... To be continued or not ... or make it :-)
 
