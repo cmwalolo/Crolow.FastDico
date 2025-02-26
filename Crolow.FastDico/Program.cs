@@ -3,8 +3,8 @@ using Crolow.Fast.Dawg.GadDag;
 using Crolow.Fast.Dawg.Interfaces;
 
 var tester = new Tester();
-//tester.TestDawg(true);
-tester.TestGadDag(false);
+tester.TestDawg(true);
+//tester.TestGadDag(true);
 public class Tester
 {
     public Tester()
@@ -17,7 +17,7 @@ public class Tester
         DawgCompiler dawg = new DawgCompiler();
         if (compile)
         {
-            List<string> words = System.IO.File.ReadAllLines("C:\\dev\\Dawg.Compiler\\GADDAG\\GADDAG\\GADDAG\\ODS9-complet.txt").Select(p => p.ToLower()).ToList();
+            List<string> words = System.IO.File.ReadAllLines("C:\\dev\\ODS9-complet.txt").Select(p => p.ToLower()).ToList();
             dawg.Build(words);
             dawg.SaveToFile("dawg_data.gz");
             Console.WriteLine($"DAWG saved to dawg_data.gz");
@@ -65,7 +65,7 @@ public class Tester
         GadDagCompiler gaddag = new GadDagCompiler();
         if (compile)
         {
-            List<string> words = System.IO.File.ReadAllLines("C:\\dev\\Dawg.Compiler\\GADDAG\\GADDAG\\GADDAG\\ODS9-complet.txt").Select(p => p.ToLower()).ToList();
+            List<string> words = System.IO.File.ReadAllLines("C:\\dev\\ODS9-complet.txt").Select(p => p.ToLower()).ToList();
             gaddag.Build(words);
             gaddag.SaveToFile("gaddag_data.gz");
             Console.WriteLine($"GADDAG saved to GADDAG_data.gz");

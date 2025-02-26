@@ -4,7 +4,7 @@ namespace Crolow.Fast.Dawg.Interfaces;
 
 public interface IDawgSearch
 {
-    DawgNode Root { get; }
+    LetterNode Root { get; }
     List<string> SearchByPattern(string pattern);
     List<string> SearchByPrefix(string prefix);
     List<string> SearchBySuffix(string suffix);

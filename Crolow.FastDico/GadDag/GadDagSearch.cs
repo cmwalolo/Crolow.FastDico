@@ -6,9 +6,9 @@ namespace Crolow.Fast.Dawg.GadDag;
 
 public class GadDagSearch : IDawgSearch
 {
-    public DawgNode Root { get; private set; }
+    public LetterNode Root { get; private set; }
 
-    public GadDagSearch(DawgNode root)
+    public GadDagSearch(LetterNode root)
     {
         Root = root;
     }
@@ -19,7 +19,7 @@ public class GadDagSearch : IDawgSearch
         return SearchWordRecursive(Root, bytes, 0, false);
     }
 
-    private bool SearchWordRecursive(DawgNode currentNode, List<byte> word, int index, bool pastPivot)
+    private bool SearchWordRecursive(LetterNode currentNode, List<byte> word, int index, bool pastPivot)
     {
         if (index == word.Count)
         {
@@ -62,7 +62,7 @@ public class GadDagSearch : IDawgSearch
         return results;
     }
 
-    private void SearchPrefixesFromNode(DawgNode node, List<byte> currentWord, List<string> results)
+    private void SearchPrefixesFromNode(LetterNode node, List<byte> currentWord, List<string> results)
     {
         if (node.IsEnd)
         {
@@ -102,7 +102,7 @@ public class GadDagSearch : IDawgSearch
         return results;
     }
 
-    private void SearchSuffixesFromNode(DawgNode node, List<byte> currentWord, List<byte> result, List<string> results)
+    private void SearchSuffixesFromNode(LetterNode node, List<byte> currentWord, List<byte> result, List<string> results)
     {
         if (node.Children.Count == 0)
         {
@@ -128,7 +128,7 @@ public class GadDagSearch : IDawgSearch
         return results;
     }
 
-    private void SearchByPatternRecursive(DawgNode currentNode, List<byte> bytePattern, int patternIndex, List<byte> currentWord, List<string> results)
+    private void SearchByPatternRecursive(LetterNode currentNode, List<byte> bytePattern, int patternIndex, List<byte> currentWord, List<string> results)
     {
         // Base case: Reached the end of the pattern
         if (patternIndex == bytePattern.Count)
@@ -220,7 +220,7 @@ public class GadDagSearch : IDawgSearch
 
     // Recursive helper for both functions
     private void FindWordsUsingLetters(
-        DawgNode currentNode,
+        LetterNode currentNode,
         List<byte> availableLetters,
         List<byte> currentWord,
         List<string> results,

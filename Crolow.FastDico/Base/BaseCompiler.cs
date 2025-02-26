@@ -4,18 +4,18 @@ namespace Crolow.Fast.Dawg.Base;
 
 public class BaseCompiler
 {
-    public DawgNode Root { get; private set; }
+    public LetterNode Root { get; private set; }
 
-    public DawgNodeBuild RootBuild { get; private set; }
+    public LetterNode RootBuild { get; private set; }
     public int BuildNodeId { get; set; }
 
 
-    private Dictionary<string, DawgNodeBuild> nodeCache;
+    private Dictionary<string, LetterNode> nodeCache;
 
     public BaseCompiler()
     {
-        Root = new DawgNode();
-        nodeCache = new Dictionary<string, DawgNodeBuild>();
+        Root = new LetterNode();
+        nodeCache = new Dictionary<string, LetterNode>();
     }
 
     public virtual void Insert(string word)
@@ -25,9 +25,9 @@ public class BaseCompiler
 
     public void Build(IEnumerable<string> words)
     {
-        nodeCache = new Dictionary<string, DawgNodeBuild>();
+        nodeCache = new Dictionary<string, LetterNode>();
         BuildNodeId = 0;
-        RootBuild = new DawgNodeBuild();
+        RootBuild = new LetterNode();
 
         foreach (var word in words)
         {
@@ -41,7 +41,7 @@ public class BaseCompiler
     {
         int processedNodes = 0;
 
-        List<DawgNodeBuild> nodesToProcess = new List<DawgNodeBuild> { RootBuild };
+        List<LetterNode> nodesToProcess = new List<LetterNode> { RootBuild };
         while (nodesToProcess.Count > 0)
         {
             processedNodes++;
@@ -66,7 +66,7 @@ public class BaseCompiler
         }
     }
 
-    private string GetNodeSignature(DawgNodeBuild node)
+    private string GetNodeSignature(LetterNode node)
     {
         // Include the letter in the signature to ensure uniqueness
         var childrenSignatures = node.Children
@@ -90,10 +90,10 @@ public class BaseCompiler
         using (GZipStream gzipStream = new GZipStream(fileStream, CompressionMode.Compress))
         using (BinaryWriter writer = new BinaryWriter(gzipStream))
         {
-            Dictionary<DawgNodeBuild, int> nodeToId = new Dictionary<DawgNodeBuild, int>();
+            Dictionary<LetterNode, int> nodeToId = new Dictionary<LetterNode, int>();
             int currentId = 0;
 
-            List<DawgNodeBuild> writeOrder = new List<DawgNodeBuild>();
+            List<LetterNode> writeOrder = new List<LetterNode>();
             CollectNodesWithIds(RootBuild, nodeToId, ref currentId, writeOrder);
 
             writer.Write(writeOrder.Count);
@@ -105,7 +105,7 @@ public class BaseCompiler
         }
     }
 
-    private void CollectNodesWithIds(DawgNodeBuild node, Dictionary<DawgNodeBuild, int> nodeToId, ref int currentId, List<DawgNodeBuild> writeOrder)
+    private void CollectNodesWithIds(LetterNode node, Dictionary<LetterNode, int> nodeToId, ref int currentId, List<LetterNode> writeOrder)
     {
         if (nodeToId.ContainsKey(node))
             return;
@@ -119,7 +119,7 @@ public class BaseCompiler
         }
     }
 
-    private void WriteNodeWithId(DawgNodeBuild node, BinaryWriter writer, Dictionary<DawgNodeBuild, int> nodeToId)
+    private void WriteNodeWithId(LetterNode node, BinaryWriter writer, Dictionary<LetterNode, int> nodeToId)
     {
         writer.Write(node.Control);
         writer.Write((byte)node.Children.Count);
@@ -133,18 +133,18 @@ public class BaseCompiler
 
     public void ReadFromFile(string filePath)
     {
-        Root = new DawgNode();
+        Root = new LetterNode();
 
         using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
         using (GZipStream gzipStream = new GZipStream(fileStream, CompressionMode.Decompress))
         using (BinaryReader reader = new BinaryReader(gzipStream))
         {
             int nodeCount = reader.ReadInt32();
-            List<DawgNode> nodeList = new List<DawgNode>(nodeCount);
+            List<LetterNode> nodeList = new List<LetterNode>(nodeCount);
 
             for (int i = 0; i < nodeCount; i++)
             {
-                nodeList.Add(new DawgNode());
+                nodeList.Add(new LetterNode());
             }
 
             for (int i = 0; i < nodeCount; i++)
@@ -156,7 +156,7 @@ public class BaseCompiler
         }
     }
 
-    private void ReadNodeWithId(DawgNode node, BinaryReader reader, List<DawgNode> nodeList)
+    private void ReadNodeWithId(LetterNode node, BinaryReader reader, List<LetterNode> nodeList)
     {
         node.Control = reader.ReadByte();
         int childrenCount = reader.ReadByte();
@@ -166,7 +166,7 @@ public class BaseCompiler
             byte childLetter = reader.ReadByte();
             int childId = reader.ReadInt32();
 
-            DawgNode childNode = nodeList[childId];
+            LetterNode childNode = nodeList[childId];
             childNode.Letter = childLetter;  // Set the letter for the child node
             node.Children.Add(childNode);
         }

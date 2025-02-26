@@ -89,7 +89,7 @@ public class ScrabbleAI
     private int ExploreWord(int x, int y, List<byte> currentWord, bool direction)
     {
         int score = 0;
-        DawgNode currentNode = gaddag.Root;
+        LetterNode currentNode = gaddag.Root;
 
         // Depending on direction, traverse the GADDAG or DAWG
         foreach (byte letter in currentWord)

@@ -34,11 +34,11 @@ namespace Crolow.Fast.Dawg.GadDag
             var hasTerminated = false;
             foreach (var letter in chars)
             {
-                DawgNodeBuild childNode = currentNode.Children.FirstOrDefault(c => c.Letter == letter);
+                LetterNode childNode = currentNode.Children.FirstOrDefault(c => c.Letter == letter);
 
                 if (childNode == null)
                 {
-                    childNode = new DawgNodeBuild { Id = BuildNodeId++, Letter = letter };
+                    childNode = new LetterNode { Letter = letter };
                     currentNode.Children.Add(childNode);
                 }
                 currentNode = childNode;
