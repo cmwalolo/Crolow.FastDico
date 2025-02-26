@@ -5,6 +5,10 @@ namespace Crolow.Fast.Dawg.ScrabbleApi;
 
 /// <summary>
 /// It's just a starting point
+/// Still need implementation
+/// Thinking of using gaddag and dawg together :
+/// - Gaddag to search from RTL and LTR at the first pivot position
+/// - Dawg to search from the first pivot position only LTR
 /// </summary>
 public class ScrabbleAI
 {
@@ -20,7 +24,11 @@ public class ScrabbleAI
         this.gaddag = gaddag;
     }
 
-    public void FindBestMove(List<byte> rack)
+    /// <summary>
+    ///  All code here is just bullshit 
+    /// </summary>
+    /// <param name="rack"></param>
+    public void FindBestMoveFirstRound(List<byte> rack)
     {
         this.rack = rack;
         int bestScore = 0;
