@@ -3,8 +3,7 @@
 public static class DawgUtils
 {
     public const byte IsEnd = 1;
-    public const byte IsPivot = 2;
-    public const byte IsStart = 4;
+    public const byte PivotByte = 31;
 
     // Convert a string (lowercase letters) to a byte array
     public static List<byte> ConvertWordToBytes(string word)

@@ -31,9 +31,9 @@ public class GadDagSearch : IDawgSearch
         // Traverse children to find the matching letter
         foreach (var child in currentNode.Children)
         {
-            if (child.Letter == currentByte || !pastPivot && child.Letter == 31) // Pivot handling
+            if (child.Letter == currentByte || !pastPivot && child.Letter == DawgUtils.PivotByte) // Pivot handling
             {
-                if (SearchWordRecursive(child, word, index + 1, pastPivot || child.Letter == 31))
+                if (SearchWordRecursive(child, word, index + 1, pastPivot || child.Letter == DawgUtils.PivotByte))
                 {
                     return true;
                 }
@@ -71,7 +71,7 @@ public class GadDagSearch : IDawgSearch
 
         foreach (var child in node.Children)
         {
-            if (child.Letter != 31)
+            if (child.Letter != DawgUtils.PivotByte)
             {
                 currentWord.Add(child.Letter);
                 SearchPrefixesFromNode(child, currentWord, results);
@@ -151,7 +151,7 @@ public class GadDagSearch : IDawgSearch
             // Then, try matching one or more characters
             foreach (var child in currentNode.Children)
             {
-                if (child.Letter != 31)
+                if (child.Letter != DawgUtils.PivotByte)
                 {
                     currentWord.Add(child.Letter);
                     SearchByPatternRecursive(child, bytePattern, patternIndex, currentWord, results);
@@ -164,7 +164,7 @@ public class GadDagSearch : IDawgSearch
             // Match exactly one character
             foreach (var child in currentNode.Children)
             {
-                if (child.Letter != 31)
+                if (child.Letter != DawgUtils.PivotByte)
                 {
                     currentWord.Add(child.Letter);
                     SearchByPatternRecursive(child, bytePattern, patternIndex + 1, currentWord, results);
@@ -175,7 +175,7 @@ public class GadDagSearch : IDawgSearch
         else
         {
             // Match the exact character
-            var nextNode = currentNode.Children.Where(p => p.Letter != 31 && p.Letter == currentByte);
+            var nextNode = currentNode.Children.Where(p => p.Letter != DawgUtils.PivotByte && p.Letter == currentByte);
             if (nextNode.Any())
             {
                 currentWord.Add(currentByte);

@@ -22,7 +22,7 @@ namespace Crolow.Fast.Dawg.GadDag
                 List<byte> right = byteWord.GetRange(0, i);
 
                 right.Reverse();
-                left.Add(31); // Add the pivot '#'
+                left.Add(DawgUtils.PivotByte); // Add the pivot '#'
                 left.AddRange(right);
                 Insert(left);
             }
