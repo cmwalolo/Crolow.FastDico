@@ -48,6 +48,8 @@ public class BaseCompiler
             var currentNode = nodesToProcess[0];
             nodesToProcess.RemoveAt(0);
 
+            currentNode.Children = currentNode.Children.OrderBy(p => p.Letter).ToList();
+
             for (int x = 0; x < currentNode.Children.Count; x++)
             {
                 var node = currentNode.Children[x];

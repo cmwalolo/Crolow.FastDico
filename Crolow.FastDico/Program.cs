@@ -1,10 +1,29 @@
 ﻿using Crolow.Fast.Dawg.Dawg;
 using Crolow.Fast.Dawg.GadDag;
 using Crolow.Fast.Dawg.Interfaces;
+using Crolow.Fast.Dawg.ScrabbleApi;
+using Crolow.FastDico.ScrabbleApi.Utils;
+using System.Diagnostics;
+
 
 var tester = new Tester();
-tester.TestDawg(true);
-//tester.TestGadDag(true);
+//tester.TestDawg(true);
+tester.TestGadDag(false);
+
+
+GadDagCompiler gaddag = new GadDagCompiler();
+gaddag.ReadFromFile("gaddag_data.gz");
+
+
+var gridConfig = System.IO.File.ReadAllText("gridConfig.json");
+var config = ConfigReader.FillGridConfig(gridConfig);
+
+Stopwatch stopwatch = new Stopwatch();
+stopwatch.Start();
+var ScrabbleAI = new ScrabbleAI(config, gaddag);
+ScrabbleAI.StartGame();
+stopwatch.Stop();
+Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");
 public class Tester
 {
     public Tester()
@@ -29,6 +48,7 @@ public class Tester
 
         IDawgSearch newDawg = new DawgSearch(dawg.Root);
         // Test searching
+        Console.WriteLine(newDawg.SearchWord("sufa"));   // False
         Console.WriteLine(newDawg.SearchWord("chien"));   // True
         Console.WriteLine(newDawg.SearchWord("dormir"));   // False
         Console.WriteLine(newDawg.SearchWord("fechier"));   // False
@@ -49,6 +69,7 @@ public class Tester
         Console.WriteLine("--------------");
         Console.WriteLine(" artesien ? " + newDawg.SearchWord("artesien"));
         Console.WriteLine(string.Join("\n", newDawg.FindAllWordsFromLetters("arteisn")));   // False
+        Console.WriteLine(string.Join("\n", newDawg.FindAllWordsFromLetters("afusbi")));
         Console.WriteLine("\nSmaller words");
         Console.WriteLine("--------------");
         Console.WriteLine(string.Join("\n", newDawg.FindAllWordsContainingLetters("piboutre")));   // False
@@ -80,6 +101,7 @@ public class Tester
         Console.WriteLine("\nWord Search");
         Console.WriteLine("--------------");
 
+        Console.WriteLine(newDawg.SearchWord("tamerz"));   // False
         Console.WriteLine(newDawg.SearchWord("chien"));   // True
         Console.WriteLine(newDawg.SearchWord("dormir"));   // False
         Console.WriteLine(newDawg.SearchWord("fechier"));   // False
@@ -103,12 +125,17 @@ public class Tester
         Console.WriteLine("--------------");
         Console.WriteLine(
             string.Join("\n", newDawg.SearchBySuffix("forage")));  // 2 (bat, batman)
+        Console.WriteLine(
+            string.Join("\n", newDawg.SearchBySuffix("mplacais")));  // 2 (bat, batman)
+        Console.WriteLine(
+            string.Join("\n", newDawg.SearchBySuffix("placais")));  // 2 (bat, batman)
 
 
         Console.WriteLine("\nAnagrams");
         Console.WriteLine("--------------");
         Console.WriteLine(" artesien ? " + newDawg.SearchWord("artesien"));
         Console.WriteLine(string.Join("\n", newDawg.FindAllWordsFromLetters("arteisn")));   // False
+
         Console.WriteLine("\nSmaller words");
         Console.WriteLine("--------------");
         Console.WriteLine(string.Join("\n", newDawg.FindAllWordsContainingLetters("cuba")));   // False

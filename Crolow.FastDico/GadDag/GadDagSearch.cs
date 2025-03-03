@@ -106,16 +106,18 @@ public class GadDagSearch : IDawgSearch
     {
         if (node.Children.Count == 0)
         {
+            var newWord = new List<byte>();
             var word = currentWord.Take(currentWord.Count - 1).ToList();
-            result.AddRange(word);
-            results.Add(DawgUtils.ConvertBytesToWord(result));
-            result.Clear();
+            newWord.AddRange(result);
+            newWord.AddRange(word);
+            results.Add(DawgUtils.ConvertBytesToWord(newWord));
         }
 
         foreach (var child in node.Children)
         {
             result.Insert(0, child.Letter);
             SearchSuffixesFromNode(child, currentWord, result, results);
+            result.RemoveAt(0);
         }
     }
 

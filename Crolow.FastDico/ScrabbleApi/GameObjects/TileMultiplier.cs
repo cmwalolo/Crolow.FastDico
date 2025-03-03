@@ -1,4 +1,4 @@
-﻿namespace Crolow.Fast.Dawg.ScrabbleApi;
+﻿namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
 public enum TileMultiplier
 {

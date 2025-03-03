@@ -1,4 +1,6 @@
-﻿namespace Crolow.Fast.Dawg.Utils;
+﻿using Crolow.FastDico.ScrabbleApi.Config;
+
+namespace Crolow.Fast.Dawg.Utils;
 
 public static class DawgUtils
 {
@@ -26,5 +28,15 @@ public static class DawgUtils
             wordChars[i] = byteArray[i] == 31 ? '#' : (char)(byteArray[i] + 'a');
         }
         return new string(wordChars);
+    }
+
+    public static string ConvertBytesToWord(List<Tile> m)
+    {
+        char[] wordChars = new char[m.Count];
+        for (int i = 0; i < m.Count; i++)
+        {
+            wordChars[i] = (char)(m[i].Letter == 31 ? '#' : m[i].IsJoker ? ((char)m[i].Letter + 'A') : ((char)m[i].Letter + 'a'));
+        }
+        return new string(wordChars).Replace('[', '?');
     }
 }
