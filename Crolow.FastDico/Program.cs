@@ -6,9 +6,9 @@ using Crolow.FastDico.ScrabbleApi.Utils;
 using System.Diagnostics;
 
 
-var tester = new Tester();
+//var tester = new Tester();
 //tester.TestDawg(true);
-tester.TestGadDag(false);
+//tester.TestGadDag(false);
 
 
 GadDagCompiler gaddag = new GadDagCompiler();

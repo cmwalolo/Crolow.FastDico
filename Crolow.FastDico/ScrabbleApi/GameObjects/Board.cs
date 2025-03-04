@@ -14,7 +14,16 @@ public class Board
     }
 
     public Square GetTile(Position p) => CurrentBoard.Grid[p.X, p.Y];
-    public Square GetTile(int X, int Y) => CurrentBoard.Grid[X, Y];
+    public Square GetTile(int X, int Y)
+    {
+        if (X < 0 || X >= CurrentBoard.Grid.GetLength(0) ||
+            Y < 0 || Y >= CurrentBoard.Grid.GetLength(1))
+        {
+            return null;
+        }
+        return CurrentBoard.Grid[X, Y];
+    }
+
 
     public void SetTile(Position p, Tile tile)
     {

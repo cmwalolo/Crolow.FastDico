@@ -4,6 +4,8 @@ using Crolow.Fast.Dawg.GadDag;
 using Crolow.Fast.Dawg.Utils;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 namespace Crolow.Fast.Dawg.ScrabbleApi;
 
@@ -55,9 +57,9 @@ public partial class ScrabbleAI
 
             CurrentRound.Points += CurrentRound.Bonus;
 
-            if (CurrentRound.Points >= 100) //MaxPoints)
+            if (CurrentRound.Points > MaxPoints)
             {
-                //Rounds.Clear();
+                Rounds.Clear();
                 Rounds.Add(CurrentRound);
                 MaxPoints = CurrentRound.Points;
             }
@@ -66,22 +68,20 @@ public partial class ScrabbleAI
                 return;
             }
 
-#if DEBUG
-            if (CurrentRound.Bonus > 0)
-            {
-                //Console.WriteLine("Bonus found : " + CurrentRound.Bonus);
-            }
-#endif
 
 #if DEBUG
 
-            var l = CurrentRound.Tiles.Take(CurrentRound.Pivot).ToList();
-            var m = CurrentRound.Tiles.Skip(CurrentRound.Pivot).ToList();
+            var l = CurrentRound.Tiles.Take(CurrentRound.Pivot).Select(p => p.Letter).ToList();
+            var m = CurrentRound.Tiles.Skip(CurrentRound.Pivot).Select(p => p.Letter).ToList();
             if (CurrentRound.Pivot != 0)
             {
                 m.Reverse();
             }
-            m.AddRange(l);
+            if (l.Count() > 0)
+            {
+                m.Add(31);
+                m.AddRange(l);
+            }
 
             string res = DawgUtils.ConvertBytesToWord(m);
             var txt = $"Word found : {res} "
@@ -178,9 +178,9 @@ public partial class ScrabbleAI
 
         var t = letters.Select(p => p.Letter).ToList();
 
-        Position p = new Position(-2 + (board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
+        Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
         var playedRounds = new PlayedRounds(playConfig);
-        playedRounds.CurrentRound.Position = p;
+        playedRounds.CurrentRound.Position = new Position(p);
         SearchNodes(dico.Root, p.X, p.Y, letters, 1, 0, playedRounds, p);
     }
     private void SearchNodes(LetterNode parentNode, int x, int y, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition)
@@ -195,38 +195,40 @@ public partial class ScrabbleAI
         {
             rounds.CurrentRound.Position.X = x;
             rounds.CurrentRound.Position.Y = y;
+        }
 
-#if DEBUG
-            //            Console.WriteLine($"POS  : {rounds.CurrentRound.Position.X}-{rounds.CurrentRound.Position.Y}");
-#endif
+        int direction = x != 0 ? 0 : 1;
+
+        var square = board.GetTile(x, y);
+
+        var nodes = new List<LetterNode>();
+
+        if (square == null || square.IsBorder)
+        {
+            nodes = parentNode.Children.Where(p => p.Letter == DawgUtils.PivotByte).ToList();
         }
         else
         {
-#if DEBUG
-            // Console.WriteLine($"POS  : {x}-{y}");
-#endif
-
+            nodes = parentNode.Children;
         }
 
+        var wm = 1;
+        var lm = 1;
+        Tile tileLetter = null;
 
-        int direction = x != 0 ? 0 : 1;
-        var square = board.GetTile(x, y);
-
-        if (square.IsBorder)
+        if (square != null && !parentNode.IsPivot)
         {
-            return;
+            tileLetter = square.CurrentLetter;
+            wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
+            lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
         }
 
-        var tileLetter = square.CurrentLetter;
-        var wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
-        var lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
-
-        foreach (var node in parentNode.Children)
+        foreach (var node in nodes)
         {
-            var letter = tileLetter;
-
             if (!node.IsPivot)
             {
+                var letter = tileLetter;
+
                 // The current square is empty 
                 if (letter == null)
                 {
@@ -253,10 +255,12 @@ public partial class ScrabbleAI
                 // We add a letter to the round
                 if (letter != null)
                 {
-#if DEBUG
-                    // Console.WriteLine($"POS  : {rounds.CurrentRound.Position.X}-{rounds.CurrentRound.Position.Y}");
-#endif
                     rounds.CurrentRound.SetTile(letter, wm, lm);
+
+                    if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "mplacais")
+                    {
+                        Console.WriteLine("ok");
+                    }
 
                     if (node.IsEnd)
                     {
@@ -279,10 +283,6 @@ public partial class ScrabbleAI
                                 Pivot = pivot
                             };
                         }
-                        else
-                        {
-                            Console.WriteLine("WTF");
-                        }
                     }
 
                     SearchNodes(node, x + incH, y + incV, letters, incH, incV, rounds, FirstPosition);
@@ -292,10 +292,10 @@ public partial class ScrabbleAI
             }
             else
             {
-                //rounds.CurrentRound.SetPivot();
-                //SearchNodes(node, rounds.CurrentRound.Position.X - incH, rounds.CurrentRound.Position.Y - incV, letters, -incH, -incV, rounds, null);
-                //rounds.CurrentRound.RemovePivot();
-                //rounds.CurrentRound.Position = new Position(FirstPosition.X, FirstPosition.Y, FirstPosition.Direction);
+                rounds.CurrentRound.SetPivot();
+                SearchNodes(node, FirstPosition.X - incH, FirstPosition.Y - incV, letters, -incH, -incV, rounds, FirstPosition);
+                rounds.CurrentRound.RemovePivot();
+                rounds.CurrentRound.Position = new Position(FirstPosition);
             }
 
         }

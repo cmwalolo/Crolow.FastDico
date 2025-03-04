@@ -11,4 +11,11 @@ public class Position
         Y = y;
         Direction = direction;
     }
+
+    public Position(Position copy)
+    {
+        X = copy.X;
+        Y = copy.Y;
+        Direction = copy.Direction;
+    }
 }
