@@ -4,8 +4,6 @@ using Crolow.Fast.Dawg.GadDag;
 using Crolow.Fast.Dawg.Utils;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
 
 namespace Crolow.Fast.Dawg.ScrabbleApi;
 
@@ -27,133 +25,6 @@ public partial class ScrabbleAI
     private PlayerRack rack;
     private CurrentGame currentGame;
 
-    public class PlayedRounds
-    {
-        PlayConfig Config { get; set; }
-        public int MaxPoints { get; set; }
-        public List<PlayedRound> Rounds { get; set; }
-        public PlayedRound CurrentRound { get; set; }
-        public PlayedRounds(PlayConfig config)
-        {
-            Config = config;
-            Rounds = new List<PlayedRound>();
-            CurrentRound = new PlayedRound();
-        }
-        public void SetRound()
-        {
-            int wm = 1;
-            foreach (var t in CurrentRound.Tiles)
-            {
-                wm *= t.WordMultiplier;
-            }
-
-            CurrentRound.Points = CurrentRound.Tiles.Sum(p => p.Points * p.LetterMultiplier) * wm;
-
-            var tilesFromRack = CurrentRound.Tiles.Count(p => p.Status == 0);
-            if (tilesFromRack > 0 && tilesFromRack < Config.Bonus.Count())
-            {
-                CurrentRound.Bonus = Config.Bonus[tilesFromRack - 1];
-            }
-
-            CurrentRound.Points += CurrentRound.Bonus;
-
-            if (CurrentRound.Points > MaxPoints)
-            {
-                Rounds.Clear();
-                Rounds.Add(CurrentRound);
-                MaxPoints = CurrentRound.Points;
-            }
-            else
-            {
-                return;
-            }
-
-
-#if DEBUG
-
-            var l = CurrentRound.Tiles.Take(CurrentRound.Pivot).Select(p => p.Letter).ToList();
-            var m = CurrentRound.Tiles.Skip(CurrentRound.Pivot).Select(p => p.Letter).ToList();
-            if (CurrentRound.Pivot != 0)
-            {
-                m.Reverse();
-            }
-            if (l.Count() > 0)
-            {
-                m.Add(31);
-                m.AddRange(l);
-            }
-
-            string res = DawgUtils.ConvertBytesToWord(m);
-            var txt = $"Word found : {res} "
-                + CurrentRound.Points + " : " + CurrentRound.GetPosition();
-            Console.WriteLine(txt);
-
-#endif
-        }
-
-    }
-
-    public class PlayedRound
-    {
-        public List<Tile> Tiles { get; set; }
-        public Position Position { get; set; }
-        public int Points { get; set; }
-        public int PlayedTime { get; set; }
-        public int Bonus { get; set; }
-        public int Pivot { get; set; }
-
-        public void SetTile(Tile tile, int wm, int lm)
-        {
-            Tile t = new Tile(tile);
-            t.WordMultiplier = wm;
-            t.LetterMultiplier = lm;
-            Tiles.Add(t);
-        }
-
-        public Tile RemoveTile(int m)
-        {
-            var t = Tiles[Tiles.Count - 1];
-            Tiles.RemoveAt(Tiles.Count - 1);
-            return new Tile(t);
-        }
-
-        public PlayedRound()
-        {
-            Tiles = new List<Tile>();
-            Position = new Position(0, 0, 0);
-        }
-
-        public PlayedRound(PlayedRound copy)
-        {
-            Tiles = copy.Tiles;
-            Pivot = copy.Pivot;
-            Position = copy.Position;
-        }
-
-        internal void SetPivot()
-        {
-            Pivot = Tiles.Count;
-        }
-
-        internal void RemovePivot()
-        {
-            Pivot = 0;
-        }
-
-        internal string GetPosition()
-        {
-            return $"{(new char[] { ((char)(64 + Position.Y)) }[0])}{Position.X}";
-        }
-    }
-
-    public class CurrentGame
-    {
-        public int Round { get; set; }
-        public int TotalPoints { get; set; }
-        public int PlayTime { get; set; }
-
-    }
-
     public ScrabbleAI(GameConfiguration config, GadDagCompiler gaddag)
     {
         this.board = new Board(config);
@@ -169,8 +40,9 @@ public partial class ScrabbleAI
     }
     private void DoFirstMove()
     {
-        //        var letters = letterBag.DrawLetters(playConfig.InRackLetters, rack);
-        var letters = letterBag.ForceDrawLetters("lecparaism");
+        //var letters = letterBag.DrawLetters(playConfig.InRackLetters, rack);
+        // Used for testing 
+        var letters = letterBag.ForceDrawLetters("vaquerabou");
         string res = DawgUtils.ConvertBytesToWord(letters);
         Console.WriteLine("Rack : " + res);
         Console.WriteLine("-------------------------------------------");
@@ -178,31 +50,27 @@ public partial class ScrabbleAI
 
         var t = letters.Select(p => p.Letter).ToList();
 
-        Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
         var playedRounds = new PlayedRounds(playConfig);
+
+        // We set the original position to place which is at the board center
+        Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
         playedRounds.CurrentRound.Position = new Position(p);
-        SearchNodes(dico.Root, p.X, p.Y, letters, 1, 0, playedRounds, p);
+        SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
     }
-    private void SearchNodes(LetterNode parentNode, int x, int y, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition)
+    private void SearchNodes(LetterNode parentNode, Position p, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition)
     {
-        if (x < 1 || y < 1)
-        {
-            return;
-        }
+        int x = p.X;
+        int y = p.Y;
 
-        // We are moving backwards so we adjust the round
-        if (incV < 0 || incH < 0)
-        {
-            rounds.CurrentRound.Position.X = x;
-            rounds.CurrentRound.Position.Y = y;
-        }
-
-        int direction = x != 0 ? 0 : 1;
-
+        // We first Get the Square according to the current position
         var square = board.GetTile(x, y);
 
-        var nodes = new List<LetterNode>();
+        // We define the dirrection
+        int direction = 0;
 
+
+        // We load the nodes to be checked
+        var nodes = new List<LetterNode>();
         if (square == null || square.IsBorder)
         {
             nodes = parentNode.Children.Where(p => p.Letter == DawgUtils.PivotByte).ToList();
@@ -212,6 +80,8 @@ public partial class ScrabbleAI
             nodes = parentNode.Children;
         }
 
+
+        // We set the word/letter multipliers
         var wm = 1;
         var lm = 1;
         Tile tileLetter = null;
@@ -223,24 +93,28 @@ public partial class ScrabbleAI
             lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
         }
 
+        // We go through each node
         foreach (var node in nodes)
         {
+            // If node is a pivot we need to reset the traversal and invert the direction
             if (!node.IsPivot)
             {
                 var letter = tileLetter;
-
-                // The current square is empty 
+                // The current square is empty so we can take a new letter from the rack
                 if (letter == null)
                 {
                     letter = letters.FirstOrDefault(p => p.Letter == node.Letter || p.IsJoker);
+                    // if the letter is available in the rack or is a joker
                     if (letter != null)
                     {
                         if (!square.GetPivot(letter.Letter, direction) && !letter.IsJoker)
                         {
                             continue;
                         }
+                        // We remove the letter from the rack
                         letters.Remove(letter);
 
+                        // if the letter is a joker we asssign assign the current node letter
                         if (letter.IsJoker)
                         {
                             letter.Letter = node.Letter;
@@ -252,50 +126,61 @@ public partial class ScrabbleAI
                     }
                 }
 
-                // We add a letter to the round
+                // We add a letter to round if not null
                 if (letter != null)
                 {
+                    // We set a new tile 
                     rounds.CurrentRound.SetTile(letter, wm, lm);
 
-                    if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "mplacais")
+                    if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "aquav")
                     {
-                        Console.WriteLine("ok");
+                        rounds.DebugRound(rounds.CurrentRound);
                     }
 
+                    // If the node isEnd we check the round 
                     if (node.IsEnd)
                     {
                         if (x + incH > 15)
                         {
                             // Console.WriteLine("ok end of grid");
                         }
+
+                        // For a round to be valid the next tile needs to be empty 
                         var nextTile = board.GetTile(x + incH, y + incV);
                         if (nextTile.CurrentLetter == null)
                         {
-                            rounds.SetRound();
-
-                            var tiles = rounds.CurrentRound.Tiles;
-                            var position = rounds.CurrentRound.Position;
-                            var pivot = rounds.CurrentRound.Pivot;
-                            rounds.CurrentRound = new PlayedRound()
-                            {
-                                Tiles = tiles,
-                                Position = position,
-                                Pivot = pivot
-                            };
+                            // We check the and calculate his score
+                            rounds.SetRound(rounds.CurrentRound);
+                            // We create a new round
+                            rounds.CurrentRound = new PlayedRound(rounds.CurrentRound);
                         }
                     }
 
-                    SearchNodes(node, x + incH, y + incV, letters, incH, incV, rounds, FirstPosition);
+                    var oldPosition = new Position(x + incH, y + incV, direction);
+                    // We continue the search in the nodes 
+                    SearchNodes(node, oldPosition, letters, incH, incV, rounds, FirstPosition);
 
+                    rounds.CurrentRound.Position = new Position(oldPosition);
+
+                    // We reset letter on the rack.
                     letters.Add(rounds.CurrentRound.RemoveTile(wm));
                 }
             }
             else
             {
+                if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "aqua")
+                {
+                    rounds.DebugRound(rounds.CurrentRound);
+                }
+
                 rounds.CurrentRound.SetPivot();
-                SearchNodes(node, FirstPosition.X - incH, FirstPosition.Y - incV, letters, -incH, -incV, rounds, FirstPosition);
+
+                Position pp = new Position(FirstPosition.X - incH,
+                    FirstPosition.Y - incV, direction);
+
+                SearchNodes(node, pp, letters, -incH, -incV, rounds, FirstPosition);
                 rounds.CurrentRound.RemovePivot();
-                rounds.CurrentRound.Position = new Position(FirstPosition);
+                rounds.CurrentRound.Position = new Position(pp);
             }
 
         }
