@@ -1,6 +1,6 @@
 ﻿namespace Crolow.Fast.Dawg.ScrabbleApi;
 
-public class Position
+public struct Position
 {
     public int Direction { get; set; }
     public int X { get; set; }
@@ -17,5 +17,13 @@ public class Position
         X = copy.X;
         Y = copy.Y;
         Direction = copy.Direction;
+    }
+}
+
+public static class PositionExtensions
+{
+    public static bool ISGreater(this Position p1, Position p2)
+    {
+        return p1.X > p2.X || p1.Y > p2.Y;
     }
 }

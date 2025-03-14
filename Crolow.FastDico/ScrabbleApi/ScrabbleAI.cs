@@ -5,6 +5,7 @@ using Crolow.Fast.Dawg.Utils;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Crolow.Fast.Dawg.ScrabbleApi;
@@ -45,7 +46,13 @@ public partial class ScrabbleAI
 
     public void StartGame()
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         NextRound(true);
+        stopwatch.Stop();
+        Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");
+
     }
     private void NextRound(bool firstMove)
     {
@@ -161,7 +168,14 @@ public partial class ScrabbleAI
                         if (nextTile.CurrentLetter == null)
                         {
                             // We set the final position of the round
-                            rounds.CurrentRound.Position = p;
+                            if (FirstPosition.ISGreater(p))
+                            {
+                                rounds.CurrentRound.Position = p;
+                            }
+                            else
+                            {
+                                rounds.CurrentRound.Position = FirstPosition;
+                            }
                             // We check the and calculate his score
                             rounds.SetRound(rounds.CurrentRound);
                             // We create a new round

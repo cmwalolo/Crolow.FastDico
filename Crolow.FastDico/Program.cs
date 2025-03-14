@@ -2,19 +2,14 @@
 using Crolow.Fast.Dawg.GadDag;
 using Crolow.Fast.Dawg.Interfaces;
 using Crolow.Fast.Dawg.ScrabbleApi;
-using System.Diagnostics;
 
 
 //var tester = new Tester();
 //tester.TestDawg(true);
 //tester.TestGadDag(false);
 
-Stopwatch stopwatch = new Stopwatch();
-stopwatch.Start();
 var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
 ScrabbleAI.StartGame();
-stopwatch.Stop();
-Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");
 public class Tester
 {
     public Tester()
