@@ -40,9 +40,9 @@ public partial class ScrabbleAI
     }
     private void DoFirstMove()
     {
-        //var letters = letterBag.DrawLetters(playConfig.InRackLetters, rack);
+        var letters = letterBag.DrawLetters(playConfig.InRackLetters, rack);
         // Used for testing 
-        var letters = letterBag.ForceDrawLetters("vaquerabou");
+        // var letters = letterBag.ForceDrawLetters("vaquera?");
         string res = DawgUtils.ConvertBytesToWord(letters);
         Console.WriteLine("Rack : " + res);
         Console.WriteLine("-------------------------------------------");
@@ -56,7 +56,10 @@ public partial class ScrabbleAI
         Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
         playedRounds.CurrentRound.Position = new Position(p);
         SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
+
+
     }
+
     private void SearchNodes(LetterNode parentNode, Position p, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition)
     {
         int x = p.X;
@@ -68,9 +71,9 @@ public partial class ScrabbleAI
         // We define the dirrection
         int direction = 0;
 
-
         // We load the nodes to be checked
         var nodes = new List<LetterNode>();
+
         if (square == null || square.IsBorder)
         {
             nodes = parentNode.Children.Where(p => p.Letter == DawgUtils.PivotByte).ToList();
@@ -132,23 +135,15 @@ public partial class ScrabbleAI
                     // We set a new tile 
                     rounds.CurrentRound.SetTile(letter, wm, lm);
 
-                    if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "aquav")
-                    {
-                        rounds.DebugRound(rounds.CurrentRound);
-                    }
-
                     // If the node isEnd we check the round 
                     if (node.IsEnd)
                     {
-                        if (x + incH > 15)
-                        {
-                            // Console.WriteLine("ok end of grid");
-                        }
-
                         // For a round to be valid the next tile needs to be empty 
                         var nextTile = board.GetTile(x + incH, y + incV);
                         if (nextTile.CurrentLetter == null)
                         {
+                            // We set the final position of the round
+                            rounds.CurrentRound.Position = p;
                             // We check the and calculate his score
                             rounds.SetRound(rounds.CurrentRound);
                             // We create a new round
@@ -168,10 +163,12 @@ public partial class ScrabbleAI
             }
             else
             {
-                if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "aqua")
+#if DEBUG
+                if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "aquero")
                 {
-                    rounds.DebugRound(rounds.CurrentRound);
+                    rounds.CurrentRound.DebugRound();
                 }
+#endif
 
                 rounds.CurrentRound.SetPivot();
 

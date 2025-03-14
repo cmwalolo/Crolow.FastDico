@@ -50,29 +50,11 @@ public partial class ScrabbleAI
 
 #if DEBUG
 
-            DebugRound(round);
+            round.DebugRound(round, "Word found");
 
 #endif
         }
 
-        public void DebugRound(PlayedRound round)
-        {
-            var l = round.Tiles.Take(round.Pivot).Select(p => p.Letter).ToList();
-            var m = round.Tiles.Skip(round.Pivot).Select(p => p.Letter).ToList();
-            if (round.Pivot != 0)
-            {
-                m.Reverse();
-            }
-            if (l.Count() > 0)
-            {
-                m.Add(31);
-                m.AddRange(l);
-            }
 
-            string res = DawgUtils.ConvertBytesToWord(m);
-            var txt = $"Word found : {res} "
-                + round.Points + " : " + round.GetPosition();
-            Console.WriteLine(txt);
-        }
     }
 }
