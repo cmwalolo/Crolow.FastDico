@@ -7,6 +7,7 @@ using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Crolow.Fast.Dawg.ScrabbleApi;
 
@@ -61,6 +62,7 @@ public partial class ScrabbleAI
         if (letters == null)
         {
             EndGame();
+            return;
         }
 
         string res = DawgUtils.ConvertBytesToWord(letters);
@@ -77,6 +79,14 @@ public partial class ScrabbleAI
         playedRounds.CurrentRound.Position = new Position(p);
         SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
 
+        var SelectedRound = playedRounds.Rounds.FirstOrDefault();
+        if (SelectedRound == null)
+        {
+            EndGame(); return;
+        }
+
+
+
 
     }
 
@@ -87,6 +97,11 @@ public partial class ScrabbleAI
 
     private void SearchNodes(LetterNode parentNode, Position p, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition)
     {
+        if (rounds.CurrentRound.Tiles.Count(p => p.Status == 0) >= currentGameConfig.PlayableLetters)
+        {
+            return;
+        }
+
         int x = p.X;
         int y = p.Y;
 
@@ -183,12 +198,11 @@ public partial class ScrabbleAI
                         }
                     }
 
+                    // if we reach the maximum number of playables we stop 
                     var oldPosition = new Position(x + incH, y + incV, direction);
                     // We continue the search in the nodes 
                     SearchNodes(node, oldPosition, letters, incH, incV, rounds, FirstPosition);
-
                     rounds.CurrentRound.Position = new Position(oldPosition);
-
                     // We reset letter on the rack.
                     letters.Add(rounds.CurrentRound.RemoveTile(wm));
                 }
