@@ -4,6 +4,8 @@ using Crolow.Fast.Dawg.GadDag;
 using Crolow.Fast.Dawg.Utils;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
+using Crolow.FastDico.ScrabbleApi.Utils;
+using System.Runtime.CompilerServices;
 
 namespace Crolow.Fast.Dawg.ScrabbleApi;
 
@@ -17,32 +19,43 @@ namespace Crolow.Fast.Dawg.ScrabbleApi;
 public partial class ScrabbleAI
 {
     private GadDagCompiler dico;
-    private GameConfiguration GameConfiguration;
+    private PlayConfiguration PlayConfiguration;
     private Board board;
-    private PlayConfig playConfig;
+    private GameConfig gameConfig;
     private LetterBag letterBag;
     private DawgSearch gaddag;
     private PlayerRack rack;
     private CurrentGame currentGame;
+    private GameConfig currentGameConfig;
 
-    public ScrabbleAI(GameConfiguration config, GadDagCompiler gaddag)
+    public ScrabbleAI(string configsFile, string configName)
     {
-        this.board = new Board(config);
-        this.letterBag = new LetterBag(config);
-        this.playConfig = config.PlayConfig.Configurations[0];
+        PlayConfiguration = new ConfigReader().ReadConfiguration(configsFile, configName);
+        currentGameConfig = PlayConfiguration.SelectedConfig;
+        GadDagCompiler gaddag = new GadDagCompiler();
+        gaddag.ReadFromFile(PlayConfiguration.SelectedConfig.GaddagFile);
+        this.currentGame = new CurrentGame { Configuration = PlayConfiguration };
+
+        this.board = new Board(this.currentGame);
+        this.letterBag = new LetterBag(this.currentGame);
         this.rack = new PlayerRack();
         this.dico = gaddag;
+        this.gameConfig = PlayConfiguration.SelectedConfig;
     }
 
     public void StartGame()
     {
-        DoFirstMove();
+        NextRound(true);
     }
-    private void DoFirstMove()
+    private void NextRound(bool firstMove)
     {
-        var letters = letterBag.DrawLetters(playConfig.InRackLetters, rack);
-        // Used for testing 
-        // var letters = letterBag.ForceDrawLetters("vaquera?");
+        var letters = letterBag.DrawLetters(rack);
+
+        if (letters == null)
+        {
+            EndGame();
+        }
+
         string res = DawgUtils.ConvertBytesToWord(letters);
         Console.WriteLine("Rack : " + res);
         Console.WriteLine("-------------------------------------------");
@@ -50,7 +63,7 @@ public partial class ScrabbleAI
 
         var t = letters.Select(p => p.Letter).ToList();
 
-        var playedRounds = new PlayedRounds(playConfig);
+        var playedRounds = new PlayedRounds(gameConfig);
 
         // We set the original position to place which is at the board center
         Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
@@ -58,6 +71,11 @@ public partial class ScrabbleAI
         SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
 
 
+    }
+
+    private void EndGame()
+    {
+        // We are done 
     }
 
     private void SearchNodes(LetterNode parentNode, Position p, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition)
@@ -166,7 +184,7 @@ public partial class ScrabbleAI
 #if DEBUG
                 if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "aquero")
                 {
-                    rounds.CurrentRound.DebugRound();
+                    rounds.CurrentRound.DebugRound("DEBUG");
                 }
 #endif
 

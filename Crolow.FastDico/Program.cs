@@ -2,7 +2,6 @@
 using Crolow.Fast.Dawg.GadDag;
 using Crolow.Fast.Dawg.Interfaces;
 using Crolow.Fast.Dawg.ScrabbleApi;
-using Crolow.FastDico.ScrabbleApi.Utils;
 using System.Diagnostics;
 
 
@@ -10,17 +9,9 @@ using System.Diagnostics;
 //tester.TestDawg(true);
 //tester.TestGadDag(false);
 
-
-GadDagCompiler gaddag = new GadDagCompiler();
-gaddag.ReadFromFile("gaddag_data.gz");
-
-
-var gridConfig = System.IO.File.ReadAllText("gridConfig.json");
-var config = ConfigReader.FillGridConfig(gridConfig);
-
 Stopwatch stopwatch = new Stopwatch();
 stopwatch.Start();
-var ScrabbleAI = new ScrabbleAI(config, gaddag);
+var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
 ScrabbleAI.StartGame();
 stopwatch.Stop();
 Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");

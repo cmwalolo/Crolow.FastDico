@@ -7,12 +7,12 @@ public partial class ScrabbleAI
 {
     public class PlayedRounds
     {
-        PlayConfig Config { get; set; }
+        GameConfig Config { get; set; }
         public int MaxPoints { get; set; }
         public List<PlayedRound> Rounds { get; set; }
 
         public PlayedRound CurrentRound { get; set; }
-        public PlayedRounds(PlayConfig config)
+        public PlayedRounds(GameConfig config)
         {
             Config = config;
             Rounds = new List<PlayedRound>();
@@ -50,7 +50,7 @@ public partial class ScrabbleAI
 
 #if DEBUG
 
-            round.DebugRound(round, "Word found");
+            round.DebugRound("Word found");
 
 #endif
         }

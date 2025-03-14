@@ -20,22 +20,29 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
 
         private class BoardData
         {
-            public PlayConfigContainer PlayConfig { get; set; }
             public BagConfigurationContainer BagConfiguration { get; set; }
             public BoardGrid Grid { get; set; }
         }
 
-        public static GameConfiguration FillGridConfig(string jsonData)
+        public PlayConfiguration ReadConfiguration(string configFiles, string configName)
         {
+            PlayConfiguration g = new PlayConfiguration();
+            var gridConfigs = System.IO.File.ReadAllText(configFiles);
+            var configs = JsonConvert.DeserializeObject<GameConfigContainer>(gridConfigs);
+            g.SelectedConfig = configs.Configurations.First(p => p.Name == configName);
+            FillGridConfig(g);
+            return g;
+        }
+
+        public static PlayConfiguration FillGridConfig(PlayConfiguration g)
+        {
+            var gridConfig = System.IO.File.ReadAllText(g.SelectedConfig.GridConfigFile);
+
             // Deserialize JSON data into BoardData
-            var boardData = JsonConvert.DeserializeObject<BoardData>(jsonData);
+            var boardData = JsonConvert.DeserializeObject<BoardData>(gridConfig);
 
-            GameConfiguration config = new GameConfiguration();
-
-
-            config.GridConfig = new GridConfigurationContainer(boardData.Grid.SizeH, boardData.Grid.SizeV);
-            config.BagConfig = boardData.BagConfiguration;
-            config.PlayConfig = boardData.PlayConfig;
+            g.GridConfig = new GridConfigurationContainer(boardData.Grid.SizeH, boardData.Grid.SizeV);
+            g.BagConfig = boardData.BagConfiguration;
 
             foreach (var multiplierData in boardData.Grid.Configuration)
             {
@@ -46,16 +53,16 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
 
                     if (multiplierData.Multiplier > 0)
                     {
-                        config.GridConfig.Grid[row, col].LetterMultiplier = multiplierData.Multiplier;
+                        g.GridConfig.Grid[row, col].LetterMultiplier = multiplierData.Multiplier;
                     }
                     else
                     {
-                        config.GridConfig.Grid[row, col].WordMultiplier = Math.Abs(multiplierData.Multiplier);
+                        g.GridConfig.Grid[row, col].WordMultiplier = Math.Abs(multiplierData.Multiplier);
                     }
                 }
             }
 
-            return config;
+            return g;
         }
     }
 }

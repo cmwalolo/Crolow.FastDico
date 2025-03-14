@@ -1,0 +1,19 @@
+{
+  "Configurations": [
+    {
+      "Name": "FR Normal",
+      "GridConfigFile": "gridConfig_FR.json",
+      "GaddagFile": "gaddag_data.gz",
+      "GameType": 0,
+      "GridType": 0,
+      "PLayableLetters": 10,
+      "InRackLetters": 10,
+      "TimeByTurn": 90,
+      "DifficultRatio": 40,
+      "JokerMode": false,
+      "ToppingMode": true,
+      "DifficultMode": false,
+      "CheckDistributionRound": 15
+    }
+  ]
+}

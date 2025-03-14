@@ -1,4 +1,5 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
+using static Crolow.Fast.Dawg.ScrabbleApi.ScrabbleAI;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
@@ -6,22 +7,26 @@ public class LetterBag
 {
     private List<Tile> Letters;
     private Random RandomGen;
-
-    public LetterBag(GameConfiguration distribution)
+    private PlayConfiguration GameConfig;
+    private CurrentGame CurrentGame;
+    public LetterBag(CurrentGame currentGame)
     {
+        CurrentGame = currentGame;
+        GameConfig = currentGame.Configuration;
         Letters = new List<Tile>();
         RandomGen = new Random();
 
         // Populate the bag according to the distribution
-        foreach (var kvp in distribution.BagConfig.Letters)
+        foreach (var kvp in GameConfig.BagConfig.Letters)
         {
             Letters.AddRange(Enumerable.Repeat(kvp, kvp.TotalLetters));
         }
     }
 
     // Draw a specified number of letters from the bag
-    public List<Tile> DrawLetters(int count, PlayerRack rack)
+    public List<Tile> DrawLetters(PlayerRack rack)
     {
+        int count = GameConfig.SelectedConfig.InRackLetters;
         var drawnLetters = rack.GetTiles();
         bool ok = true;
         if (IsValid(Letters, drawnLetters))

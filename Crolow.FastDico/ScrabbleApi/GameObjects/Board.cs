@@ -1,5 +1,6 @@
 ﻿using Crolow.Fast.Dawg.ScrabbleApi;
 using Crolow.FastDico.ScrabbleApi.Config;
+using static Crolow.Fast.Dawg.ScrabbleApi.ScrabbleAI;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
@@ -8,9 +9,9 @@ public class Board
     // Current State of the board
     public GridConfigurationContainer CurrentBoard;
 
-    public Board(GameConfiguration config)
+    public Board(CurrentGame currentGame)
     {
-        CurrentBoard = new GridConfigurationContainer(config.GridConfig);
+        CurrentBoard = new GridConfigurationContainer(currentGame.Configuration.GridConfig);
     }
 
     public Square GetTile(Position p) => CurrentBoard.Grid[p.X, p.Y];
@@ -23,7 +24,6 @@ public class Board
         }
         return CurrentBoard.Grid[X, Y];
     }
-
 
     public void SetTile(Position p, Tile tile)
     {

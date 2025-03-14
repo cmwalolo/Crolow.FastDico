@@ -1,20 +1,4 @@
 {
-  "PlayConfig": {
-    "Configurations": [
-      {
-        "Dictionary": "FR",
-        "GameType": 0,
-        "GridType": 0,
-        "PLayableLetters": 10,
-        "InRackLetters": 10,
-        "TimeByTurn": 90,
-        "DifficultRatio": 40,
-        "JokerMode": false,
-        "ToppingMode": true,
-        "DifficultMode": false
-      }
-    ]
-  },
   "BagConfiguration": {
     "Letters": [
       {

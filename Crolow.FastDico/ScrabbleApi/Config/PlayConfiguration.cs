@@ -1,10 +1,11 @@
 ﻿namespace Crolow.FastDico.ScrabbleApi.Config
 {
-    public partial class GameConfiguration
+    public partial class PlayConfiguration
     {
         public BagConfigurationContainer BagConfig { get; set; }
         public GridConfigurationContainer GridConfig { get; set; }
-        public PlayConfigContainer PlayConfig { get; set; }
+
+        public GameConfig SelectedConfig { get; set; }
 
     }
 }
