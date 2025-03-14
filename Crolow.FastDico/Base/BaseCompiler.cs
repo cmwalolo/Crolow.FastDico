@@ -1,6 +1,6 @@
-﻿using Crolow.Fast.Dawg.Dicos;
+﻿using Crolow.FastDico.Dicos;
 using System.IO.Compression;
-namespace Crolow.Fast.Dawg.Base;
+namespace Crolow.FastDico.Base;
 
 public class BaseCompiler
 {

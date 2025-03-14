@@ -1,15 +1,15 @@
-﻿using Crolow.Fast.Dawg.Dawg;
-using Crolow.Fast.Dawg.Dicos;
-using Crolow.Fast.Dawg.GadDag;
-using Crolow.Fast.Dawg.Utils;
-using Crolow.FastDico.ScrabbleApi.Config;
+﻿using Crolow.FastDico.Dawg;
+using Crolow.FastDico.Dicos;
+using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
+using Crolow.FastDico.Utils;
+using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Crolow.Fast.Dawg.ScrabbleApi;
+namespace Crolow.FastDico.ScrabbleApi;
 
 /// <summary>
 /// It's just a starting point
@@ -75,17 +75,20 @@ public partial class ScrabbleAI
         var playedRounds = new PlayedRounds(gameConfig);
 
         // We set the original position to place which is at the board center
-        Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
-        playedRounds.CurrentRound.Position = new Position(p);
-        SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
+        if (firstMove)
+        {
+            Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
+            playedRounds.CurrentRound.Position = new Position(p);
+            SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
+        }
 
-        var SelectedRound = playedRounds.Rounds.FirstOrDefault();
-        if (SelectedRound == null)
+        var selectedRound = playedRounds.Rounds.FirstOrDefault();
+        if (selectedRound == null)
         {
             EndGame(); return;
         }
 
-
+        var tiles = selectedRound.ReorderTiles();
 
 
     }
@@ -106,7 +109,7 @@ public partial class ScrabbleAI
         int y = p.Y;
 
         // We first Get the Square according to the current position
-        var square = board.GetTile(x, y);
+        var square = board.GetSquare(x, y);
 
         // We define the dirrection
         int direction = 0;
@@ -179,7 +182,7 @@ public partial class ScrabbleAI
                     if (node.IsEnd)
                     {
                         // For a round to be valid the next tile needs to be empty 
-                        var nextTile = board.GetTile(x + incH, y + incV);
+                        var nextTile = board.GetSquare(x + incH, y + incV);
                         if (nextTile.CurrentLetter == null)
                         {
                             // We set the final position of the round

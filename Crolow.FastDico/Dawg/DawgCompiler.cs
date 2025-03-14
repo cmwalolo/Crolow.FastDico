@@ -1,8 +1,8 @@
-﻿using Crolow.Fast.Dawg.Base;
-using Crolow.Fast.Dawg.Dicos;
-using Crolow.Fast.Dawg.Utils;
+﻿using Crolow.FastDico.Base;
+using Crolow.FastDico.Dicos;
+using Crolow.FastDico.Utils;
 
-namespace Crolow.Fast.Dawg.Dawg;
+namespace Crolow.FastDico.Dawg;
 
 public class DawgCompiler : BaseCompiler
 {

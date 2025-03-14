@@ -1,7 +1,7 @@
-﻿using Crolow.Fast.Dawg.Utils;
+﻿using Crolow.FastDico.Utils;
 using Crolow.FastDico.ScrabbleApi.Config;
 
-namespace Crolow.Fast.Dawg.ScrabbleApi;
+namespace Crolow.FastDico.ScrabbleApi;
 
 public partial class ScrabbleAI
 {
@@ -47,14 +47,9 @@ public partial class ScrabbleAI
                 return;
             }
 
-
 #if DEBUG
-
             round.DebugRound("Word found");
-
 #endif
         }
-
-
     }
 }

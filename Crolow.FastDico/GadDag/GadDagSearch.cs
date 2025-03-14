@@ -1,8 +1,8 @@
-﻿using Crolow.Fast.Dawg.Dicos;
-using Crolow.Fast.Dawg.Interfaces;
-using Crolow.Fast.Dawg.Utils;
+﻿using Crolow.FastDico.Dicos;
+using Crolow.FastDico.Interfaces;
+using Crolow.FastDico.Utils;
 
-namespace Crolow.Fast.Dawg.GadDag;
+namespace Crolow.FastDico.GadDag;
 
 public class GadDagSearch : IDawgSearch
 {

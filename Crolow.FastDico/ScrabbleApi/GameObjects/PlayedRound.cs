@@ -1,7 +1,7 @@
-﻿using Crolow.Fast.Dawg.Utils;
-using Crolow.FastDico.ScrabbleApi.Config;
+﻿using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.Utils;
 
-namespace Crolow.Fast.Dawg.ScrabbleApi;
+namespace Crolow.FastDico.ScrabbleApi;
 
 public partial class ScrabbleAI
 {
@@ -56,6 +56,24 @@ public partial class ScrabbleAI
         {
             return $"{(new char[] { ((char)(64 + Position.Y)) }[0])}{Position.X}";
         }
+
+
+        public List<Tile> ReorderTiles()
+        {
+            var l = Tiles.Take(Pivot);
+            var m = Tiles.Skip(Pivot).ToList();
+            if (Pivot != 0)
+            {
+                m.Reverse();
+            }
+            if (l.Count() > 0)
+            {
+                m.AddRange(l);
+            }
+
+            return m;
+        }
+
 
         public void DebugRound(string message)
         {

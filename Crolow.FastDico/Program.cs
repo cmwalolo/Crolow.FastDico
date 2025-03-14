@@ -1,7 +1,7 @@
-﻿using Crolow.Fast.Dawg.Dawg;
-using Crolow.Fast.Dawg.GadDag;
-using Crolow.Fast.Dawg.Interfaces;
-using Crolow.Fast.Dawg.ScrabbleApi;
+﻿using Crolow.FastDico.Dawg;
+using Crolow.FastDico.GadDag;
+using Crolow.FastDico.Interfaces;
+using Crolow.FastDico.ScrabbleApi;
 
 
 //var tester = new Tester();

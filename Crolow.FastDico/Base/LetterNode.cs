@@ -1,6 +1,6 @@
-﻿using Crolow.Fast.Dawg.Utils;
+﻿using Crolow.FastDico.Utils;
 
-namespace Crolow.Fast.Dawg.Dicos;
+namespace Crolow.FastDico.Dicos;
 
 public class LetterNode
 {

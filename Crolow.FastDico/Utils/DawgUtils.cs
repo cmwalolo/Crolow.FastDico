@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
 
-namespace Crolow.Fast.Dawg.Utils;
+namespace Crolow.FastDico.Utils;
 
 public static class DawgUtils
 {

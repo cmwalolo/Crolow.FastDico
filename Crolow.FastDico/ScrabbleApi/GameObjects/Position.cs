@@ -1,5 +1,7 @@
-﻿namespace Crolow.Fast.Dawg.ScrabbleApi;
+﻿namespace Crolow.FastDico.ScrabbleApi;
 
+
+// Moved the position to a struct, so it can be on the heap
 public struct Position
 {
     public int Direction { get; set; }

@@ -1,6 +1,5 @@
-﻿using Crolow.Fast.Dawg.ScrabbleApi;
-using Crolow.FastDico.ScrabbleApi.Config;
-using static Crolow.Fast.Dawg.ScrabbleApi.ScrabbleAI;
+﻿using Crolow.FastDico.ScrabbleApi.Config;
+using static Crolow.FastDico.ScrabbleApi.ScrabbleAI;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
@@ -14,8 +13,8 @@ public class Board
         CurrentBoard = new GridConfigurationContainer(currentGame.Configuration.GridConfig);
     }
 
-    public Square GetTile(Position p) => CurrentBoard.Grid[p.X, p.Y];
-    public Square GetTile(int X, int Y)
+    public Square GetSquare(Position p) => CurrentBoard.Grid[p.X, p.Y];
+    public Square GetSquare(int X, int Y)
     {
         if (X < 0 || X >= CurrentBoard.Grid.GetLength(0) ||
             Y < 0 || Y >= CurrentBoard.Grid.GetLength(1))
@@ -25,8 +24,35 @@ public class Board
         return CurrentBoard.Grid[X, Y];
     }
 
-    public void SetTile(Position p, Tile tile)
+    public void SetTile(int X, int Y, Tile tile)
     {
-        CurrentBoard.Grid[p.X, p.Y].CurrentLetter = new Tile(tile);
+        // WE set definetly the tile on the rack
+        tile.Status = 1;
+        CurrentBoard.Grid[X, Y].CurrentLetter = tile;
+    }
+
+    public void SetRound(PlayedRound round)
+    {
+        int incH = 0;
+        int incV = 0;
+        int x = round.Position.X;
+        int y = round.Position.Y;
+
+        if (round.Position.Direction == 0)
+        {
+            incH = 1;
+        }
+        else
+        {
+            incV = 1;
+        }
+
+        foreach (var tile in round.Tiles)
+        {
+            SetTile(x, y, tile);
+            tile.Status = 1;
+            x += incH;
+            y += incV;
+        }
     }
 }

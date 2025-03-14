@@ -1,5 +1,5 @@
-﻿using Crolow.Fast.Dawg.Utils;
-using Crolow.FastDico.ScrabbleApi.Config;
+﻿using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 

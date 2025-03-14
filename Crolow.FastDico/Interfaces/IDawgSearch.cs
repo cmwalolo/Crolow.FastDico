@@ -1,6 +1,6 @@
-﻿using Crolow.Fast.Dawg.Dicos;
+﻿using Crolow.FastDico.Dicos;
 
-namespace Crolow.Fast.Dawg.Interfaces;
+namespace Crolow.FastDico.Interfaces;
 
 public interface IDawgSearch
 {

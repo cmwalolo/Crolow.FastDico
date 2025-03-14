@@ -1,15 +1,19 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
+using static Crolow.FastDico.ScrabbleApi.ScrabbleAI;
 
-namespace Crolow.Fast.Dawg.ScrabbleApi;
+namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
-public partial class ScrabbleAI
+public class CurrentGame
 {
-    public class CurrentGame
+    public CurrentGame()
     {
-        public PlayConfiguration Configuration { get; set; }
-        public int Round { get; set; }
-        public int TotalPoints { get; set; }
-        public int PlayTime { get; set; }
-
+        RoundsPlayed = new List<PlayedRounds>();
     }
+
+    public PlayConfiguration Configuration { get; set; }
+    public int Round { get; set; }
+    public List<PlayedRounds> RoundsPlayed { get; set; }
+    public int TotalPoints { get; set; }
+    public int PlayTime { get; set; }
+
 }
