@@ -7,12 +7,12 @@ public class CurrentGame
 {
     public CurrentGame()
     {
-        RoundsPlayed = new List<PlayedRounds>();
+        RoundsPlayed = new List<PlayedRound>();
     }
 
     public PlayConfiguration Configuration { get; set; }
     public int Round { get; set; }
-    public List<PlayedRounds> RoundsPlayed { get; set; }
+    public List<PlayedRound> RoundsPlayed { get; set; }
     public int TotalPoints { get; set; }
     public int PlayTime { get; set; }
 

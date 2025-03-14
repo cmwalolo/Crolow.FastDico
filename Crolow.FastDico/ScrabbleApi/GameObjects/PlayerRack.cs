@@ -22,6 +22,12 @@ public class PlayerRack
         return Tiles;
     }
 
+    public void RemoveTile(Tile tile)
+    {
+        var i = Tiles.FindIndex(t => t.Letter == tile.Letter || tile.IsJoker == tile.IsJoker);
+        Tiles.RemoveAt(i);
+    }
+
 
     // Example: Convert from human-readable string to byte representation
     public string ToString()

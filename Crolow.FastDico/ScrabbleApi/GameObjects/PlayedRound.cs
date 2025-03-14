@@ -58,7 +58,10 @@ public partial class ScrabbleAI
         }
 
 
-        public List<Tile> ReorderTiles()
+        /// <summary>
+        /// We reset the tiles and create of them to keep the status
+        /// </summary>
+        public void FinalizeRound()
         {
             var l = Tiles.Take(Pivot);
             var m = Tiles.Skip(Pivot).ToList();
@@ -71,7 +74,8 @@ public partial class ScrabbleAI
                 m.AddRange(l);
             }
 
-            return m;
+            Pivot = 0;
+            Tiles = Tiles.Select(t => new Tile(t)).ToList();
         }
 
 
@@ -90,6 +94,7 @@ public partial class ScrabbleAI
             }
 
             string res = DawgUtils.ConvertBytesToWord(m);
+
             var txt = $"{message} : {res} "
                 + Points + " : " + GetPosition();
             Console.WriteLine(txt);

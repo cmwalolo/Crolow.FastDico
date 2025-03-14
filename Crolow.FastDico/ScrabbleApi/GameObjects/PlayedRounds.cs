@@ -47,9 +47,9 @@ public partial class ScrabbleAI
                 return;
             }
 
-#if DEBUG
+            //#if DEBUG
             round.DebugRound("Word found");
-#endif
+            //#endif
         }
     }
 }

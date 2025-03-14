@@ -81,6 +81,11 @@ public partial class ScrabbleAI
             playedRounds.CurrentRound.Position = new Position(p);
             SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
         }
+        else
+        {
+            EndGame();
+            return;
+        }
 
         var selectedRound = playedRounds.Rounds.FirstOrDefault();
         if (selectedRound == null)
@@ -88,9 +93,20 @@ public partial class ScrabbleAI
             EndGame(); return;
         }
 
-        var tiles = selectedRound.ReorderTiles();
+        // We remove letters played from the rack
+        foreach (var letter in selectedRound.Tiles)
+        {
+            if (letter.Status == 0)
+            {
+                rack.RemoveTile(letter);
+            }
+        }
 
-
+        selectedRound.FinalizeRound();
+        board.SetRound(selectedRound);
+        currentGame.RoundsPlayed.Add(selectedRound);
+        currentGame.Round++;
+        NextRound(false);
     }
 
     private void EndGame()
