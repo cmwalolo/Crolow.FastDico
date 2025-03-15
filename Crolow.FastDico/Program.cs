@@ -95,10 +95,10 @@ public class Tester
         Console.WriteLine("\nPattern Search");
         Console.WriteLine("--------------");
 
-        Console.WriteLine(string.Join("\n", newDawg.SearchByPattern("chi?ent")));   // False
+        Console.WriteLine(string.Join("\n", newDawg.SearchByPattern("?chi?ent")));   // False
         Console.WriteLine(string.Join("\n", newDawg.SearchByPattern("*baties")));   // False
         Console.WriteLine(string.Join("\n", newDawg.SearchByPattern("*forage")));   // False
-        Console.WriteLine(string.Join("\n", newDawg.SearchByPattern("*urb*forage*")));   // False
+        Console.WriteLine(string.Join("\n", newDawg.SearchByPattern("*urb?forage*")));   // False
         Console.WriteLine(string.Join("\n", newDawg.SearchByPattern("?gourmand?")));   // False
 
         Console.WriteLine("\nPrefix Search");

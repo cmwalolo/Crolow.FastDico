@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.ScrabbleApi.Config;
+﻿namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 public class Tile
 {
     public Tile()

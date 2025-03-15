@@ -50,7 +50,6 @@ public class Board
         foreach (var tile in round.Tiles)
         {
             SetTile(x, y, tile);
-            tile.Status = 1;
             x += incH;
             y += incV;
         }

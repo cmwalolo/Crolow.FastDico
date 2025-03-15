@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.ScrabbleApi.Config;
+﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi;
@@ -73,9 +73,9 @@ public partial class ScrabbleAI
             {
                 m.AddRange(l);
             }
-
+            Tiles = m.Select(t => new Tile(t)).ToList();
             Pivot = 0;
-            Tiles = Tiles.Select(t => new Tile(t)).ToList();
+
         }
 
 

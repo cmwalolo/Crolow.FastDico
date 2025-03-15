@@ -1,6 +1,4 @@
-﻿using Crolow.FastDico.ScrabbleApi.Config;
-
-namespace Crolow.FastDico.ScrabbleApi.GameObjects;
+﻿namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
 public class Player
 {

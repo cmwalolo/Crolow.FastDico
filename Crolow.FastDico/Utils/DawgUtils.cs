@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.ScrabbleApi.Config;
+﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
 
 namespace Crolow.FastDico.Utils;
 
@@ -25,7 +25,8 @@ public static class DawgUtils
         char[] wordChars = new char[byteArray.Count];
         for (int i = 0; i < byteArray.Count; i++)
         {
-            wordChars[i] = byteArray[i] == 31 ? '#' : (char)(byteArray[i] + 'a');
+            byte b = byteArray[i];
+            wordChars[i] = b == 31 ? '#' : (b == 30 ? '?' : (char)(byteArray[i] + 'a'));
         }
         return new string(wordChars);
     }

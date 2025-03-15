@@ -21,7 +21,7 @@ namespace Crolow.FastDico.ScrabbleApi;
 public partial class ScrabbleAI
 {
     private GadDagCompiler dico;
-    private PlayConfiguration PlayConfiguration;
+    private PlayConfiguration playConfiguration;
     private Board board;
     private GameConfig gameConfig;
     private LetterBag letterBag;
@@ -29,31 +29,30 @@ public partial class ScrabbleAI
     private PlayerRack rack;
     private CurrentGame currentGame;
     private GameConfig currentGameConfig;
+    private PivotBuilder pivotBuilder;
 
     public ScrabbleAI(string configsFile, string configName)
     {
-        PlayConfiguration = new ConfigReader().ReadConfiguration(configsFile, configName);
-        currentGameConfig = PlayConfiguration.SelectedConfig;
+        playConfiguration = new ConfigReader().ReadConfiguration(configsFile, configName);
+        currentGameConfig = playConfiguration.SelectedConfig;
         GadDagCompiler gaddag = new GadDagCompiler();
-        gaddag.ReadFromFile(PlayConfiguration.SelectedConfig.GaddagFile);
-        this.currentGame = new CurrentGame { Configuration = PlayConfiguration };
+        gaddag.ReadFromFile(playConfiguration.SelectedConfig.GaddagFile);
+        this.currentGame = new CurrentGame { Configuration = playConfiguration };
 
         this.board = new Board(this.currentGame);
         this.letterBag = new LetterBag(this.currentGame);
         this.rack = new PlayerRack();
         this.dico = gaddag;
-        this.gameConfig = PlayConfiguration.SelectedConfig;
+        this.gameConfig = playConfiguration.SelectedConfig;
+        this.pivotBuilder = new PivotBuilder(board, gaddag.Root, playConfiguration);
     }
 
     public void StartGame()
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-
-        NextRound(true);
-        stopwatch.Stop();
-        Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");
-
+        using (StopWatcher stopwatch = new StopWatcher("Game started"))
+        {
+            NextRound(true);
+        }
     }
     private void NextRound(bool firstMove)
     {
@@ -83,6 +82,10 @@ public partial class ScrabbleAI
         }
         else
         {
+            // Once we get the rack 
+            // We create a grid with all possibilities at each pivot place
+            pivotBuilder.Build();
+
             EndGame();
             return;
         }

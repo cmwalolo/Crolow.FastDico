@@ -1,4 +1,6 @@
-﻿namespace Crolow.FastDico.ScrabbleApi.Config
+﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
+
+namespace Crolow.FastDico.ScrabbleApi.Config
 {
     public class BagConfigurationContainer
     {
