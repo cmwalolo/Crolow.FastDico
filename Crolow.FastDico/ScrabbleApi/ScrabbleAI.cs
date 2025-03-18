@@ -8,6 +8,7 @@ using Crolow.FastDico.ScrabbleApi.Utils;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Diagnostics.Metrics;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
@@ -69,16 +70,14 @@ public partial class ScrabbleAI
         Console.WriteLine("-------------------------------------------");
 
 
-        var t = letters.Select(p => p.Letter).ToList();
-
         var playedRounds = new PlayedRounds(gameConfig);
 
         // We set the original position to place which is at the board center
         if (firstMove)
         {
-            Position p = new Position((board.CurrentBoard.SizeH - 1) / 2, (board.CurrentBoard.SizeV - 1) / 2, 0);
+            Position p = new Position((board.CurrentBoard[0].SizeH - 1) / 2, (board.CurrentBoard[0].SizeV - 1) / 2, 0);
             playedRounds.CurrentRound.Position = new Position(p);
-            SearchNodes(dico.Root, p, letters, 1, 0, playedRounds, p);
+            SearchNodes(0, dico.Root, p, letters, 1, 0, playedRounds, p);
         }
         else
         {
@@ -86,8 +85,14 @@ public partial class ScrabbleAI
             // We create a grid with all possibilities at each pivot place
             pivotBuilder.Build();
 
-            EndGame();
-            return;
+            // Here begins the story... 
+            // Related to the DAWG search we are only starting on squares that can
+            // be connected 
+
+            // Horizontal Search
+            Search(0, letters, playedRounds);
+            // Vertical Search
+            Search(1, letters, playedRounds);
         }
 
         var selectedRound = playedRounds.Rounds.FirstOrDefault();
@@ -112,12 +117,81 @@ public partial class ScrabbleAI
         NextRound(false);
     }
 
+    private void Search(int grid, List<Tile> letters, PlayedRounds playedRounds)
+    {
+        for (var i = 1; i < board.CurrentBoard[grid].SizeV - 1; i++)
+        {
+            var rightToLeft = true;
+            int oldj = 1;
+            for (var j = 1; j < board.CurrentBoard[grid].SizeH - 1; j++)
+            {
+                var sq = board.GetSquare(grid, j, i);
+                if (sq.CurrentLetter == null)
+                {
+                    if (CheckConnect(grid, j, i))
+                    {
+                        Position start = new Position(j, i, 0);
+                        // If we are skipping only one square we do not need
+                        // to search on the left.
+                        rightToLeft = j == 1 || (j == oldj + 1 ? true : false);
+
+                        // If there is a filled squared on the left
+                        // We need to prefill the current solution
+                        var sqLeft = board.GetSquare(grid, j - 1, i);
+                        if (sqLeft.CurrentLetter != null && sqLeft.CurrentLetter.Status == 1)
+                        {
+                            var sql = new List<Square>();
+                            sql.Add(sqLeft);
+                            var pos = j - 2;
+                            while (true)
+                            {
+                                var sqNext = board.GetSquare(grid, pos, i);
+                                if (sqNext.CurrentLetter != null && sqNext.CurrentLetter.Status == 1)
+                                {
+                                    sql.Add(sqNext);
+                                    pos--;
+                                }
+                                else
+                                {
+                                    sql.Reverse();
+                                    playedRounds.CurrentRound = new PlayedRound();
+
+                                    foreach (var item in sql)
+                                    {
+                                        playedRounds.CurrentRound.AddTile(item.CurrentLetter, 1, 1);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Ok we can process that square
+                        SearchNodes(grid, dico.Root, start, letters, 1, 0, playedRounds, start, rightToLeft);
+                    }
+
+                }
+            }
+        }
+    }
+    private bool CheckConnect(int grid, int j, int i)
+    {
+        if (board.GetSquare(grid, j - 1, i).CurrentLetter != null
+           || board.GetSquare(grid, j + 1, i).CurrentLetter != null
+           || board.GetSquare(grid, j, i + 1).CurrentLetter != null
+           || board.GetSquare(grid, j, i - 1).CurrentLetter != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private void EndGame()
     {
         // We are done 
     }
 
-    private void SearchNodes(LetterNode parentNode, Position p, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition)
+    private void SearchNodes(int grid, LetterNode parentNode, Position p, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition, bool rightToLeft = true)
     {
         if (rounds.CurrentRound.Tiles.Count(p => p.Status == 0) >= currentGameConfig.PlayableLetters)
         {
@@ -128,7 +202,7 @@ public partial class ScrabbleAI
         int y = p.Y;
 
         // We first Get the Square according to the current position
-        var square = board.GetSquare(x, y);
+        var square = board.GetSquare(grid, x, y);
 
         // We define the dirrection
         int direction = 0;
@@ -156,6 +230,10 @@ public partial class ScrabbleAI
             tileLetter = square.CurrentLetter;
             wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
             lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
+            if (square.CurrentLetter != null)
+            {
+                nodes = nodes.Where(p => p.Letter == tileLetter.Letter).ToList();
+            }
         }
 
         // We go through each node
@@ -195,13 +273,13 @@ public partial class ScrabbleAI
                 if (letter != null)
                 {
                     // We set a new tile 
-                    rounds.CurrentRound.SetTile(letter, wm, lm);
+                    rounds.CurrentRound.AddTile(letter, wm, lm);
 
                     // If the node isEnd we check the round 
                     if (node.IsEnd)
                     {
                         // For a round to be valid the next tile needs to be empty 
-                        var nextTile = board.GetSquare(x + incH, y + incV);
+                        var nextTile = board.GetSquare(grid, x + incH, y + incV);
                         if (nextTile.CurrentLetter == null)
                         {
                             // We set the final position of the round
@@ -223,10 +301,17 @@ public partial class ScrabbleAI
                     // if we reach the maximum number of playables we stop 
                     var oldPosition = new Position(x + incH, y + incV, direction);
                     // We continue the search in the nodes 
-                    SearchNodes(node, oldPosition, letters, incH, incV, rounds, FirstPosition);
+                    SearchNodes(grid, node, oldPosition, letters, incH, incV, rounds, FirstPosition);
                     rounds.CurrentRound.Position = new Position(oldPosition);
                     // We reset letter on the rack.
-                    letters.Add(rounds.CurrentRound.RemoveTile(wm));
+
+                    rounds.CurrentRound.RemoveTile(wm);
+
+                    // If letter comes from rack we put it back
+                    if (letter.Status == 0)
+                    {
+                        letters.Add(letter);
+                    }
                 }
             }
             else
@@ -243,7 +328,7 @@ public partial class ScrabbleAI
                 Position pp = new Position(FirstPosition.X - incH,
                     FirstPosition.Y - incV, direction);
 
-                SearchNodes(node, pp, letters, -incH, -incV, rounds, FirstPosition);
+                SearchNodes(grid, node, pp, letters, -incH, -incV, rounds, FirstPosition);
                 rounds.CurrentRound.RemovePivot();
                 rounds.CurrentRound.Position = new Position(pp);
             }

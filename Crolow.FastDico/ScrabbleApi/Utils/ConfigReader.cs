@@ -44,6 +44,7 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
             g.GridConfig = new GridConfigurationContainer(boardData.Grid.SizeH, boardData.Grid.SizeV);
             g.BagConfig = boardData.BagConfiguration;
 
+            int sizeH = g.GridConfig.SizeH;
             foreach (var multiplierData in boardData.Grid.Configuration)
             {
                 foreach (var position in multiplierData.Positions)

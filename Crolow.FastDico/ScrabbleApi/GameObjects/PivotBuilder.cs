@@ -23,29 +23,23 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
         public void Build()
         {
-            for (int y = 1; y < board.CurrentBoard.SizeV - 1; y++)
-            {
-                var squares = new Square[board.CurrentBoard.SizeH];
+            Build(0);
+            Build(1);
+        }
 
-                for (int x = 0; x < board.CurrentBoard.SizeH; x++)
+        public void Build(int grid)
+        {
+            for (int y = 1; y < board.CurrentBoard[0].SizeV - 1; y++)
+            {
+                var squares = new Square[board.CurrentBoard[0].SizeH];
+
+                for (int x = 0; x < board.CurrentBoard[0].SizeH; x++)
                 {
-                    squares[x] = board.GetSquare(x, y);
+                    squares[x] = board.GetSquare(grid, x, y);
                     squares[x].ResetPivot();
                 }
-                MaskLeftToRightHorizontal(squares, y, 0);
+                MaskLeftToRightHorizontal(grid, squares, y);
 
-            }
-
-            for (int y = 1; y < board.CurrentBoard.SizeH - 1; y++)
-            {
-                var squares = new Square[board.CurrentBoard.SizeV];
-
-                for (int x = 0; x < board.CurrentBoard.SizeV; x++)
-                {
-                    squares[x] = board.GetSquare(y, x);
-                    squares[x].ResetPivot();
-                }
-                MaskLeftToRightHorizontal(squares, y, 1);
             }
 
         }
@@ -55,7 +49,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             public bool toRight = toRight;
             public int start = start, end = end;
         }
-        private void MaskLeftToRightHorizontal(Square[] squares, int x, int direction)
+        private void MaskLeftToRightHorizontal(int grid, Square[] squares, int x)
         {
             int startX = 1;
             int endX = 0;
@@ -114,7 +108,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
             runs.ForEach(run =>
             {
-                Solve(run, squares, direction);
+                Solve(grid, run, squares);
                 //#if DEBUG 
                 //                Console.WriteLine($"{run.start} - {run.end} - {run.toRight} - {direction}");
                 //#endif
@@ -123,7 +117,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
         }
 
-        private void Solve(Run run, Square[] squares, int direction)
+        private void Solve(int grid, Run run, Square[] squares)
         {
             var start = run.start;
             var end = run.end;
@@ -166,7 +160,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 pivotSquare.ResetPivot(0);
                 foreach (var result in results)
                 {
-                    pivotSquare.SetPivot(result[pivotPosition], direction, points);
+                    pivotSquare.SetPivot(result[pivotPosition], grid, points);
                 }
             }
         }

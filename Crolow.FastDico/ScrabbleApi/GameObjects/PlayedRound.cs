@@ -22,6 +22,13 @@ public partial class ScrabbleAI
             Tiles.Add(t);
         }
 
+        public void AddTile(Tile tile, int wm, int lm)
+        {
+            tile.WordMultiplier = wm;
+            tile.LetterMultiplier = lm;
+            Tiles.Add(tile);
+        }
+
         public Tile RemoveTile(int m)
         {
             var t = Tiles[Tiles.Count - 1];
