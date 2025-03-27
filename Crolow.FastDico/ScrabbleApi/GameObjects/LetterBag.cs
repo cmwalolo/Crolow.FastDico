@@ -84,7 +84,9 @@ public class LetterBag
         List<Tile> tiles = new List<Tile>();
         foreach (var c in v)
         {
-            tiles.Add(Letters.First(p => c == '?' ? p.Letter == 26 : p.Letter == c - 'a'));
+            int ndx = Letters.FindIndex(p => c == '?' ? p.Letter == 26 : p.Letter == c - 'a');
+            tiles.Add(Letters[ndx]);
+            Letters.RemoveAt(ndx);
         }
 
         return tiles;

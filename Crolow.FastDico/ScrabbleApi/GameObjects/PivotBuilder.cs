@@ -152,14 +152,14 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             }
             var results = SearchByPattern(bytes);
 
-#if DEBUG
-            var pattern = DawgUtils.ConvertBytesToWord(bytes.ToList());
-            results.ForEach(result =>
-            {
-                var s = DawgUtils.ConvertBytesToWord(result.ToList());
-                Console.WriteLine($"raccord : {pattern} {s}");
-            });
-#endif
+            //#if DEBUG
+            //            var pattern = DawgUtils.ConvertBytesToWord(bytes.ToList());
+            //            results.ForEach(result =>
+            //            {
+            //                var s = DawgUtils.ConvertBytesToWord(result.ToList());
+            //                Console.WriteLine($"raccord : {pattern} {s}");
+            //            });
+            //#endif
 
             pivotSquare.ResetPivot(targetGrid, 0);
             if (results.Any())

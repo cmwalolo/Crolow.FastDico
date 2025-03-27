@@ -73,7 +73,7 @@ public partial class ScrabbleAI
         {
             Position p = new Position((board.CurrentBoard[0].SizeH - 1) / 2, (board.CurrentBoard[0].SizeV - 1) / 2, 0);
             playedRounds.CurrentRound.Position = new Position(p);
-            SearchNodes(0, dico.Root, p, letters, 1, 0, playedRounds, p);
+            SearchNodes(0, dico.Root, p, letters, 1, 0, playedRounds, p, true);
         }
         else
         {
@@ -115,7 +115,7 @@ public partial class ScrabbleAI
 
     private void Search(int grid, List<Tile> letters, PlayedRounds playedRounds)
     {
-        for (var i = 8; i < board.CurrentBoard[grid].SizeV - 1; i++)
+        for (var i = 1; i < board.CurrentBoard[grid].SizeV - 1; i++)
         {
             var rightToLeft = true;
             int oldj = 1;
@@ -127,7 +127,6 @@ public partial class ScrabbleAI
 
                     if (CheckConnect(grid, j, i))
                     {
-
                         var currentNode = dico.Root;
                         Position start = new Position(j, i, 0);
                         Position firstPosition = new Position(j, i, 0);
@@ -156,6 +155,7 @@ public partial class ScrabbleAI
                                 {
                                     sql.Reverse();
                                     playedRounds.CurrentRound = new PlayedRound();
+                                    firstPosition = new Position(pos + 1, firstPosition.Y, grid);
                                     playedRounds.CurrentRound.Position = firstPosition;
 
                                     foreach (var item in sql)
@@ -171,10 +171,14 @@ public partial class ScrabbleAI
                                 currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
                             }
 
-                        }
+                            Console.Write("Raccord " + playedRounds.CurrentRound.GetDebugWord());
 
-                        // Ok we can process that square
-                        SearchNodes(grid, currentNode, start, letters, 1, 0, playedRounds, firstPosition, rightToLeft);
+                            // Ok we can process that square only if there are children
+                            if (currentNode.Children.Any())
+                            {
+                                SearchNodes(grid, currentNode, start, letters, 1, 0, playedRounds, firstPosition, rightToLeft);
+                            }
+                        }
                     }
 
                 }
@@ -218,10 +222,6 @@ public partial class ScrabbleAI
         // We load the nodes to be checked
         var nodes = new List<LetterNode>();
 
-        if (rightToLeft == false && parentNode.IsPivot)
-        {
-            return;
-        }
 
         if (square == null || square.IsBorder)
         {
@@ -248,11 +248,6 @@ public partial class ScrabbleAI
             {
                 nodes = nodes.Where(p => p.Letter == tileLetter.Letter).ToList();
             }
-        }
-
-        if (FirstPosition.X == 8 && FirstPosition.Y == 8 && x == 8 && y == 8 && wm == 1)
-        {
-            Console.WriteLine("Bad bad ");
         }
 
         // We go through each node
@@ -291,19 +286,6 @@ public partial class ScrabbleAI
                 // We add a letter to round if not null
                 if (letter != null)
                 {
-                    if (FirstPosition.X == 8 && FirstPosition.Y == 8 && rounds.CurrentRound.Tiles.Any() && rounds.CurrentRound.Tiles[0].Letter == 's' - 97)
-                    {
-                        if (rounds.CurrentRound.Tiles[0].WordMultiplier != 2)
-                        {
-                            Console.WriteLine("First Poistion check");
-                        }
-                    }
-                    if (x == 8 && y == 8 && FirstPosition.X == 8 && FirstPosition.Y == 8 && wm == 1)
-                    {
-                        Console.WriteLine("Bad bad ");
-                        wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
-                        lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
-                    }
                     // We set a new tile 
                     rounds.CurrentRound.AddTile(letter, wm, lm);
 
@@ -348,14 +330,17 @@ public partial class ScrabbleAI
             }
             else
             {
-                rounds.CurrentRound.SetPivot();
+                if (rightToLeft == true)
+                {
+                    rounds.CurrentRound.SetPivot();
 
-                Position pp = new Position(FirstPosition.X - incH,
-                    FirstPosition.Y - incV, direction);
+                    Position pp = new Position(FirstPosition.X - incH,
+                        FirstPosition.Y - incV, direction);
 
-                SearchNodes(grid, node, pp, letters, -incH, -incV, rounds, FirstPosition);
-                rounds.CurrentRound.RemovePivot();
-                rounds.CurrentRound.Position = new Position(pp);
+                    SearchNodes(grid, node, pp, letters, -incH, -incV, rounds, FirstPosition);
+                    rounds.CurrentRound.RemovePivot();
+                    rounds.CurrentRound.Position = new Position(pp);
+                }
             }
 
         }
