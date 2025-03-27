@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extra", "Extra", "{79DAC9A0
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.TopMachine", "Crolow.TopMachine\Crolow.TopMachine.csproj", "{3754B897-9C07-4D40-B1C9-1B51946189DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{D3967F65-FDE7-4D01-99FD-0922BB61F326}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3967F65-FDE7-4D01-99FD-0922BB61F326}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3967F65-FDE7-4D01-99FD-0922BB61F326}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
