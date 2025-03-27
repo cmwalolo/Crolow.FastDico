@@ -20,6 +20,13 @@ public partial class ScrabbleAI
         }
         public void SetRound(PlayedRound round)
         {
+#if DEBUG
+            if (round.GetDebugWord() == "strikes")
+            {
+                Console.WriteLine("found strikes");
+            }
+#endif
+
             int wm = 1;
             foreach (var t in round.Tiles)
             {

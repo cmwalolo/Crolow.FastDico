@@ -1,14 +1,10 @@
 ﻿using Crolow.FastDico.Dawg;
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
-using Crolow.FastDico.Utils;
 using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Diagnostics.Metrics;
+using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
@@ -242,6 +238,7 @@ public partial class ScrabbleAI
         var lm = 1;
         Tile tileLetter = null;
 
+        // WTF !!!! Word multipliers are not set for certain words
         if (square != null && !parentNode.IsPivot)
         {
             tileLetter = square.CurrentLetter;
@@ -251,6 +248,11 @@ public partial class ScrabbleAI
             {
                 nodes = nodes.Where(p => p.Letter == tileLetter.Letter).ToList();
             }
+        }
+
+        if (FirstPosition.X == 8 && FirstPosition.Y == 8 && x == 8 && y == 8 && wm == 1)
+        {
+            Console.WriteLine("Bad bad ");
         }
 
         // We go through each node
@@ -289,6 +291,19 @@ public partial class ScrabbleAI
                 // We add a letter to round if not null
                 if (letter != null)
                 {
+                    if (FirstPosition.X == 8 && FirstPosition.Y == 8 && rounds.CurrentRound.Tiles.Any() && rounds.CurrentRound.Tiles[0].Letter == 's' - 97)
+                    {
+                        if (rounds.CurrentRound.Tiles[0].WordMultiplier != 2)
+                        {
+                            Console.WriteLine("First Poistion check");
+                        }
+                    }
+                    if (x == 8 && y == 8 && FirstPosition.X == 8 && FirstPosition.Y == 8 && wm == 1)
+                    {
+                        Console.WriteLine("Bad bad ");
+                        wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
+                        lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
+                    }
                     // We set a new tile 
                     rounds.CurrentRound.AddTile(letter, wm, lm);
 
@@ -322,7 +337,7 @@ public partial class ScrabbleAI
                     rounds.CurrentRound.Position = new Position(oldPosition);
                     // We reset letter on the rack.
 
-                    rounds.CurrentRound.RemoveTile(wm);
+                    rounds.CurrentRound.RemoveTile();
 
                     // If letter comes from rack we put it back
                     if (letter.Status == 0)
@@ -333,13 +348,6 @@ public partial class ScrabbleAI
             }
             else
             {
-#if DEBUG
-                if (DawgUtils.ConvertBytesToWord(rounds.CurrentRound.Tiles) == "aquero")
-                {
-                    rounds.CurrentRound.DebugRound("DEBUG");
-                }
-#endif
-
                 rounds.CurrentRound.SetPivot();
 
                 Position pp = new Position(FirstPosition.X - incH,

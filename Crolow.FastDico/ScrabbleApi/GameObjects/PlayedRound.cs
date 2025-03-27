@@ -29,10 +29,13 @@ public partial class ScrabbleAI
             Tiles.Add(tile);
         }
 
-        public Tile RemoveTile(int m)
+        public Tile RemoveTile()
         {
             var t = Tiles[Tiles.Count - 1];
             Tiles.RemoveAt(Tiles.Count - 1);
+            t.WordMultiplier = 1;
+            t.LetterMultiplier = 1;
+
             return t;
         }
 
@@ -88,6 +91,15 @@ public partial class ScrabbleAI
 
         public void DebugRound(string message)
         {
+            string res = GetDebugWord();
+
+            var txt = $"{message} : {res} "
+                + Points + " : " + GetPosition();
+            Console.WriteLine(txt);
+        }
+
+        public string GetDebugWord()
+        {
             var l = Tiles.Take(Pivot).Select(p => p.Letter).ToList();
             var m = Tiles.Skip(Pivot).Select(p => p.Letter).ToList();
             if (Pivot != 0)
@@ -101,10 +113,7 @@ public partial class ScrabbleAI
             }
 
             string res = DawgUtils.ConvertBytesToWord(m);
-
-            var txt = $"{message} : {res} "
-                + Points + " : " + GetPosition();
-            Console.WriteLine(txt);
+            return res;
         }
     }
 }

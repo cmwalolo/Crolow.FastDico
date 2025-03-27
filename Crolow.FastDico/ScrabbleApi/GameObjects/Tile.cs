@@ -15,8 +15,8 @@ public class Tile
         Status = status;
         Points = tile.Points;
         IsJoker = tile.IsJoker;
-        WordMultiplier = 1;
-        LetterMultiplier = 1;
+        WordMultiplier = tile.LetterMultiplier;
+        LetterMultiplier = tile.WordMultiplier;
     }
 
     public int LetterMultiplier { get; set; }

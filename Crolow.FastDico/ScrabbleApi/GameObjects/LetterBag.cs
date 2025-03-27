@@ -18,7 +18,10 @@ public class LetterBag
         // Populate the bag according to the distribution
         foreach (var kvp in GameConfig.BagConfig.Letters)
         {
-            Letters.AddRange(Enumerable.Repeat(kvp, kvp.TotalLetters));
+            for (var i = 0; i < kvp.TotalLetters; i++)
+            {
+                Letters.Add(new Tile(kvp));
+            }
         }
     }
 
