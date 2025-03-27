@@ -1,0 +1,103 @@
+﻿.rz-footer {
+    padding: 0;
+}
+
+
+#playgroundNav {
+    padding: 0px;
+}
+/* Rack Styling */
+div#rack {
+    padding: 0px;
+    text-align: center;
+    width: 100%;
+    height: 50px;
+}
+
+    div#rack table {
+        table-layout: auto;
+    }
+
+    div#rack TD {
+        padding: 0px;
+        width: 30px;
+        height: 30px;
+        border: solid 1px gray;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 27px;
+        font-weight: bold;
+        background-color: #ffcc66;
+        position: relative;
+    }
+
+
+div#grid {
+    padding: 5px;
+    height: 500px;
+}
+
+    /* Grid styling */
+    div#grid table {
+        table-layout: fixed;
+        margin: 0px;
+        padding: 0px;
+    }
+
+        div#grid table td {
+            border: solid 1px gray;
+            border-collapse: collapse;
+            table-layout: fixed;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: bold;
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+            height: 50px;
+            width: 50px;
+        }
+
+
+    div#grid td.border {
+        font-size: 9px !important;
+        overflow: hidden;
+        color: White !important;
+    }
+
+    div#grid td.cell {
+        border: solid 1px gray;
+        border-collapse: collapse;
+        font-weight: bold;
+        color: Black;
+    }
+
+    div#grid td.cell0 {
+        background-color: white;
+    }
+
+    div#grid td.cell2 {
+        background-color: Coral;
+    }
+
+    div#grid td.cell3 {
+        background-color: DarkRed;
+    }
+
+
+    div#grid td.cell-2 {
+        background-color: LightSteelBlue;
+    }
+
+    div#grid td.cell-3 {
+        background-color: DarkBlue;
+    }
+
+    div#grid td.tileJoker {
+        background-color: #ffcc66;
+        color: #FF3333;
+    }
+
+    div#grid td.tile {
+        background-color: #ffcc66;
+    }

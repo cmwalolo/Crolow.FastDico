@@ -14,13 +14,13 @@
     </RadzenBody>
     <RadzenFooter>
         <RadzenMenu>
-            <RadzenMenuItem Text="Home" Icon="home" Click=@(args => UpdateMenu("General"))>
+            <RadzenMenuItem Text="Home" Icon="home" Click=@(args => UpdateMenu("Home"))>
             </RadzenMenuItem>
-            <RadzenMenuItem Text="Finder" Icon="match_word" Click=@(args => UpdateMenu("General"))>
+            <RadzenMenuItem Text="Finder" Icon="match_word" Click=@(args => UpdateMenu("Finder"))>
             </RadzenMenuItem>
-            <RadzenMenuItem Text="Topping" Icon="crossword" Click=@(args => UpdateMenu("Albums"))>
+            <RadzenMenuItem Text="Topping" Icon="crossword" Click=@(args => UpdateMenu("Topping"))>
             </RadzenMenuItem>
-            <RadzenMenuItem Text="Puzzling" Icon="extension" Click=@(args => UpdateMenu("Albums"))>
+            <RadzenMenuItem Text="Puzzling" Icon="extension" Click=@(args => UpdateMenu("Puzzling"))>
             </RadzenMenuItem>
             <RadzenMenuItem Text="Settings" Icon="settings" Click=@(args => UpdateMenu("Settings"))>
             </RadzenMenuItem>
@@ -37,8 +37,17 @@
         SelectedApp = menu;
         switch (menu)
         {
-            case "Albums":
-                Navigation.NavigateTo("/Modules/PhotoManager/Albums/Album");
+            case "Home":
+                Navigation.NavigateTo("/Home");
+                break;
+            case "Topping":
+                Navigation.NavigateTo("/Topping");
+                break;
+            case "Puzzling":
+                Navigation.NavigateTo("/Puzzling");
+                break;
+            case "Finder":
+                Navigation.NavigateTo("/Finder");
                 break;
             default:
                 break;
