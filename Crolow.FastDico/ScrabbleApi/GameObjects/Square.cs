@@ -21,10 +21,11 @@
             return (Pivots[direction] & 1u << letter) > 0;
         }
 
-        public void ResetPivot(uint maskValue = uint.MaxValue)
+
+        public void ResetPivot(int grid, uint maskValue = uint.MaxValue)
         {
-            Pivots[0] = Pivots[1] = maskValue;
-            PivotPoints[0] = PivotPoints[1] = 0;
+            Pivots[grid] = maskValue;
+            PivotPoints[grid] = 0;
         }
 
 

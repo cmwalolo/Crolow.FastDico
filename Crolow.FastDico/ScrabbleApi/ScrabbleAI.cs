@@ -119,7 +119,7 @@ public partial class ScrabbleAI
 
     private void Search(int grid, List<Tile> letters, PlayedRounds playedRounds)
     {
-        for (var i = 1; i < board.CurrentBoard[grid].SizeV - 1; i++)
+        for (var i = 8; i < board.CurrentBoard[grid].SizeV - 1; i++)
         {
             var rightToLeft = true;
             int oldj = 1;
@@ -128,9 +128,13 @@ public partial class ScrabbleAI
                 var sq = board.GetSquare(grid, j, i);
                 if (sq.CurrentLetter == null)
                 {
+
                     if (CheckConnect(grid, j, i))
                     {
+
+                        var currentNode = dico.Root;
                         Position start = new Position(j, i, 0);
+                        Position firstPosition = new Position(j, i, 0);
                         // If we are skipping only one square we do not need
                         // to search on the left.
                         rightToLeft = j == 1 || (j == oldj + 1 ? true : false);
@@ -140,6 +144,7 @@ public partial class ScrabbleAI
                         var sqLeft = board.GetSquare(grid, j - 1, i);
                         if (sqLeft.CurrentLetter != null && sqLeft.CurrentLetter.Status == 1)
                         {
+                            rightToLeft = false;
                             var sql = new List<Square>();
                             sql.Add(sqLeft);
                             var pos = j - 2;
@@ -155,6 +160,7 @@ public partial class ScrabbleAI
                                 {
                                     sql.Reverse();
                                     playedRounds.CurrentRound = new PlayedRound();
+                                    playedRounds.CurrentRound.Position = firstPosition;
 
                                     foreach (var item in sql)
                                     {
@@ -163,10 +169,16 @@ public partial class ScrabbleAI
                                     break;
                                 }
                             }
+
+                            foreach (var letter in sql)
+                            {
+                                currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
+                            }
+
                         }
 
                         // Ok we can process that square
-                        SearchNodes(grid, dico.Root, start, letters, 1, 0, playedRounds, start, rightToLeft);
+                        SearchNodes(grid, currentNode, start, letters, 1, 0, playedRounds, firstPosition, rightToLeft);
                     }
 
                 }
@@ -209,6 +221,11 @@ public partial class ScrabbleAI
 
         // We load the nodes to be checked
         var nodes = new List<LetterNode>();
+
+        if (rightToLeft == false && parentNode.IsPivot)
+        {
+            return;
+        }
 
         if (square == null || square.IsBorder)
         {

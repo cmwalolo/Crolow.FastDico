@@ -2,6 +2,7 @@
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.Utils;
+using System.Text;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects
 {
@@ -21,13 +22,18 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             this.playConfiguration = playConfiguration;
         }
 
-        public void Build()
+        public uint[] GetMask(int x, int y, int direction)
         {
-            Build(0);
-            Build(1);
+            return board.GetSquare(direction, x, y).Pivots;
         }
 
-        public void Build(int grid)
+        public void Build()
+        {
+            Build(0, 1);
+            Build(1, 0);
+        }
+
+        public void Build(int grid, int targetGrid)
         {
             for (int y = 1; y < board.CurrentBoard[0].SizeV - 1; y++)
             {
@@ -36,10 +42,9 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 for (int x = 0; x < board.CurrentBoard[0].SizeH; x++)
                 {
                     squares[x] = board.GetSquare(grid, x, y);
-                    squares[x].ResetPivot();
+                    squares[x].ResetPivot(targetGrid);
                 }
-                MaskLeftToRightHorizontal(grid, squares, y);
-
+                var runs = MaskLeftToRightHorizontal(grid, targetGrid, squares, y);
             }
 
         }
@@ -49,16 +54,19 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             public bool toRight = toRight;
             public int start = start, end = end;
         }
-        private void MaskLeftToRightHorizontal(int grid, Square[] squares, int x)
+
+        private List<Run> MaskLeftToRightHorizontal(int grid, int targetGrid, Square[] squares, int y)
         {
             int startX = 1;
             int endX = 0;
 
             var runs = new List<Run>();
+
             if (squares.Count(p => p.CurrentLetter != null) == 0)
             {
-                return;
+                return null;
             }
+
             // We first calculate runs of adjacent letters
             do
             {
@@ -108,16 +116,14 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
             runs.ForEach(run =>
             {
-                Solve(grid, run, squares);
-                //#if DEBUG 
-                //                Console.WriteLine($"{run.start} - {run.end} - {run.toRight} - {direction}");
-                //#endif
+                Solve(grid, targetGrid, run, squares);
             });
 
+            return runs;
 
         }
 
-        private void Solve(int grid, Run run, Square[] squares)
+        private void Solve(int grid, int targetGrid, Run run, Square[] squares)
         {
             var start = run.start;
             var end = run.end;
@@ -146,21 +152,21 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             }
             var results = SearchByPattern(bytes);
 
-            //#if DEBUG
-            //            var pattern = DawgUtils.ConvertBytesToWord(bytes.ToList());
-            //            results.ForEach(result =>
-            //            {
-            //                var s = DawgUtils.ConvertBytesToWord(result.ToList());
-            //                Console.WriteLine($"raccord : {pattern} {s}");
-            //            });
-            //#endif
+#if DEBUG
+            var pattern = DawgUtils.ConvertBytesToWord(bytes.ToList());
+            results.ForEach(result =>
+            {
+                var s = DawgUtils.ConvertBytesToWord(result.ToList());
+                Console.WriteLine($"raccord : {pattern} {s}");
+            });
+#endif
 
+            pivotSquare.ResetPivot(targetGrid, 0);
             if (results.Any())
             {
-                pivotSquare.ResetPivot(0);
                 foreach (var result in results)
                 {
-                    pivotSquare.SetPivot(result[pivotPosition], grid, points);
+                    pivotSquare.SetPivot(result[pivotPosition], targetGrid, points);
                 }
             }
         }
