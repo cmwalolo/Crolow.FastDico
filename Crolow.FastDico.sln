@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extra", "Extra", "{79DAC9A0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.TopMachine", "Crolow.TopMachine\Crolow.TopMachine.csproj", "{3754B897-9C07-4D40-B1C9-1B51946189DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.TopMachine.Data", "Crolow.TopMachine.Data\Crolow.TopMachine.Data.csproj", "{6C92E89F-1310-7DBA-E792-7D461A12D5DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,8 +28,15 @@ Global
 		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C92E89F-1310-7DBA-E792-7D461A12D5DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C92E89F-1310-7DBA-E792-7D461A12D5DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C92E89F-1310-7DBA-E792-7D461A12D5DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C92E89F-1310-7DBA-E792-7D461A12D5DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D22E2F87-D845-47DE-9A40-30442D105CBC}
 	EndGlobalSection
 EndGlobal
