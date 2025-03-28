@@ -1,9 +1,8 @@
-﻿using Crolow.Pix.Data;
-using Crolow.Pix.Data.Interfaces;
+﻿using Crolow.TopMachine.Data.Interfaces;
 using LiteDB;
 using System.Linq.Expressions;
 
-namespace Kalow.Apps.DataLayer.LiteDb.Repositories
+namespace Crolow.TopMachine.Data
 {
 
     internal static class Clients
@@ -20,8 +19,8 @@ namespace Kalow.Apps.DataLayer.LiteDb.Repositories
         public Repository(DatabaseSettings settings, string db, string table)
         {
             var setting = settings.Values.FirstOrDefault(p => p.Name == db);
-            this.databaseSetting = setting;
-            this.tableName = table;
+            databaseSetting = setting;
+            tableName = table;
 
             if (setting != null)
             {

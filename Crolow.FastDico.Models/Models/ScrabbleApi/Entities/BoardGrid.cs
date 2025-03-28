@@ -1,6 +1,6 @@
 ﻿using Kalow.Apps.Models.Data;
 
-namespace Crolow.FastDico.ScrabbleApi.Utils;
+namespace Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 public class BoardGrid : DataObject
 {
     public class MultiplierData

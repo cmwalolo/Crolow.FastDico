@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Crolow.TopMachine.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Radzen;
 
 namespace Crolow.TopMachine
@@ -23,8 +25,20 @@ namespace Crolow.TopMachine
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
 #endif
-
+            CreateConfiguration(builder);
             return builder.Build();
+        }
+
+        private static void CreateConfiguration(MauiAppBuilder builder)
+        {
+            builder.Configuration
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            var databaseSettings = builder.Configuration
+                .GetSection("DatabaseSettings")
+                .Get<DatabaseSettings>();
+
+            builder.Services.AddSingleton(databaseSettings);
         }
     }
 }

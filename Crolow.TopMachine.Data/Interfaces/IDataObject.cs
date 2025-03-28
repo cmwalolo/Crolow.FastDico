@@ -1,6 +1,6 @@
 ﻿using Kalow.Apps.Common.DataTypes;
 
-namespace Crolow.Pix.Data.Interfaces
+namespace Crolow.TopMachine.Data.Interfaces
 {
     public enum EditState
     {

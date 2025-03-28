@@ -1,4 +1,4 @@
-﻿namespace Crolow.Pix.Data
+﻿namespace Crolow.TopMachine.Data
 {
     public class DatabaseSettings
     {

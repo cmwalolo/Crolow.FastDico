@@ -1,7 +1,6 @@
-﻿
-using Kalow.Apps.Common.DataTypes;
+﻿using Kalow.Apps.Common.DataTypes;
 
-namespace Crolow.Pix.Core.FileStorage
+namespace Crolow.TopMachine.Data.Interfaces
 {
     public interface IFileRepository
     {

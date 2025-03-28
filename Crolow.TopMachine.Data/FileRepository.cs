@@ -1,8 +1,8 @@
-﻿using Crolow.Pix.Data;
+﻿using Crolow.TopMachine.Data.Interfaces;
 using Kalow.Apps.Common.DataTypes;
 using LiteDB;
 
-namespace Crolow.Pix.Core.FileStorage;
+namespace Crolow.TopMachine.Data;
 public class FileRepository : IDisposable, IFileRepository
 {
     private string DatabaseName = "Media";

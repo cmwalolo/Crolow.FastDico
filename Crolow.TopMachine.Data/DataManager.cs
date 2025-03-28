@@ -1,11 +1,9 @@
-﻿using Crolow.Pix.Data;
-using Crolow.Pix.Data.Interfaces;
+﻿using Crolow.TopMachine.Data.Interfaces;
 using Kalow.Apps.Common.DataTypes;
-using Kalow.Apps.DataLayer.LiteDb.Repositories;
 using LiteDB;
 using System.Linq.Expressions;
 
-namespace Kalow.Apps.Managers.LiteDb.Data
+namespace Crolow.TopMachine.Data
 {
     public interface IDataManager<T> : IDisposable where T : IDataObject
     {
@@ -39,7 +37,7 @@ namespace Kalow.Apps.Managers.LiteDb.Data
         }
         public IEnumerable<T> GetAllNodes(Expression<Func<T, bool>> filter)
         {
-            return repository.List<T>(filter).Result;
+            return repository.List(filter).Result;
         }
 
         public T GetNode(KalowId dataLink)
@@ -49,7 +47,7 @@ namespace Kalow.Apps.Managers.LiteDb.Data
 
         public T GetNode(Expression<Func<T, bool>> filter)
         {
-            return repository.Get<T>(filter).Result;
+            return repository.Get(filter).Result;
         }
 
         public void Update(T data)
@@ -57,10 +55,10 @@ namespace Kalow.Apps.Managers.LiteDb.Data
             switch (data.EditState)
             {
                 case EditState.New:
-                    repository.Add<T>(data);
+                    repository.Add(data);
                     break;
                 case EditState.Update:
-                    repository.Update<T>(t => t.Id == data.Id, data);
+                    repository.Update(t => t.Id == data.Id, data);
                     break;
                 case EditState.ToDelete:
                     repository.Remove<T>(t => t.Id == data.Id);
@@ -84,7 +82,7 @@ namespace Kalow.Apps.Managers.LiteDb.Data
                     switch (data.EditState)
                     {
                         case EditState.Update:
-                            repository.Update<T>(t => t.Id == data.Id, data);
+                            repository.Update(t => t.Id == data.Id, data);
                             break;
                         case EditState.ToDelete:
                             repository.Remove<T>(t => t.Id == data.Id);
