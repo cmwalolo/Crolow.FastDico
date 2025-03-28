@@ -1,5 +1,5 @@
 ﻿using Crolow.FastDico.Utils;
-using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 
 namespace Crolow.FastDico.ScrabbleApi;
 

@@ -1,6 +1,7 @@
 ﻿using Crolow.FastDico.Dawg;
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
+using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;

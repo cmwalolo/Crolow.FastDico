@@ -1,22 +1,11 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
+
 using Newtonsoft.Json;
 
 namespace Crolow.FastDico.ScrabbleApi.Utils
 {
-    public class ConfigReader
+    public partial class ConfigReader
     {
-        private class MultiplierData
-        {
-            public int Multiplier { get; set; }
-            public List<int[]> Positions { get; set; }
-        }
-
-        private class BoardGrid
-        {
-            public int SizeH { get; set; }
-            public int SizeV { get; set; }
-            public List<MultiplierData> Configuration { get; set; }
-        }
 
         private class BoardData
         {

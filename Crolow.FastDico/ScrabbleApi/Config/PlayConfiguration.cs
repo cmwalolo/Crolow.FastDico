@@ -1,4 +1,6 @@
-﻿namespace Crolow.FastDico.ScrabbleApi.Config
+﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+
+namespace Crolow.FastDico.ScrabbleApi.Config
 {
     public partial class PlayConfiguration
     {
