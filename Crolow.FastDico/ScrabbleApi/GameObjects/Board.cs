@@ -13,8 +13,8 @@ public class Board
     {
         CurrentBoard[0] = new GridConfigurationContainer(currentGame.Configuration.GridConfig);
         CurrentBoard[1] = new GridConfigurationContainer();
-        CurrentBoard[1].SizeV = CurrentBoard[1].SizeH;
-        CurrentBoard[1].SizeH = CurrentBoard[1].SizeV;
+        CurrentBoard[1].SizeV = CurrentBoard[0].SizeH;
+        CurrentBoard[1].SizeH = CurrentBoard[0].SizeV;
         CurrentBoard[1].Grid = ArrayUtils.Transpose<Square>(CurrentBoard[0].Grid);
 
     }
@@ -33,6 +33,8 @@ public class Board
     {
         // WE set definetly the tile on the rack
         tile.Status = 1;
+        tile.LetterMultiplier = 1;
+        tile.WordMultiplier = 1;
         CurrentBoard[grid].Grid[X, Y].CurrentLetter = tile;
     }
 

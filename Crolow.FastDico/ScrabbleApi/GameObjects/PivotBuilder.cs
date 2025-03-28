@@ -1,8 +1,11 @@
-﻿using Crolow.FastDico.Dicos;
+﻿#undef DEBUGPIVOT  
+
+using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.Utils;
 using System.Text;
+
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects
 {
@@ -42,7 +45,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 for (int x = 0; x < board.CurrentBoard[0].SizeH; x++)
                 {
                     squares[x] = board.GetSquare(grid, x, y);
-                    squares[x].ResetPivot(targetGrid);
+                    squares[x].ResetPivot(targetGrid, 0);
                 }
                 var runs = MaskLeftToRightHorizontal(grid, targetGrid, squares, y);
             }
@@ -152,16 +155,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             }
             var results = SearchByPattern(bytes);
 
-            //#if DEBUG
-            //            var pattern = DawgUtils.ConvertBytesToWord(bytes.ToList());
-            //            results.ForEach(result =>
-            //            {
-            //                var s = DawgUtils.ConvertBytesToWord(result.ToList());
-            //                Console.WriteLine($"raccord : {pattern} {s}");
-            //            });
-            //#endif
-
-            pivotSquare.ResetPivot(targetGrid, 0);
+            pivotSquare.ResetPivot(targetGrid, 0, 0);
             if (results.Any())
             {
                 foreach (var result in results)
@@ -169,6 +163,14 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                     pivotSquare.SetPivot(result[pivotPosition], targetGrid, points);
                 }
             }
+
+#if DEBUGPIVOT
+            var pattern = DawgUtils.ConvertBytesToWord(bytes.ToList());
+            var mask = pivotSquare.Pivots[targetGrid];
+            var pts = pivotSquare.PivotPoints[targetGrid];
+            Console.WriteLine($"raccord : {pattern} {mask} {pts}");
+#endif
+
         }
 
         public List<byte[]> SearchByPattern(byte[] bytePattern)

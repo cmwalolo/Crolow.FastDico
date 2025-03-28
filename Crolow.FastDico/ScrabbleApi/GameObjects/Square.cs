@@ -22,10 +22,10 @@
         }
 
 
-        public void ResetPivot(int grid, uint maskValue = uint.MaxValue)
+        public void ResetPivot(int grid, int points, uint maskValue = uint.MaxValue)
         {
             Pivots[grid] = maskValue;
-            PivotPoints[grid] = 0;
+            PivotPoints[grid] = points;
         }
 
 

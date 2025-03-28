@@ -64,7 +64,12 @@ public partial class ScrabbleAI
 
         internal string GetPosition()
         {
-            return $"{(new char[] { ((char)(64 + Position.Y)) }[0])}{Position.X}";
+            if (Position.Direction == 0)
+            {
+                return $"{(new char[] { ((char)(64 + Position.Y)) }[0])}{Position.X}";
+            }
+
+            return $"{Position.Y}{(new char[] { ((char)(64 + Position.X)) }[0])}";
         }
 
 

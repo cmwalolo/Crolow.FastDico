@@ -105,6 +105,11 @@ public partial class ScrabbleAI
             {
                 rack.RemoveTile(letter);
             }
+
+            if (letter.IsJoker)
+            {
+                letter.Letter = DawgUtils.PivotByte;
+            }
         }
 
         selectedRound.FinalizeRound();
@@ -122,15 +127,16 @@ public partial class ScrabbleAI
             int oldj = 1;
             for (var j = 1; j < board.CurrentBoard[grid].SizeH - 1; j++)
             {
+                var currentNode = dico.Root;
+                playedRounds.CurrentRound = new PlayedRound();
+
                 var sq = board.GetSquare(grid, j, i);
                 if (sq.CurrentLetter == null)
                 {
-
                     if (CheckConnect(grid, j, i))
                     {
-                        var currentNode = dico.Root;
-                        Position start = new Position(j, i, 0);
-                        Position firstPosition = new Position(j, i, 0);
+                        Position start = new Position(j, i, grid);
+                        Position firstPosition = new Position(j, i, grid);
                         // If we are skipping only one square we do not need
                         // to search on the left.
                         rightToLeft = j == 1 || (j == oldj + 1 ? true : false);
@@ -172,7 +178,7 @@ public partial class ScrabbleAI
                                 currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
                             }
 
-                            Console.Write("Raccord " + playedRounds.CurrentRound.GetDebugWord());
+                            Console.WriteLine("Raccord " + playedRounds.CurrentRound.GetDebugWord());
 
                             // Ok we can process that square only if there are children
                             if (currentNode.Children.Any())
@@ -180,9 +186,14 @@ public partial class ScrabbleAI
                                 SearchNodes(grid, currentNode, start, letters, 1, 0, playedRounds, firstPosition, rightToLeft);
                             }
                         }
+                        else
+                        {
+                            SearchNodes(grid, currentNode, start, letters, 1, 0, playedRounds, firstPosition, rightToLeft);
+                        }
                     }
 
                 }
+                rightToLeft = false;
             }
         }
     }

@@ -23,7 +23,11 @@ public class PlayerRack
 
     public void RemoveTile(Tile tile)
     {
-        var i = Tiles.FindIndex(t => t.Letter == tile.Letter || tile.IsJoker == tile.IsJoker);
+        var i = Tiles.FindIndex(t => t.Letter == tile.Letter || (t.IsJoker && tile.IsJoker));
+        if (i == -1)
+        {
+            Console.WriteLine("missing tile");
+        }
         Tiles.RemoveAt(i);
     }
 

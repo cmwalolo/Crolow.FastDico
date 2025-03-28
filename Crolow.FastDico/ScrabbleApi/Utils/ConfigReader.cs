@@ -1,4 +1,5 @@
-﻿using Crolow.FastDico.ScrabbleApi.Config;
+﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+using Crolow.FastDico.ScrabbleApi.Config;
 
 using Newtonsoft.Json;
 
