@@ -221,6 +221,68 @@ public partial class ScrabbleAI
 
     private void EndGame()
     {
+        StringBuilder sb = new StringBuilder();
+#if DEBUG
+        sb.AppendLine("<html>");
+        sb.AppendLine("<head>");
+        sb.AppendLine("<link rel=\"stylesheet\" href=\"grid.css\" />");
+        sb.AppendLine("</head>");
+
+        sb.AppendLine("<body><div id='grid'>");
+
+        sb.AppendLine("<table class='results' style='float:right'>");
+        sb.AppendLine("<th><td>#</td><td>Rack</td><td>Word</td><td>pos</td><td>pts</td></th>");
+        int ndx = 1;
+        foreach (var r in currentGame.RoundsPlayed)
+        {
+            sb.AppendLine("<tr>");
+            sb.AppendLine($"<td>{ndx++}</td>");
+            sb.AppendLine("<td></td>");
+            sb.AppendLine($"<td>{r.GetDebugWord(true)}</td>");
+            sb.AppendLine($"<td>{r.GetPosition()}</td>");
+            sb.AppendLine($"<td>{r.Points}</td>");
+            sb.AppendLine("</tr>");
+        }
+
+        sb.AppendLine("</table>");
+
+        sb.AppendLine("<table>");
+        sb.AppendLine("<tr><td></td>");
+        for (int col = 1; col < board.CurrentBoard[0].SizeH - 1; col++)
+        {
+            sb.AppendLine($"<td class='border'>{col}</td>");
+        }
+        sb.AppendLine("</tr>");
+
+        for (int x = 1; x < board.CurrentBoard[0].SizeH - 1; x++)
+        {
+            var cc = ((char)(x + 64));
+            sb.AppendLine($"<tr><td class='border'>{cc}</td>");
+            for (int y = 1; y < board.CurrentBoard[0].SizeH - 1; y++)
+            {
+                var sq = board.GetSquare(0, y, x);
+                var cclass = $"cell cell-{sq.LetterMultiplier} cell{sq.WordMultiplier}";
+
+                if (sq.CurrentLetter != null)
+                {
+                    cclass += sq.CurrentLetter.IsJoker ? " tileJoker" : " tile";
+                }
+
+                sb.AppendLine($"<td class='{cclass}'>");
+                if (sq.CurrentLetter != null)
+                {
+                    var c = (char)(sq.CurrentLetter.Letter + 97);
+                    sb.AppendLine(char.ToUpper(c).ToString());
+                }
+                sb.AppendLine("</td>");
+            }
+            sb.AppendLine("</tr>");
+        }
+        sb.AppendLine("</table>");
+
+        sb.AppendLine("</grid></body></html>");
+        System.IO.File.WriteAllText("output.html", sb.ToString());
+#endif
         // We are done 
     }
 
@@ -286,6 +348,9 @@ public partial class ScrabbleAI
                         {
                             continue;
                         }
+
+                        letter.Mask = square.GetPivotPoints(grid);
+
                         // We remove the letter from the rack
                         letters.Remove(letter);
 

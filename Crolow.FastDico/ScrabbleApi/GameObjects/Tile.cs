@@ -22,6 +22,7 @@ public class Tile
 #if DEBUG
     public int x { get; set; }
 #endif
+    public int Mask { get; set; }
 
     public int LetterMultiplier { get; set; }
     public int WordMultiplier { get; set; }

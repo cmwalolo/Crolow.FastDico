@@ -21,6 +21,11 @@
             return (Pivots[direction] & 1u << letter) > 0;
         }
 
+        public int GetPivotPoints(int direction)
+        {
+            return PivotPoints[direction];
+        }
+
 
         public void ResetPivot(int grid, int points, uint maskValue = uint.MaxValue)
         {

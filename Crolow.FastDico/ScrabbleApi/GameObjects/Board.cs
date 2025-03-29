@@ -45,6 +45,9 @@ public class Board
         int x = round.Position.X;
         int y = round.Position.Y;
 
+        round.DebugRound("Word");
+        Console.WriteLine("-------------------------------------------");
+
         if (round.Position.Direction == 0)
         {
             incH = 1;

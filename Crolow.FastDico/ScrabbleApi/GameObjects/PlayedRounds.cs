@@ -21,9 +21,15 @@ public partial class ScrabbleAI
         public void SetRound(PlayedRound round)
         {
             int wm = 1;
+            int pivotTotal = 0;
             foreach (var t in round.Tiles)
             {
                 wm *= t.WordMultiplier;
+
+                if (t.Status == 0 && t.Mask > 0)
+                {
+                    pivotTotal += (t.Points * t.LetterMultiplier * t.WordMultiplier) + (t.Mask * t.WordMultiplier);
+                }
             }
 
             round.Points = round.Tiles.Sum(p => p.Points * p.LetterMultiplier) * wm;
@@ -34,7 +40,8 @@ public partial class ScrabbleAI
                 round.Bonus = Config.Bonus[tilesFromRack - 1];
             }
 
-            round.Points += round.Bonus;
+            round.Points += round.Bonus + pivotTotal;
+
 
             if (round.Points > MaxPoints)
             {

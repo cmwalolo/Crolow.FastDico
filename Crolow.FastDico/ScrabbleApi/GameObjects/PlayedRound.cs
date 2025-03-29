@@ -62,7 +62,7 @@ public partial class ScrabbleAI
             Pivot = 0;
         }
 
-        internal string GetPosition()
+        public string GetPosition()
         {
             if (Position.Direction == 0)
             {
@@ -97,10 +97,6 @@ public partial class ScrabbleAI
             {
                 Position = new Position(Position.Y, Position.X, 1);
             }
-
-            this.DebugRound("Word");
-            Console.WriteLine("-------------------------------------------");
-
         }
 
 
