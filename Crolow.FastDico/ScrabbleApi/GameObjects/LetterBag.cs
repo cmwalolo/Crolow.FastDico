@@ -40,7 +40,7 @@ public class LetterBag
                     ReturnLetters(drawnLetters);
                 }
 
-                drawnLetters = ForceDrawLetters("ntryegu");
+                //drawnLetters = ForceDrawLetters("ntryegu");
 
                 for (int i = drawnLetters.Count; i < count; i++)
                 {

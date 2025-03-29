@@ -7,6 +7,7 @@ using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
@@ -64,7 +65,7 @@ public partial class ScrabbleAI
         }
 
         string res = DawgUtils.ConvertBytesToWord(letters);
-        Console.WriteLine("Rack : " + res);
+        Console.WriteLine($"Rack :#{currentGame.Round}  {res}");
         Console.WriteLine("-------------------------------------------");
 
 
@@ -182,9 +183,6 @@ public partial class ScrabbleAI
                                 currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
                             }
 
-#if DEBUG
-                            Console.WriteLine("Raccord " + playedRounds.CurrentRound.GetDebugWord(true));
-#endif
                             // Ok we can process that square only if there are children
                             if (currentNode.Children.Any())
                             {
@@ -253,7 +251,6 @@ public partial class ScrabbleAI
         var lm = 1;
         Tile tileLetter = null;
 
-        // WTF !!!! Word multipliers are not set for certain words
         if (square != null && !parentNode.IsPivot)
         {
             tileLetter = square.CurrentLetter;
@@ -302,9 +299,19 @@ public partial class ScrabbleAI
                 if (letter != null)
                 {
 #if DEBUG
-                    if (rounds.CurrentRound.GetDebugWord(true) == "gentr")
+                    //if (node.IsEnd)
+                    //{
+                    //    var res = $"{rounds.CurrentRound.GetDebugWord(true)}";
+                    //    if (res == "yre" || res == "entry")
+                    //    {
+                    //        Console.WriteLine($"found : {rounds.CurrentRound.GetDebugWord(true)}");
+                    //    }
+                    //}
+
+                    letter.x = x;
+                    if (rounds.CurrentRound.Tiles.Any(p => p.WordMultiplier == 2) && wm == 2)
                     {
-                        Console.WriteLine("found gentr");
+                        //Console.Write("Double word multiplier ?");
                     }
 #endif
                     // We set a new tile 
@@ -336,7 +343,7 @@ public partial class ScrabbleAI
                     }
 
                     // if we reach the maximum number of playables we stop 
-                    var oldPosition = new Position(x + 1, y, grid);
+                    var oldPosition = new Position(x + increment, y, grid);
                     // We continue the search in the nodes 
                     SearchNodes(grid, node, increment, oldPosition, letters, rounds, firstPosition);
                     rounds.CurrentRound.Position = new Position(oldPosition);

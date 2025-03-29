@@ -19,6 +19,10 @@ public class Tile
         LetterMultiplier = tile.WordMultiplier;
     }
 
+#if DEBUG
+    public int x { get; set; }
+#endif
+
     public int LetterMultiplier { get; set; }
     public int WordMultiplier { get; set; }
 
