@@ -18,7 +18,7 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
         {
             stopwatch.Stop();
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Stopping : " + message + " : " + stopwatch.ElapsedMilliseconds);
+            Console.WriteLine("Stopping : " + message + " : " + stopwatch.ElapsedMilliseconds + " ms");
         }
     }
 }

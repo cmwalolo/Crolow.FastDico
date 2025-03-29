@@ -53,6 +53,7 @@ public class Board
         {
             incV = 1;
         }
+        round.Tiles = round.Tiles.Select(p => new Tile(p)).ToList();
 
         foreach (var tile in round.Tiles)
         {

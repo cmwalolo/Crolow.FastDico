@@ -66,7 +66,6 @@ public partial class ScrabbleAI
 
         string res = DawgUtils.ConvertBytesToWord(letters);
         Console.WriteLine($"Rack :#{currentGame.Round}  {res}");
-        Console.WriteLine("-------------------------------------------");
 
 
         var playedRounds = new PlayedRounds(gameConfig);
@@ -111,10 +110,10 @@ public partial class ScrabbleAI
                 rack.RemoveTile(letter);
             }
 
-            if (letter.IsJoker)
-            {
-                letter.Letter = DawgUtils.JokerByte;
-            }
+            //if (letter.IsJoker)
+            //{
+            //    letter.Letter = DawgUtils.JokerByte;
+            //}
         }
 
         selectedRound.FinalizeRound();
@@ -180,7 +179,14 @@ public partial class ScrabbleAI
 
                             foreach (var letter in sql)
                             {
-                                currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
+                                try
+                                {
+                                    currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
+                                }
+                                catch (Exception ex)
+                                {
+                                    DawgUtils.ConvertBytesToWord(sql.Select(p => p.CurrentLetter.Letter).ToList());
+                                }
                             }
 
                             // Ok we can process that square only if there are children

@@ -48,7 +48,7 @@ public partial class ScrabbleAI
             }
 
 #if DEBUG
-            round.DebugRound("Word found");
+            //   round.DebugRound("Word found");
 #endif
         }
     }

@@ -91,6 +91,16 @@ public partial class ScrabbleAI
             Tiles = m.Select(t => new Tile(t)).ToList();
             Pivot = 0;
 
+            // If we played vertically, we reset the position
+            // To the transposed coordinate
+            if (Position.Direction == 1)
+            {
+                Position = new Position(Position.Y, Position.X, 1);
+            }
+
+            this.DebugRound("Word");
+            Console.WriteLine("-------------------------------------------");
+
         }
 
 
