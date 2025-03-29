@@ -6,6 +6,7 @@ using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
+using System.Text;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
@@ -72,9 +73,12 @@ public partial class ScrabbleAI
         // We set the original position to place which is at the board center
         if (firstMove)
         {
-            Position p = new Position((board.CurrentBoard[0].SizeH - 1) / 2, (board.CurrentBoard[0].SizeV - 1) / 2, 0);
+            int grid = 0;
+            Position p = new Position((board.CurrentBoard[0].SizeH - 1) / 2, (board.CurrentBoard[0].SizeV - 1) / 2, grid);
+            playedRounds.CurrentRound = new PlayedRound();
             playedRounds.CurrentRound.Position = new Position(p);
-            SearchNodes(0, dico.Root, p, letters, 1, 0, playedRounds, p, true);
+            board.TransposeGrid();
+            SearchNodes(grid, dico.Root, 1, p, letters, playedRounds, p, true);
         }
         else
         {
@@ -108,7 +112,7 @@ public partial class ScrabbleAI
 
             if (letter.IsJoker)
             {
-                letter.Letter = DawgUtils.PivotByte;
+                letter.Letter = DawgUtils.JokerByte;
             }
         }
 
@@ -178,17 +182,18 @@ public partial class ScrabbleAI
                                 currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
                             }
 
-                            Console.WriteLine("Raccord " + playedRounds.CurrentRound.GetDebugWord());
-
+#if DEBUG
+                            Console.WriteLine("Raccord " + playedRounds.CurrentRound.GetDebugWord(true));
+#endif
                             // Ok we can process that square only if there are children
                             if (currentNode.Children.Any())
                             {
-                                SearchNodes(grid, currentNode, start, letters, 1, 0, playedRounds, firstPosition, rightToLeft);
+                                SearchNodes(grid, currentNode, 1, start, letters, playedRounds, firstPosition, rightToLeft);
                             }
                         }
                         else
                         {
-                            SearchNodes(grid, currentNode, start, letters, 1, 0, playedRounds, firstPosition, rightToLeft);
+                            SearchNodes(grid, currentNode, 1, start, letters, playedRounds, firstPosition, rightToLeft);
                         }
                     }
 
@@ -215,7 +220,7 @@ public partial class ScrabbleAI
         // We are done 
     }
 
-    private void SearchNodes(int grid, LetterNode parentNode, Position p, List<Tile> letters, int incH, int incV, PlayedRounds rounds, Position FirstPosition, bool rightToLeft = true)
+    private void SearchNodes(int grid, LetterNode parentNode, int increment, Position p, List<Tile> letters, PlayedRounds rounds, Position firstPosition, bool rightToLeft = true)
     {
         if (rounds.CurrentRound.Tiles.Count(p => p.Status == 0) >= currentGameConfig.PlayableLetters)
         {
@@ -228,8 +233,6 @@ public partial class ScrabbleAI
         // We first Get the Square according to the current position
         var square = board.GetSquare(grid, x, y);
 
-        // We define the dirrection
-        int direction = 0;
 
         // We load the nodes to be checked
         var nodes = new List<LetterNode>();
@@ -276,7 +279,7 @@ public partial class ScrabbleAI
                     // if the letter is available in the rack or is a joker
                     if (letter != null)
                     {
-                        if (!square.GetPivot(letter.Letter, direction) && !letter.IsJoker)
+                        if (!square.GetPivot(letter.Letter, grid) && !letter.IsJoker)
                         {
                             continue;
                         }
@@ -298,6 +301,12 @@ public partial class ScrabbleAI
                 // We add a letter to round if not null
                 if (letter != null)
                 {
+#if DEBUG
+                    if (rounds.CurrentRound.GetDebugWord(true) == "gentr")
+                    {
+                        Console.WriteLine("found gentr");
+                    }
+#endif
                     // We set a new tile 
                     rounds.CurrentRound.AddTile(letter, wm, lm);
 
@@ -305,18 +314,20 @@ public partial class ScrabbleAI
                     if (node.IsEnd)
                     {
                         // For a round to be valid the next tile needs to be empty 
-                        var nextTile = board.GetSquare(grid, x + incH, y + incV);
+                        var nextTile = board.GetSquare(grid, x + increment, y);
                         if (nextTile.CurrentLetter == null)
                         {
-                            // We set the final position of the round
-                            if (FirstPosition.ISGreater(p))
+                            // We update the position of the current word
+                            if (firstPosition.ISGreater(p))
                             {
-                                rounds.CurrentRound.Position = p;
+                                rounds.CurrentRound.Position = new Position(p);
                             }
                             else
                             {
-                                rounds.CurrentRound.Position = FirstPosition;
+                                rounds.CurrentRound.Position = new Position(firstPosition);
                             }
+
+
                             // We check the and calculate his score
                             rounds.SetRound(rounds.CurrentRound);
                             // We create a new round
@@ -325,12 +336,11 @@ public partial class ScrabbleAI
                     }
 
                     // if we reach the maximum number of playables we stop 
-                    var oldPosition = new Position(x + incH, y + incV, direction);
+                    var oldPosition = new Position(x + 1, y, grid);
                     // We continue the search in the nodes 
-                    SearchNodes(grid, node, oldPosition, letters, incH, incV, rounds, FirstPosition);
+                    SearchNodes(grid, node, increment, oldPosition, letters, rounds, firstPosition);
                     rounds.CurrentRound.Position = new Position(oldPosition);
                     // We reset letter on the rack.
-
                     rounds.CurrentRound.RemoveTile();
 
                     // If letter comes from rack we put it back
@@ -346,12 +356,11 @@ public partial class ScrabbleAI
                 {
                     rounds.CurrentRound.SetPivot();
 
-                    Position pp = new Position(FirstPosition.X - incH,
-                        FirstPosition.Y - incV, direction);
+                    Position pp = new Position(firstPosition.X - 1,
+                        firstPosition.Y, grid);
 
-                    SearchNodes(grid, node, pp, letters, -incH, -incV, rounds, FirstPosition);
+                    SearchNodes(grid, node, -1, pp, letters, rounds, firstPosition);
                     rounds.CurrentRound.RemovePivot();
-                    rounds.CurrentRound.Position = new Position(pp);
                 }
             }
 

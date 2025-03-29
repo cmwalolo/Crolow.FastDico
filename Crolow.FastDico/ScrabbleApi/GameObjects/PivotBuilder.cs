@@ -143,7 +143,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 var sq = squares[i];
                 if (sq.CurrentLetter == null)
                 {
-                    bytes[i - start] = 30;
+                    bytes[i - start] = DawgUtils.JokerByte;
                     pivotSquare = squares[i];
                     pivotPosition = i - start;
                 }
@@ -195,7 +195,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
             byte currentByte = bytePattern[patternIndex];
 
-            if (currentByte == 30) // '?' wildcard
+            if (currentByte == DawgUtils.JokerByte) // '?' wildcard
             {
                 // Match exactly one character
                 foreach (var child in currentNode.Children)
@@ -204,7 +204,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                     {
                         currentWord[patternIndex] = child.Letter;
                         SearchByPatternRecursive(child, bytePattern, patternIndex + 1, currentWord, results);
-                        currentWord[patternIndex] = 30;
+                        currentWord[patternIndex] = DawgUtils.JokerByte;
                     }
                 }
             }
@@ -216,7 +216,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 {
                     currentWord[patternIndex] = currentByte;
                     SearchByPatternRecursive(nextNode.First(), bytePattern, patternIndex + 1, currentWord, results);
-                    currentWord[patternIndex] = 30; // Backtrack
+                    currentWord[patternIndex] = DawgUtils.JokerByte; // Backtrack
                 }
             }
         }

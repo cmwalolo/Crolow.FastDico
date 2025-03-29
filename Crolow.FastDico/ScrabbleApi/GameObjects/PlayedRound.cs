@@ -96,29 +96,34 @@ public partial class ScrabbleAI
 
         public void DebugRound(string message)
         {
-            string res = GetDebugWord();
+            string res = GetDebugWord(true);
+            string resRaw = GetDebugWord(false);
 
-            var txt = $"{message} : {res} "
-                + Points + " : " + GetPosition();
+            var txt = $"{message} : {res} {Points} : {GetPosition()} - {resRaw}";
             Console.WriteLine(txt);
         }
 
-        public string GetDebugWord()
+        public string GetDebugWord(bool reorder)
         {
-            var l = Tiles.Take(Pivot).Select(p => p.Letter).ToList();
-            var m = Tiles.Skip(Pivot).Select(p => p.Letter).ToList();
-            if (Pivot != 0)
+            if (reorder)
             {
-                m.Reverse();
+                var l = Tiles.Take(Pivot).Select(p => p.Letter).ToList();
+                var m = Tiles.Skip(Pivot).Select(p => p.Letter).ToList();
+                if (Pivot != 0)
+                {
+                    m.Reverse();
+                }
+                if (l.Count() > 0)
+                {
+                    m.AddRange(l);
+                }
+                return DawgUtils.ConvertBytesToWord(m);
             }
-            if (l.Count() > 0)
+            else
             {
-                m.Add(31);
-                m.AddRange(l);
+                var m = Tiles.Select(p => p.Letter).ToList();
+                return DawgUtils.ConvertBytesToWord(m);
             }
-
-            string res = DawgUtils.ConvertBytesToWord(m);
-            return res;
         }
     }
 }

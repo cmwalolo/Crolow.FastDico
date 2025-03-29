@@ -21,9 +21,9 @@ public partial class ScrabbleAI
         public void SetRound(PlayedRound round)
         {
 #if DEBUG
-            if (round.GetDebugWord() == "strikes")
+            if (round.GetDebugWord(true) == "gentry")
             {
-                Console.WriteLine("found strikes");
+                Console.WriteLine("found gentry");
             }
 #endif
 
@@ -34,6 +34,11 @@ public partial class ScrabbleAI
             }
 
             round.Points = round.Tiles.Sum(p => p.Points * p.LetterMultiplier) * wm;
+
+            if (round.Points == 64)
+            {
+                Console.WriteLine("hoho");
+            }
 
             var tilesFromRack = round.Tiles.Count(p => p.Status == 0);
             if (tilesFromRack > 0 && tilesFromRack < Config.Bonus.Count())
@@ -51,12 +56,12 @@ public partial class ScrabbleAI
             }
             else
             {
-                return;
+                //    return;
             }
 
-            //#if DEBUG
+#if DEBUG
             round.DebugRound("Word found");
-            //#endif
+#endif
         }
     }
 }

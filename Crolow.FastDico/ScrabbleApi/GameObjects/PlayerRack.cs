@@ -27,6 +27,7 @@ public class PlayerRack
         if (i == -1)
         {
             Console.WriteLine("missing tile");
+            return;
         }
         Tiles.RemoveAt(i);
     }

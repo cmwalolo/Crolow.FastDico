@@ -61,6 +61,12 @@ public class Board
             y += incV;
         }
 
+        TransposeGrid();
+    }
+
+    public void TransposeGrid()
+    {
         CurrentBoard[1].Grid = ArrayUtils.Transpose<Square>(CurrentBoard[0].Grid);
+
     }
 }

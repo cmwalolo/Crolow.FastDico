@@ -40,6 +40,8 @@ public class LetterBag
                     ReturnLetters(drawnLetters);
                 }
 
+                drawnLetters = ForceDrawLetters("ntryegu");
+
                 for (int i = drawnLetters.Count; i < count; i++)
                 {
                     if (!IsEmpty)
@@ -76,7 +78,13 @@ public class LetterBag
         int vow = letters.Sum(p => p.IsVowel ? 1 : 0) + (rack?.Sum(p => p.IsVowel ? 1 : 0) ?? 0);
         int con = letters.Sum(p => p.IsConsonant ? 1 : 0) + (rack?.Sum(p => p.IsConsonant ? 1 : 0) ?? 0);
 
-        return vow >= 1 && con >= 1;
+        if (CurrentGame.Round >= CurrentGame.Configuration.SelectedConfig.CheckDistributionRound)
+        {
+            return vow >= 1 && con >= 1;
+        }
+
+        return vow >= 2 && con >= 2;
+
     }
 
     internal List<Tile> ForceDrawLetters(string v)
