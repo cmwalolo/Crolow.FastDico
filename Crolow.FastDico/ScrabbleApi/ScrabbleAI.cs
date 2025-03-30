@@ -360,7 +360,7 @@ public partial class ScrabbleAI
                     // if the letter is available in the rack or is a joker
                     if (letter != null)
                     {
-                        if (!square.GetPivot(letter.Letter, grid) && !letter.IsJoker)
+                        if (!square.GetPivot(letter, grid, node.Letter))
                         {
                             continue;
                         }

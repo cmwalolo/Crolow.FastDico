@@ -187,7 +187,7 @@
         "Letter": 30,
         "IsVowel": true,
         "IsConsonant": true,
-        "TotalLetters": 0,
+        "TotalLetters": 2,
         "Points": 0,
         "IsJoker": true
       }
