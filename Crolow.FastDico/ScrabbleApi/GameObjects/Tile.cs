@@ -9,14 +9,15 @@ public class Tile
     public Tile(Tile tile, int status = 0)
     {
         Letter = tile.Letter;
-        IsVowel
-            = tile.IsVowel;
+        IsVowel = tile.IsVowel;
         IsConsonant = tile.IsConsonant;
         Status = status;
         Points = tile.Points;
         IsJoker = tile.IsJoker;
         WordMultiplier = tile.LetterMultiplier;
         LetterMultiplier = tile.WordMultiplier;
+        TotalLetters = tile.TotalLetters;
+
     }
 
 #if DEBUG

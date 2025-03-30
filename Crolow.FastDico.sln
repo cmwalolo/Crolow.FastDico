@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.FastDico", "Crolow.F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extra", "Extra", "{79DAC9A0-5951-48EB-8940-CF7B82D52EA8}"
 	ProjectSection(SolutionItems) = preProject
+		gaddag_data.gz = gaddag_data.gz
+		ODS9-complet.txt = ODS9-complet.txt
 		README.md = README.md
 	EndProjectSection
 EndProject

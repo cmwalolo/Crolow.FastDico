@@ -6,6 +6,7 @@ using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
+using System.Diagnostics;
 using System.Text;
 using System.Xml.Linq;
 
@@ -58,6 +59,21 @@ public partial class ScrabbleAI
     {
         var letters = letterBag.DrawLetters(rack);
 
+        // Test pivots
+        //for (int i = 6; i <= 8; i += 2)
+        //{
+        //    var test = letterBag.DrawLetters(rack);
+        //    var j = 5;
+        //    foreach (var t in test)
+        //    {
+        //        board.SetTile(0, i, j++, t);
+        //    }
+        //}
+        //board.TransposeGrid();
+        //pivotBuilder.Build();
+
+
+        // End Test
         if (letters == null)
         {
             EndGame();

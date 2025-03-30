@@ -69,7 +69,7 @@ public partial class ScrabbleAI
                 return $"{(new char[] { ((char)(64 + Position.Y)) }[0])}{Position.X}";
             }
 
-            return $"{Position.Y}{(new char[] { ((char)(64 + Position.X)) }[0])}";
+            return $"{Position.X}{(new char[] { ((char)(64 + Position.Y)) }[0])}";
         }
 
 

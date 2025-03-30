@@ -46,7 +46,6 @@ public class Board
         int y = round.Position.Y;
 
         round.DebugRound("Word");
-        Console.WriteLine("-------------------------------------------");
 
         if (round.Position.Direction == 0)
         {
@@ -56,14 +55,21 @@ public class Board
         {
             incV = 1;
         }
-        round.Tiles = round.Tiles.Select(p => new Tile(p)).ToList();
+        //        round.Tiles = round.Tiles.Select(p => new Tile(p)).ToList();
 
         foreach (var tile in round.Tiles)
         {
+#if DEBUG
+            if (tile.IsJoker)
+            {
+                round.DebugRound($"Joker is Found : {(char)(tile.Letter + 97)}");
+            }
+#endif
             SetTile(0, x, y, tile);
             x += incH;
             y += incV;
         }
+        Console.WriteLine("-------------------------------------------");
 
         TransposeGrid();
     }

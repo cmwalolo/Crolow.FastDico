@@ -4,6 +4,7 @@ using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.Utils;
+using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 
 
@@ -47,7 +48,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                     squares[x] = board.GetSquare(grid, x, y);
                     squares[x].ResetPivot(targetGrid, 0);
                 }
-                var runs = MaskLeftToRightHorizontal(grid, targetGrid, squares, y);
+                MaskLeftToRightHorizontal(grid, targetGrid, squares, y);
             }
 
         }
@@ -58,7 +59,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             public int start = start, end = end;
         }
 
-        private List<Run> MaskLeftToRightHorizontal(int grid, int targetGrid, Square[] squares, int y)
+        private void MaskLeftToRightHorizontal(int grid, int targetGrid, Square[] squares, int y)
         {
             int startX = 1;
             int endX = 0;
@@ -67,7 +68,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
             if (squares.Count(p => p.CurrentLetter != null) == 0)
             {
-                return null;
+                return;
             }
 
             // We first calculate runs of adjacent letters
@@ -79,50 +80,62 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 }
 
                 endX = startX;
+                var extend = false;
                 if (!squares[startX].IsBorder)
                 {
-                    var run = new Run(true, startX, endX);
 
                     // We are looking for adjactent letters for the pivots to the left
-                    while (!squares[endX].IsBorder && squares[endX + 1].CurrentLetter != null)
+                    while (!squares[endX].IsBorder && squares[endX].CurrentLetter != null)
                     {
                         endX++;
                     }
 
-                    run.end = endX;
-                    if (startX > 1)
+                    var run = new Run(true, startX, endX - 1);
+                    runs.Add(run);
+                }
+                startX = endX + 1;
+            } while (startX < squares.Length && !squares[endX].IsBorder);
+
+            Console.Write("");
+            for (int x = 0; x < runs.Count; x++)
+            {
+                Run runtoDo = new Run();
+                var run = runs[x];
+
+                // Doing left Pivot
+                if (run.start > 1)
+                {
+                    // if not first run there is at least two squares between runs
+                    if (x == 0 || runs[x].start - 2 > runs[x - 1].end)
                     {
-                        run.start = startX - 1;
-                        runs.Add(run);
+                        runtoDo = new Run { start = run.start - 1, end = run.end };
                     }
 
-                    // Ok we try now to extend to the right.. But it's possible
-                    // That we add a letter in middle of two runs. so we need to 
-                    // end the run 
-                    if (!squares[endX].IsBorder)
+                    if (runtoDo.start > 0)
                     {
-                        while (!squares[endX].IsBorder && squares[endX + 1].CurrentLetter != null)
-                        {
-                            endX++;
-                        }
-                    }
-
-                    if (endX < squares.Length - 1)
-                    {
-                        run = new Run(false, startX, endX + 1);
-                        runs.Add(run);
+                        Solve(grid, targetGrid, runtoDo, squares);
                     }
                 }
 
-                startX = endX + 1;
-            } while (!squares[endX].IsBorder);
-
-            runs.ForEach(run =>
-            {
-                Solve(grid, targetGrid, run, squares);
-            });
-
-            return runs;
+                // We proceed right 
+                runtoDo = new Run();
+                if (run.end < squares.Length - 1)
+                {
+                    if (x == runs.Count - 1 || runs[x].end < runs[x + 1].start - 2)
+                    {
+                        runtoDo = new Run { start = run.start, end = run.end + 1 };
+                    }
+                    else
+                    {
+                        runtoDo = new Run { start = run.start, end = runs[x + 1].end };
+                    }
+                    if (runtoDo.start > 0)
+                    {
+                        Solve(grid, targetGrid, runtoDo, squares);
+                    }
+                }
+            }
+            return;
 
         }
 

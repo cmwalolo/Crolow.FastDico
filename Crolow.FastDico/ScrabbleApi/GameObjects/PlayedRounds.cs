@@ -1,5 +1,6 @@
 ﻿using Crolow.FastDico.Utils;
 using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+using Crolow.FastDico.ScrabbleApi.GameObjects;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
@@ -53,6 +54,8 @@ public partial class ScrabbleAI
             {
                 return;
             }
+
+            round.Tiles = round.Tiles.Select(p => new Tile(p)).ToList();
 
 #if DEBUG
             //   round.DebugRound("Word found");
