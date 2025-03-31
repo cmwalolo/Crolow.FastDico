@@ -1,14 +1,15 @@
 ﻿using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Interfaces;
+using Crolow.FastDico.ScrabbleApi;
 
 
-var tester = new Tester();
+//var tester = new Tester();
 //tester.TestDawg(true);
-tester.TestGadDag(false);
+//tester.TestGadDag(false);
 
-//var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
-//ScrabbleAI.StartGame();
+var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
+ScrabbleAI.StartGame();
 public class Tester
 {
     public Tester()

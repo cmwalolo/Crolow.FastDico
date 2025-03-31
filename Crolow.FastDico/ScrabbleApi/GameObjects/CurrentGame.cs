@@ -16,4 +16,7 @@ public class CurrentGame
     public int TotalPoints { get; set; }
     public int PlayTime { get; set; }
 
+    public LetterBag LetterBag { get; set; }
+    public PlayerRack Rack { get; set; }
+
 }

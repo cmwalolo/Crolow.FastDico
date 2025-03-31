@@ -36,10 +36,12 @@ public partial class ScrabbleAI
     public ScrabbleAI(string configsFile, string configName)
     {
         playConfiguration = new ConfigReader().ReadConfiguration(configsFile, configName);
+        this.currentGame = new CurrentGame();
+        this.currentGame.Configuration = playConfiguration;
+
         currentGameConfig = playConfiguration.SelectedConfig;
         GadDagCompiler gaddag = new GadDagCompiler();
         gaddag.ReadFromFile(playConfiguration.SelectedConfig.GaddagFile);
-        this.currentGame = new CurrentGame { Configuration = playConfiguration };
 
         this.board = new Board(this.currentGame);
         this.letterBag = new LetterBag(this.currentGame);
@@ -47,6 +49,9 @@ public partial class ScrabbleAI
         this.dico = gaddag;
         this.gameConfig = playConfiguration.SelectedConfig;
         this.pivotBuilder = new PivotBuilder(board, gaddag.Root, playConfiguration);
+
+        this.currentGame.LetterBag = this.letterBag;
+        this.currentGame.Rack = this.rack;
     }
 
     public void StartGame()
@@ -136,6 +141,7 @@ public partial class ScrabbleAI
         selectedRound.FinalizeRound();
         board.SetRound(selectedRound);
         currentGame.RoundsPlayed.Add(selectedRound);
+        selectedRound = new PlayedRound();
         currentGame.Round++;
         NextRound(false);
     }

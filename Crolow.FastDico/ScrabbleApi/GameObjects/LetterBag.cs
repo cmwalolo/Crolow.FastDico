@@ -31,31 +31,52 @@ public class LetterBag
         int count = GameConfig.SelectedConfig.InRackLetters;
         var drawnLetters = rack.GetTiles();
         bool ok = true;
-        if (IsValid(Letters, drawnLetters))
+
+        if (!IsValid(Letters, drawnLetters))
         {
-            do
+            return null;
+        }
+
+        do
+        {
+            if (!ok)
             {
-                if (!ok)
-                {
-                    ReturnLetters(drawnLetters);
-                }
+                ReturnLetters(drawnLetters);
+            }
 
-                //drawnLetters = ForceDrawLetters("ntryegu");
-
-                for (int i = drawnLetters.Count; i < count; i++)
+            if (GameConfig.SelectedConfig.JokerMode)
+            {
+                if (!drawnLetters.Any(p => p.IsJoker == true))
                 {
-                    if (!IsEmpty)
+                    var ndx = Letters.FindIndex(p => p.IsJoker);
+                    if (ndx > 0)
                     {
-                        int index = RandomGen.Next(RemainingLetters);
+                        drawnLetters.Add(Letters[ndx]);
+                        Letters.RemoveAt(ndx);
+
+                    }
+                }
+            }
+
+            //drawnLetters = ForceDrawLetters("ntryegu");
+
+            for (int i = drawnLetters.Count; i < count; i++)
+            {
+                if (!IsEmpty)
+                {
+                    int index = RandomGen.Next(RemainingLetters);
+                    var l = Letters[index];
+                    if (!GameConfig.SelectedConfig.JokerMode || (GameConfig.SelectedConfig.JokerMode && !l.IsJoker))
+                    {
                         drawnLetters.Add(Letters[index]);
                         Letters.RemoveAt(index);
-                        continue;
                     }
-                    break;
+                    continue;
                 }
-                ok = IsValid(drawnLetters, null);
-            } while (!ok);
-        }
+                break;
+            }
+            ok = IsValid(drawnLetters, null);
+        } while (!ok);
         return drawnLetters;
 
     }
@@ -80,10 +101,10 @@ public class LetterBag
 
         if (CurrentGame.Round >= CurrentGame.Configuration.SelectedConfig.CheckDistributionRound)
         {
-            return vow >= 1 && con >= 1;
+            return vow > 0 && con > 0;
         }
 
-        return vow >= 2 && con >= 2;
+        return vow > 1 && con > 1;
 
     }
 
@@ -98,5 +119,22 @@ public class LetterBag
         }
 
         return tiles;
+    }
+
+    internal Tile ReplaceJoker(Tile tile)
+    {
+        if (tile.IsJoker)
+        {
+            var ndx = Letters.FindIndex(p => p.Letter == tile.Letter);
+            if (ndx != -1)
+            {
+                var newTile = Letters[ndx];
+                Letters.RemoveAt(ndx);
+                Letters.Add(new Tile(tile));
+                return newTile;
+            }
+        }
+
+        return tile;
     }
 }

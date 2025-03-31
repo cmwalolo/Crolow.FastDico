@@ -8,6 +8,7 @@ public class Board
 {
     // Current State of the board
     public GridConfigurationContainer[] CurrentBoard = new GridConfigurationContainer[2];
+    private CurrentGame currentGame;
 
     public Board(CurrentGame currentGame)
     {
@@ -16,7 +17,7 @@ public class Board
         CurrentBoard[1].SizeV = CurrentBoard[0].SizeH;
         CurrentBoard[1].SizeH = CurrentBoard[0].SizeV;
         CurrentBoard[1].Grid = ArrayUtils.Transpose<Square>(CurrentBoard[0].Grid);
-
+        this.currentGame = currentGame;
     }
 
     public Square GetSquare(int grid, int x, int y)
@@ -55,17 +56,16 @@ public class Board
         {
             incV = 1;
         }
-        //        round.Tiles = round.Tiles.Select(p => new Tile(p)).ToList();
 
         foreach (var tile in round.Tiles)
         {
-#if DEBUG
-            if (tile.IsJoker)
+            var newTile = tile;
+            if (currentGame.Configuration.SelectedConfig.JokerMode && tile.IsJoker)
             {
-                round.DebugRound($"Joker is Found : {(char)(tile.Letter + 97)}");
+                newTile = currentGame.LetterBag.ReplaceJoker(tile);
             }
-#endif
-            SetTile(0, x, y, tile);
+
+            SetTile(0, x, y, newTile);
             x += incH;
             y += incV;
         }
