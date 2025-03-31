@@ -1,4 +1,6 @@
-﻿@inject NavigationManager Navigation
+﻿
+@using Crolow.TopMachine.Components.Pages.Settings;
+@inject NavigationManager Navigation
 @inject Radzen.DialogService DialogService
 
 @inherits LayoutComponentBase
@@ -6,9 +8,6 @@
 <RadzenDialog />
 
 <RadzenLayout>
-    <RadzenSidebar Responsive="false" Style="width: max-content">
-        <SidebarAlbums SelectedApp=@SelectedApp />
-    </RadzenSidebar>
     <RadzenBody Style="background-color:black;">
         @Body
     </RadzenBody>
@@ -48,6 +47,9 @@
                 break;
             case "Finder":
                 Navigation.NavigateTo("/Finder");
+                break;
+            case "Settings":
+                Navigation.NavigateTo("/Settings");
                 break;
             default:
                 break;

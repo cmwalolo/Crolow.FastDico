@@ -5,6 +5,7 @@ using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
+using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
 using System.Diagnostics;
 using System.Text;
@@ -80,7 +81,7 @@ public partial class ScrabbleAI
             return;
         }
 
-        string res = DawgUtils.ConvertBytesToWord(letters);
+        string res = TilesUtils.ConvertBytesToWord(letters);
         Console.WriteLine($"Rack :#{currentGame.Round}  {res}");
 
 
@@ -128,7 +129,7 @@ public partial class ScrabbleAI
 
             //if (letter.IsJoker)
             //{
-            //    letter.Letter = DawgUtils.JokerByte;
+            //    letter.Letter = TilesUtils.JokerByte;
             //}
         }
 
@@ -201,7 +202,7 @@ public partial class ScrabbleAI
                                 }
                                 catch (Exception ex)
                                 {
-                                    DawgUtils.ConvertBytesToWord(sql.Select(p => p.CurrentLetter.Letter).ToList());
+                                    TilesUtils.ConvertBytesToWord(sql.Select(p => p.CurrentLetter.Letter).ToList());
                                 }
                             }
 
@@ -322,7 +323,7 @@ public partial class ScrabbleAI
 
         if (square == null || square.IsBorder)
         {
-            nodes = parentNode.Children.Where(p => p.Letter == DawgUtils.PivotByte).ToList();
+            nodes = parentNode.Children.Where(p => p.Letter == TilesUtils.PivotByte).ToList();
         }
         else
         {

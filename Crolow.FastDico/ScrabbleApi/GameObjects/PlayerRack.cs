@@ -1,4 +1,5 @@
-﻿using Crolow.FastDico.Utils;
+﻿using Crolow.FastDico.Search;
+using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
@@ -36,6 +37,6 @@ public class PlayerRack
     // Example: Convert from human-readable string to byte representation
     public string ToString()
     {
-        return DawgUtils.ConvertBytesToWord(Tiles.Select(p => p.Letter).ToList()); // Reuse existing utility
+        return TilesUtils.ConvertBytesToWord(Tiles.Select(p => p.Letter).ToList()); // Reuse existing utility
     }
 }

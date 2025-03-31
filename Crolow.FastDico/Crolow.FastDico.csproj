@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
+		<OutputType>Library</OutputType>
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -9,22 +9,6 @@
 
 	<ItemGroup>
 		<Compile Remove="gaddag.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Remove="grid.css" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="grid.css">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Search\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,9 +21,6 @@
 
 	<ItemGroup>
 		<None Update="GridConfigs_FR.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="GridConfig_FR.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

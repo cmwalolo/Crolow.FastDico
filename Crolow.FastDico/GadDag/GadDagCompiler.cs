@@ -9,7 +9,7 @@ namespace Crolow.FastDico.GadDag
         public override void Insert(string word)
         {
             // Convert word to bytes
-            List<byte> byteWord = DawgUtils.ConvertWordToBytes(word);
+            List<byte> byteWord = TilesUtils.ConvertWordToBytes(word);
 
             // Add the full word in left-to-right order
             Insert(byteWord);
@@ -22,7 +22,7 @@ namespace Crolow.FastDico.GadDag
                 List<byte> right = byteWord.GetRange(0, i);
 
                 right.Reverse();
-                left.Add(DawgUtils.PivotByte); // Add the pivot '#'
+                left.Add(TilesUtils.PivotByte); // Add the pivot '#'
                 left.AddRange(right);
                 Insert(left);
             }

@@ -1,15 +1,14 @@
 ﻿using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Interfaces;
-using Crolow.FastDico.ScrabbleApi;
 
 
-//var tester = new Tester();
+var tester = new Tester();
 //tester.TestDawg(true);
-//tester.TestGadDag(false);
+tester.TestGadDag(false);
 
-var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
-ScrabbleAI.StartGame();
+//var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
+//ScrabbleAI.StartGame();
 public class Tester
 {
     public Tester()
@@ -74,11 +73,11 @@ public class Tester
         {
             List<string> words = System.IO.File.ReadAllLines("C:\\dev\\ODS9-complet.txt").Select(p => p.ToLower()).ToList();
             gaddag.Build(words);
-            gaddag.SaveToFile("gaddag_data.gz");
+            gaddag.SaveToFile("gaddag_fr.gz");
             Console.WriteLine($"GADDAG saved to GADDAG_data.gz");
         }
 
-        gaddag.ReadFromFile("gaddag_data.gz");
+        gaddag.ReadFromFile("gaddag_fr.gz");
         Console.WriteLine("DAWG loaded from file");
         Console.WriteLine("--------------");
 
@@ -120,7 +119,7 @@ public class Tester
         Console.WriteLine("\nAnagrams");
         Console.WriteLine("--------------");
         Console.WriteLine(" artesien ? " + newDawg.SearchWord("artesien"));
-        Console.WriteLine(string.Join("\n", newDawg.FindAllWordsFromLetters("arteisn")));   // False
+        Console.WriteLine(string.Join("\n", newDawg.FindAllWordsFromLetters("swapez?")));   // False
 
         Console.WriteLine("\nSmaller words");
         Console.WriteLine("--------------");

@@ -1,4 +1,5 @@
-﻿using Crolow.FastDico.Utils;
+﻿using Crolow.FastDico.Search;
+using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.Dicos;
 
@@ -9,10 +10,10 @@ public class LetterNode
     /// </summary>
     public byte Control;
     public byte Letter;
-    public bool IsEnd { get { return (Control & DawgUtils.IsEnd) == DawgUtils.IsEnd; } }
-    public bool IsPivot { get { return Letter == DawgUtils.PivotByte; } }
+    public bool IsEnd { get { return (Control & TilesUtils.IsEnd) == TilesUtils.IsEnd; } }
+    public bool IsPivot { get { return Letter == TilesUtils.PivotByte; } }
 
-    public void SetEnd() { Control |= DawgUtils.IsEnd; }
+    public void SetEnd() { Control |= TilesUtils.IsEnd; }
 
     public List<LetterNode> Children = new List<LetterNode>();
 }

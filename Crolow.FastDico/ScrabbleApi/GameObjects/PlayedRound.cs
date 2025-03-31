@@ -1,4 +1,5 @@
 ﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
+using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi;
@@ -123,12 +124,12 @@ public partial class ScrabbleAI
                 {
                     m.AddRange(l);
                 }
-                return DawgUtils.ConvertBytesToWord(m);
+                return TilesUtils.ConvertBytesToWord(m);
             }
             else
             {
                 var m = Tiles.Select(p => p.Letter).ToList();
-                return DawgUtils.ConvertBytesToWord(m);
+                return TilesUtils.ConvertBytesToWord(m);
             }
         }
     }

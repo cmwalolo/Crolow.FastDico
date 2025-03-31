@@ -1,0 +1,48 @@
+﻿@page "/settings/dictionaries"
+@using Crolow.FastDico.Models.Models.Dictionary.Entities
+@inherits ComponentControls.Settings.Dictionaries.DictionariesComponent;
+<RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
+    <SettingsSidebar />
+    <RadzenBody>
+        <div class="rz-p-1">
+            <RadzenLayout Style="height:100%">
+                <RadzenHeader style="padding:5px">
+                        <RadzenStack Orientation="Orientation.Horizontal">
+                            <RadzenMenu>
+                                <RadzenMenuItem Text="New dictionary" Icon="dictionary" Click="AddItem">
+                                </RadzenMenuItem>
+                            </RadzenMenu>
+                        </RadzenStack>
+                </RadzenHeader>
+                <RadzenBody style="margin-top:10px;padding:0px;">
+                    <RadzenDataGrid style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;" AllowFiltering="true" AllowSorting="true" AllowColumnResize="true"
+                                    @ref="grid" Data="@results" TItem="DictionaryModel">
+                        <EmptyTemplate>
+                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                        </EmptyTemplate>
+                        <Columns>
+                            <RadzenDataGridColumn Property="@nameof(DictionaryModel.IsDefault)" Title="Default" />
+                            <RadzenDataGridColumn Property="@nameof(DictionaryModel.Name)" Title="Name" />
+                            <RadzenDataGridColumn Property="@nameof(DictionaryModel.Language)" Title="Language" />
+                            <RadzenDataGridColumn Property="@nameof(DictionaryModel.DictionaryFile)" Title="GadDag file" />
+                            <RadzenDataGridColumn TItem="DictionaryModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => EditItem(data)) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="DictionaryModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => DeleteItem(data)) Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenBody>
+            </RadzenLayout>
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+
+@code {
+    bool sidebar1Expanded = true;
+}

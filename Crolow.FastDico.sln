@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.FastDico", "Crolow.F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extra", "Extra", "{79DAC9A0-5951-48EB-8940-CF7B82D52EA8}"
 	ProjectSection(SolutionItems) = preProject
-		gaddag_data.gz = gaddag_data.gz
+		gaddag_fr.gz = gaddag_fr.gz
 		ODS9-complet.txt = ODS9-complet.txt
 		README.md = README.md
 	EndProjectSection
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.FastDico.Models", "Crolow.FastDico.Models\Crolow.FastDico.Models.csproj", "{7EC5BB31-BCA0-482F-8270-24F57FC83C96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.TopMachine.Core", "Crolow.TopMachine.Core\Crolow.TopMachine.Core.csproj", "{D331F197-0514-470D-BFB0-75AEBBFB5D62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.FastDico.Console", "Crolow.FastDico.Console\Crolow.FastDico.Console.csproj", "{57E335CA-B770-4CA3-A518-0422187AD859}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,7 @@ Global
 		{D3967F65-FDE7-4D01-99FD-0922BB61F326}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3754B897-9C07-4D40-B1C9-1B51946189DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C92E89F-1310-7DBA-E792-7D461A12D5DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -46,6 +49,10 @@ Global
 		{D331F197-0514-470D-BFB0-75AEBBFB5D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D331F197-0514-470D-BFB0-75AEBBFB5D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D331F197-0514-470D-BFB0-75AEBBFB5D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57E335CA-B770-4CA3-A518-0422187AD859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57E335CA-B770-4CA3-A518-0422187AD859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57E335CA-B770-4CA3-A518-0422187AD859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57E335CA-B770-4CA3-A518-0422187AD859}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

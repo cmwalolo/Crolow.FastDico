@@ -1,4 +1,5 @@
-﻿using Crolow.TopMachine.Core.Interfaces;
+﻿using Crolow.Pix.Core.Services.Storage;
+using Crolow.TopMachine.Core.Interfaces;
 using Crolow.TopMachine.Data;
 using Crolow.TopMachine.Data.Interfaces;
 using Kalow.Apps.Common.DataTypes;
@@ -14,6 +15,7 @@ namespace Crolow.TopMachine.Core
             //            services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IFileRepository, FileRepository>();
             services.AddScoped<IDataFactory, DataFactory>();
+            services.AddScoped<IDictionaryService, DictionaryService>();
 
             LiteDB.BsonMapper.Global.RegisterType<KalowId>
                     (

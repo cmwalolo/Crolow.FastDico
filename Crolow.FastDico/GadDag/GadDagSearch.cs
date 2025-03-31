@@ -15,7 +15,7 @@ public class GadDagSearch : IDawgSearch
 
     public bool SearchWord(string word)
     {
-        var bytes = DawgUtils.ConvertWordToBytes(word);
+        var bytes = TilesUtils.ConvertWordToBytes(word);
         return SearchWordRecursive(Root, bytes, 0, false);
     }
 
@@ -31,9 +31,9 @@ public class GadDagSearch : IDawgSearch
         // Traverse children to find the matching letter
         foreach (var child in currentNode.Children)
         {
-            if (child.Letter == currentByte || !pastPivot && child.Letter == DawgUtils.PivotByte) // Pivot handling
+            if (child.Letter == currentByte || !pastPivot && child.Letter == TilesUtils.PivotByte) // Pivot handling
             {
-                if (SearchWordRecursive(child, word, index + 1, pastPivot || child.Letter == DawgUtils.PivotByte))
+                if (SearchWordRecursive(child, word, index + 1, pastPivot || child.Letter == TilesUtils.PivotByte))
                 {
                     return true;
                 }
@@ -45,7 +45,7 @@ public class GadDagSearch : IDawgSearch
 
     public List<string> SearchByPrefix(string prefix)
     {
-        var bytes = DawgUtils.ConvertWordToBytes(prefix);
+        var bytes = TilesUtils.ConvertWordToBytes(prefix);
         var results = new List<string>();
         var currentNode = Root;
 
@@ -66,12 +66,12 @@ public class GadDagSearch : IDawgSearch
     {
         if (node.IsEnd)
         {
-            results.Add(DawgUtils.ConvertBytesToWord(currentWord));
+            results.Add(TilesUtils.ConvertBytesToWord(currentWord));
         }
 
         foreach (var child in node.Children)
         {
-            if (child.Letter != DawgUtils.PivotByte)
+            if (child.Letter != TilesUtils.PivotByte)
             {
                 currentWord.Add(child.Letter);
                 SearchPrefixesFromNode(child, currentWord, results);
@@ -85,7 +85,7 @@ public class GadDagSearch : IDawgSearch
     {
         var patternedSuffix = suffix + "#";
 
-        var bytes = DawgUtils.ConvertWordToBytes(patternedSuffix);
+        var bytes = TilesUtils.ConvertWordToBytes(patternedSuffix);
         var results = new List<string>();
         var currentNode = Root;
 
@@ -110,7 +110,7 @@ public class GadDagSearch : IDawgSearch
             var word = currentWord.Take(currentWord.Count - 1).ToList();
             newWord.AddRange(result);
             newWord.AddRange(word);
-            results.Add(DawgUtils.ConvertBytesToWord(newWord));
+            results.Add(TilesUtils.ConvertBytesToWord(newWord));
         }
 
         foreach (var child in node.Children)
@@ -137,7 +137,7 @@ public class GadDagSearch : IDawgSearch
         {
             if (currentNode.IsEnd)
             {
-                results.Add(DawgUtils.ConvertBytesToWord(currentWord));
+                results.Add(TilesUtils.ConvertBytesToWord(currentWord));
             }
             return;
         }
@@ -153,7 +153,7 @@ public class GadDagSearch : IDawgSearch
             // Then, try matching one or more characters
             foreach (var child in currentNode.Children)
             {
-                if (child.Letter != DawgUtils.PivotByte)
+                if (child.Letter != TilesUtils.PivotByte)
                 {
                     currentWord.Add(child.Letter);
                     SearchByPatternRecursive(child, bytePattern, patternIndex, currentWord, results);
@@ -166,7 +166,7 @@ public class GadDagSearch : IDawgSearch
             // Match exactly one character
             foreach (var child in currentNode.Children)
             {
-                if (child.Letter != DawgUtils.PivotByte)
+                if (child.Letter != TilesUtils.PivotByte)
                 {
                     currentWord.Add(child.Letter);
                     SearchByPatternRecursive(child, bytePattern, patternIndex + 1, currentWord, results);
@@ -177,7 +177,7 @@ public class GadDagSearch : IDawgSearch
         else
         {
             // Match the exact character
-            var nextNode = currentNode.Children.Where(p => p.Letter != DawgUtils.PivotByte && p.Letter == currentByte);
+            var nextNode = currentNode.Children.Where(p => p.Letter != TilesUtils.PivotByte && p.Letter == currentByte);
             if (nextNode.Any())
             {
                 currentWord.Add(currentByte);
@@ -205,18 +205,19 @@ public class GadDagSearch : IDawgSearch
     // Function 1: Find all words that can be formed using exactly the given letters
     public List<string> FindAllWordsFromLetters(string pattern)
     {
-        var letters = DawgUtils.ConvertWordToBytes(pattern);
+        var letters = TilesUtils.ConvertWordToBytes(pattern);
         var results = new List<string>();
-        FindWordsUsingLetters(Root, letters, new List<byte>(), results, true);
+
+        FindWordsUsingLetters(Root, letters, new List<byte>(), new List<byte>(), results, true);
         return results;
     }
 
     // Function 2: Find all words that contain at least one of the given letters
     public List<string> FindAllWordsContainingLetters(string pattern)
     {
-        var letters = DawgUtils.ConvertWordToBytes(pattern);
+        var letters = TilesUtils.ConvertWordToBytes(pattern);
         var results = new List<string>();
-        FindWordsUsingLetters(Root, letters, new List<byte>(), results, false);
+        FindWordsUsingLetters(Root, letters, new List<byte>(), new List<byte>(), results, false);
         return results;
     }
 
@@ -225,30 +226,60 @@ public class GadDagSearch : IDawgSearch
         LetterNode currentNode,
         List<byte> availableLetters,
         List<byte> currentWord,
+        List<byte> currentJokers,
         List<string> results,
         bool requireExactMatch)
     {
         foreach (var child in currentNode.Children)
         {
-            if (availableLetters.Contains(child.Letter))
+            if (child.Letter != TilesUtils.PivotByte)
             {
-                // Use the letter, removing it from available letters
-                currentWord.Add(child.Letter);
-                availableLetters.Remove(child.Letter);
-
-                if (child.IsEnd)
+                if (availableLetters.Contains(child.Letter) || availableLetters.Contains(TilesUtils.JokerByte))
                 {
-                    if (!requireExactMatch || availableLetters.Count == 0)
+                    bool isJoker = false;
+                    // Use the letter, removing it from available letters
+                    currentWord.Add(child.Letter);
+
+                    if (availableLetters.Contains(child.Letter))
                     {
-                        results.Add(DawgUtils.ConvertBytesToWord(currentWord));
+                        currentJokers.Add(0);
+                        availableLetters.Remove(child.Letter);
                     }
+                    else if (availableLetters.Contains(TilesUtils.JokerByte))
+                    {
+                        isJoker = true;
+                        currentJokers.Add(1);
+                        availableLetters.Remove(TilesUtils.JokerByte);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (child.IsEnd)
+                    {
+                        if (!requireExactMatch || availableLetters.Count == 0)
+                        {
+                            results.Add(TilesUtils.ConvertBytesToWordForDisplay(currentWord, currentJokers));
+                        }
+                    }
+
+                    FindWordsUsingLetters(child, availableLetters, currentWord, currentJokers, results, requireExactMatch);
+
+                    // Backtrack to restore statev
+                    if (!isJoker)
+                    {
+                        availableLetters.Add(child.Letter);
+                    }
+                    else
+                    {
+                        availableLetters.Add(TilesUtils.JokerByte);
+                    }
+
+                    currentWord.RemoveAt(currentWord.Count - 1);
+                    currentJokers.RemoveAt(currentJokers.Count - 1);
+                    isJoker = false;
                 }
-
-                FindWordsUsingLetters(child, availableLetters, currentWord, results, requireExactMatch);
-
-                // Backtrack to restore statev
-                availableLetters.Add(child.Letter);
-                currentWord.RemoveAt(currentWord.Count - 1);
             }
         }
     }

@@ -3,6 +3,7 @@
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
 using System.Security.Authentication.ExtendedProtection;
 using System.Text;
@@ -156,7 +157,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 var sq = squares[i];
                 if (sq.CurrentLetter == null)
                 {
-                    bytes[i - start] = DawgUtils.JokerByte;
+                    bytes[i - start] = TilesUtils.JokerByte;
                     pivotSquare = squares[i];
                     pivotPosition = i - start;
                 }
@@ -178,7 +179,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             }
 
 #if DEBUGPIVOT
-            var pattern = DawgUtils.ConvertBytesToWord(bytes.ToList());
+            var pattern = TilesUtils.ConvertBytesToWord(bytes.ToList());
             var mask = pivotSquare.Pivots[targetGrid];
             var pts = pivotSquare.PivotPoints[targetGrid];
             Console.WriteLine($"raccord : {pattern} {mask} {pts}");
@@ -208,28 +209,28 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
             byte currentByte = bytePattern[patternIndex];
 
-            if (currentByte == DawgUtils.JokerByte) // '?' wildcard
+            if (currentByte == TilesUtils.JokerByte) // '?' wildcard
             {
                 // Match exactly one character
                 foreach (var child in currentNode.Children)
                 {
-                    if (child.Letter != DawgUtils.PivotByte)
+                    if (child.Letter != TilesUtils.PivotByte)
                     {
                         currentWord[patternIndex] = child.Letter;
                         SearchByPatternRecursive(child, bytePattern, patternIndex + 1, currentWord, results);
-                        currentWord[patternIndex] = DawgUtils.JokerByte;
+                        currentWord[patternIndex] = TilesUtils.JokerByte;
                     }
                 }
             }
             else
             {
                 // Match the exact character
-                var nextNode = currentNode.Children.Where(p => p.Letter != DawgUtils.PivotByte && p.Letter == currentByte);
-                if (nextNode.Any() && currentByte != DawgUtils.PivotByte)
+                var nextNode = currentNode.Children.Where(p => p.Letter != TilesUtils.PivotByte && p.Letter == currentByte);
+                if (nextNode.Any() && currentByte != TilesUtils.PivotByte)
                 {
                     currentWord[patternIndex] = currentByte;
                     SearchByPatternRecursive(nextNode.First(), bytePattern, patternIndex + 1, currentWord, results);
-                    currentWord[patternIndex] = DawgUtils.JokerByte; // Backtrack
+                    currentWord[patternIndex] = TilesUtils.JokerByte; // Backtrack
                 }
             }
         }

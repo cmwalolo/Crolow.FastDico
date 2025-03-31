@@ -1,6 +1,7 @@
 ﻿@page "/topping"
 <RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
-    <RadzenSidebar Style="width:400px">
+    <RadzenSidebar Style="width:400px" @bind-Expanded="@sidebar1Expanded">
+        <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
         <RadzenPanelMenu>
             <RadzenPanelMenuItem Text="Home" Icon="home" />
             <RadzenPanelMenuItem Text="Users" Icon="account_box" />
@@ -15,3 +16,7 @@
         </div>
     </RadzenBody>
 </RadzenLayout>
+
+@code {
+    bool sidebar1Expanded = true;
+}

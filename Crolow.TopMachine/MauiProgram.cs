@@ -1,4 +1,7 @@
-﻿using Crolow.TopMachine.Data;
+﻿using Blazored.LocalStorage;
+using Crolow.TopMachine.Core;
+using Crolow.TopMachine.Data;
+using Crolow.TopMachine.Startup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Radzen;
@@ -9,6 +12,11 @@ namespace Crolow.TopMachine
     {
         public static MauiApp CreateMauiApp()
         {
+            EnsureFiles.CopyAssetsToAppDataDirectoryAsync();
+
+            //string appDataPath = FileSystem.AppDataDirectory;
+            //Console.WriteLine(appDataPath);
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -20,11 +28,14 @@ namespace Crolow.TopMachine
             builder.Services.AddMauiBlazorWebView();
 
             builder.Services.AddRadzenComponents();
+            builder.Services.AddBlazoredLocalStorageAsSingleton();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
 #endif
+
+            CrolowPixConfiguration.ConfigureServices(builder.Services);
             CreateConfiguration(builder);
             return builder.Build();
         }

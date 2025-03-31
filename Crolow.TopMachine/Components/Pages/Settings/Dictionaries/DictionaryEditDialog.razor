@@ -1,0 +1,31 @@
+﻿@using Crolow.FastDico.Models.Models.Dictionary.Entities
+@using Crolow.Pix.Maui.ComponentControls.Modules.PhotoManager.Album
+
+@inherits DictionaryEditDialogComponent
+@{
+    Variant variant = Variant.Outlined;
+}
+
+<RadzenTemplateForm TItem="DictionaryModel" Data="Dictionary">
+    <fieldset>
+        <RadzenStack Gap="1rem" class="rz-p-sm-3">
+            <RadzenFormField Text="Name" Variant="@variant">
+                <RadzenCheckBox @bind-Value="@Dictionary.IsDefault" />
+            </RadzenFormField>
+            <RadzenFormField Text="Name" Variant="@variant">
+                <RadzenTextBox @bind-Value="@Dictionary.Name" />
+            </RadzenFormField>
+            <RadzenFormField Text="Language" Variant="@variant">
+                <RadzenTextBox @bind-Value="@Dictionary.Language" />
+            </RadzenFormField>
+            <RadzenFormField Text="Location" Variant="@variant">
+                <RadzenTextBox @bind-Value="@Dictionary.DictionaryFile" />
+            </RadzenFormField>
+        </RadzenStack>
+    </fieldset>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Warning" Text="Cancel" Style="width: 120px" Click="@CancelDialog" />
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary" Text="Save" Style="width: 120px" Click="@SaveAndClose" />
+    </RadzenStack>
+</RadzenTemplateForm>
+
