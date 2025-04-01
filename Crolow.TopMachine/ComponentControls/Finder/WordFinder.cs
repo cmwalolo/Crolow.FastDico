@@ -78,12 +78,61 @@ namespace Crolow.TopMachine.ComponentControls.Finder
             StateHasChanged(); // Ensure the UI is updated
         }
 
-        public void SearchGreater()
-        {
-        }
-
         public void SearchSmaller()
         {
+            Results.Clear();
+
+            List<FinderResult> final = new List<FinderResult>();
+            WordResults results = new WordResults();
+            results.Words.AddRange(searcher.FindAllWordsSmaller(SearchPattern).Words);
+
+            foreach (var r in results.Words)
+            {
+                var row = new FinderResult();
+                row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
+
+                var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
+
+                row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
+                row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
+                final.Add(row);
+            }
+
+            foreach (var item in final.OrderBy(p => p.Additional))
+            {
+                Results.Add(item);
+            }
+
+            StateHasChanged(); // Ensure the UI is updated
+        }
+
+        public void SearchGreater()
+        {
+            Results.Clear();
+
+            List<FinderResult> final = new List<FinderResult>();
+            WordResults results = new WordResults();
+            results.Words.AddRange(searcher.FindAllWordsGreater(SearchPattern, 5).Words);
+
+            foreach (var r in results.Words)
+            {
+                var row = new FinderResult();
+                row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
+                row.Additional = WordTilesUtils.ConvertBytesToWordByStatus(r, 1).ToUpper();
+
+                var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
+
+                row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
+                row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
+                final.Add(row);
+            }
+
+            foreach (var item in final.OrderBy(p => p.Additional))
+            {
+                Results.Add(item);
+            }
+
+            StateHasChanged(); // Ensure the UI is updated
         }
 
         public void SearchContaining()

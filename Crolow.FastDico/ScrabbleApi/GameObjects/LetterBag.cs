@@ -130,6 +130,9 @@ public class LetterBag
             {
                 var newTile = Letters[ndx];
                 Letters.RemoveAt(ndx);
+                // Do not change this !!! 
+                // Any where you find new Tile(tile) 
+                // to make sure that referenced objects are not modified.
                 Letters.Add(new Tile(tile));
                 return newTile;
             }

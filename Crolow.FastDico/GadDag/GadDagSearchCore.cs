@@ -17,13 +17,37 @@ public class GadDagSearchCore
     // Function 1: Find all words that can be formed using exactly the given letters
     public WordResults FindAllWordsFromLetters(string pattern, string optional)
     {
-        var letters = WordTilesUtils.ConvertWordToBytes(pattern, optional);
+        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), optional.ToLower());
         var results = new WordResults();
 
 
         FindWordsUsingLetters(Root, letters, new WordResults.Word(), results, true);
         return results;
     }
+
+    public WordResults FindAllWordsSmaller(string pattern)
+    {
+        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), "");
+        var results = new WordResults();
+
+        FindWordsUsingLetters(Root, letters, new WordResults.Word(), results, false);
+        return results;
+    }
+
+    public WordResults FindAllWordsGreater(string pattern, int maxLength)
+    {
+        var results = new WordResults();
+        var optional = "?";
+
+        for (int x = 0; x < maxLength; x++)
+        {
+            var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), optional);
+            FindWordsUsingLetters(Root, letters, new WordResults.Word(), results, true);
+            optional += "?";
+        }
+        return results;
+    }
+
 
     // Recursive helper for both functions
     private void FindWordsUsingLetters(
@@ -37,7 +61,7 @@ public class GadDagSearchCore
         {
             if (child.Letter != TilesUtils.PivotByte)
             {
-                if (availableLetters.Any(p => p.Letter == child.Letter) || availableLetters.Any(p => p.IsJoker))
+                if (!requireExactMatch || (availableLetters.Any(p => p.Letter == child.Letter) || availableLetters.Any(p => p.IsJoker)))
                 {
                     bool isJoker = false;
 
