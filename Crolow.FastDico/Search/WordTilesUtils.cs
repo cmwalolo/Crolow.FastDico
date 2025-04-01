@@ -37,6 +37,9 @@ public static class WordTilesUtils
                 case '?':
                     byteArray.Add(new WordResults.Tile(TilesUtils.JokerByte, true, 0));
                     break;
+                case '*':
+                    byteArray.Add(new WordResults.Tile(TilesUtils.WildcardByte, true, 0));
+                    break;
                 default:
                     byteArray.Add(new WordResults.Tile((byte)(letter - 'a'), false, 0));
                     break;

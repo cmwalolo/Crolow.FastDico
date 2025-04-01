@@ -19,10 +19,13 @@ public static class TilesUtils
             switch (letter)
             {
                 case '#':
-                    byteArray.Add(31);
+                    byteArray.Add(TilesUtils.PivotByte);
                     break;
                 case '?':
                     byteArray.Add(TilesUtils.JokerByte);
+                    break;
+                case '*':
+                    byteArray.Add(TilesUtils.WildcardByte);
                     break;
                 default:
                     byteArray.Add((byte)(letter - 'a'));

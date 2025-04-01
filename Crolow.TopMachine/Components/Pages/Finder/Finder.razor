@@ -23,18 +23,27 @@
                             <RadzenMenuItem Click="@SearchContaining" Text="< X >"></RadzenMenuItem>
                             <RadzenMenuItem Click="@SearchMoreOrLess" Text="± X"></RadzenMenuItem>
                             <RadzenMenuItem Click="@SearchWildcard" Text="?*?"></RadzenMenuItem>
-                            <RadzenMenuItem Click="@SearchRegex" Text="{<*>}"></RadzenMenuItem>
+                            <RadzenMenuItem Click="@SearchRegex" Disabled="true" Text="{<*>}"></RadzenMenuItem>
                         </RadzenMenu>
                     </RadzenStack>
                 </RadzenHeader>
                 <RadzenBody style="margin-top:10px;padding:0px;">
-                    <RadzenDataGrid style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;" AllowFiltering="true" AllowSorting="true" AllowColumnResize="true"
+                    <RadzenDataGrid AllowPaging="true" PageSize="20" PagerPosition="PagerPosition.TopAndBottom" style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;" AllowFiltering="true" AllowSorting="true" AllowColumnResize="true"
                                     Data="@Results" TItem="FinderResult">
                         <EmptyTemplate>
-                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                            @{
+                                if (searchActive)
+                                {
+                                                                                                                                                                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Searching ...</p>
+                                }
+                                else
+                                {
+                                                                                                                                                                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                                }
+                            }
                         </EmptyTemplate>
                         <Columns>
-                            <RadzenDataGridColumn Width="30px" Property="@nameof(FinderResult.Additional)" Title="+" />
+                            <RadzenDataGridColumn Width="50px" Property="@nameof(FinderResult.Additional)" Title="+" />
                             <RadzenDataGridColumn TextAlign="TextAlign.Right" Width="90px" Property="@nameof(FinderResult.Prefix)" Title="<1" />
                             <RadzenDataGridColumn Property="@nameof(FinderResult.Word)" Title="Word">
                                 <Template Context="result">

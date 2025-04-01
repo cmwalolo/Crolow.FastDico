@@ -6,14 +6,16 @@ public class WordResults
     public class Word
     {
         public List<Tile> Tiles;
+        public int Status;
 
         public Word()
         {
             Tiles = new List<Tile>();
         }
-        public Word(List<Tile> tiles)
+        public Word(List<Tile> tiles, int status = 0)
         {
             Tiles = tiles;
+            Status = status;
         }
 
         public Word(Word copy)

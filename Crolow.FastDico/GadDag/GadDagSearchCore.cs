@@ -6,15 +6,15 @@ namespace Crolow.FastDico.GadDag;
 public class GadDagSearchCore
 {
     public LetterNode Root { get; private set; }
+    public int MaxResults { get; private set; }
 
-    public GadDagSearchCore(LetterNode root)
+    public GadDagSearchCore(LetterNode root, int maxResults)
     {
         Root = root;
+        MaxResults = maxResults;
     }
 
-
-
-    // Function 1: Find all words that can be formed using exactly the given letters
+    // Anagramic searches From Letters + 1, Greater, smaller
     public WordResults FindAllWordsFromLetters(string pattern, string optional)
     {
         var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), optional.ToLower());
@@ -25,12 +25,14 @@ public class GadDagSearchCore
         return results;
     }
 
-    public WordResults FindAllWordsSmaller(string pattern)
+    public WordResults FindAllWordsSmaller(string pattern, int minLength = 0)
     {
         var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), "");
         var results = new WordResults();
 
         FindWordsUsingLetters(Root, letters, new WordResults.Word(), results, false);
+        results.Words = results.Words.Where(p => p.Tiles.Count > minLength).ToList();
+
         return results;
     }
 
@@ -48,7 +50,140 @@ public class GadDagSearchCore
         return results;
     }
 
+    public WordResults FindAllWordsContaining(string pattern)
+    {
+        string search = $"*{pattern}*";
+        var letters = WordTilesUtils.ConvertWordToBytes(search.ToLower(), "");
+        var results = new WordResults();
+        var optional = "?";
+        SearchByPatternRecursive(Root, letters, 0, new WordResults.Word(), results);
+        return results;
+    }
 
+    public WordResults FindAllWordsWithPattern(string pattern)
+    {
+        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), "");
+        var results = new WordResults();
+        var optional = "?";
+        SearchByPatternRecursive(Root, letters, 0, new WordResults.Word(), results);
+        return results;
+    }
+
+    public WordResults FindAllWordsMoreOrLess(string pattern)
+    {
+        var results = new WordResults();
+
+        results.Words.AddRange(FindAllWordsFromLetters(pattern, "").Words);
+
+
+        for (int x = 0; x < pattern.Length; x++)
+        {
+            var pat = pattern.ToArray();
+            pat[x] = '?';
+            results.Words.AddRange(FindAllWordsFromLetters(new string(pat), "").Words);
+        }
+
+        for (int x = 0; x <= pattern.Length; x++)
+        {
+            var pat = pattern.ToList();
+
+            if (x < pattern.Length)
+            {
+                pat.Insert(x, '?');
+            }
+            else
+            {
+                pat.Add('?');
+            }
+
+            results.Words.AddRange(FindAllWordsFromLetters(new string(pat.ToArray()), "").Words);
+        }
+        var finalResults = new WordResults();
+
+        var group = results.Words
+            .Select(p => new { w = WordTilesUtils.ConvertBytesToWordForDisplay(p).ToLower(), i = p })
+            .GroupBy(p => p.w);
+
+        foreach (var item in group)
+        {
+            var w = item.First().w.ToLower();
+            var r = WordResultEvaluator.CompareWords(pattern, w);
+
+            if (r.HasAnySet())
+            {
+                for (int x = 1; x <= 5; x++)
+                {
+                    if (r.Get(x))
+                    {
+                        finalResults.Words.Add(new WordResults.Word(item.First().i.Tiles, x));
+                    }
+                }
+            }
+        }
+        finalResults.Words = finalResults.Words.Where(p => p.Status > 0).ToList();
+        return finalResults;
+    }
+
+    #region Pattern search 
+    private void SearchByPatternRecursive(LetterNode currentNode, List<WordResults.Tile> bytePattern, int patternIndex, WordResults.Word currentWord, WordResults results)
+    {
+        // Base case: Reached the end of the pattern
+        if (patternIndex == bytePattern.Count)
+        {
+            if (currentNode.IsEnd)
+            {
+                results.Words.Add(new WordResults.Word(currentWord));
+            }
+            return;
+        }
+
+        WordResults.Tile currentByte = bytePattern[patternIndex];
+
+        if (currentByte.Letter == TilesUtils.WildcardByte) // '*' wildcard
+        {
+            // Match zero or more characters
+            // First, try skipping the '*'
+            SearchByPatternRecursive(currentNode, bytePattern, patternIndex + 1, currentWord, results);
+
+            // Then, try matching one or more characters
+            foreach (var child in currentNode.Children)
+            {
+                if (child.Letter != TilesUtils.PivotByte)
+                {
+                    currentWord.Tiles.Add(new WordResults.Tile(child.Letter, false, 1));
+                    SearchByPatternRecursive(child, bytePattern, patternIndex, currentWord, results);
+                    currentWord.Tiles.RemoveAt(currentWord.Tiles.Count - 1); // Backtrack
+                }
+            }
+        }
+        else if (currentByte.Letter == TilesUtils.JokerByte) // '?' wildcard
+        {
+            // Match exactly one character
+            foreach (var child in currentNode.Children)
+            {
+                if (child.Letter != TilesUtils.PivotByte)
+                {
+                    currentWord.Tiles.Add(new WordResults.Tile(child.Letter, false, 1));
+                    SearchByPatternRecursive(child, bytePattern, patternIndex + 1, currentWord, results);
+                    currentWord.Tiles.RemoveAt(currentWord.Tiles.Count - 1); // Backtrack
+                }
+            }
+        }
+        else
+        {
+            // Match the exact character
+            var nextNode = currentNode.Children.Where(p => p.Letter != TilesUtils.PivotByte && p.Letter == currentByte.Letter);
+            if (nextNode.Any())
+            {
+                currentWord.Tiles.Add(new WordResults.Tile(currentByte.Letter, false, 0));
+                SearchByPatternRecursive(nextNode.First(), bytePattern, patternIndex + 1, currentWord, results);
+                currentWord.Tiles.RemoveAt(currentWord.Tiles.Count - 1); // Backtrack
+            }
+        }
+    }
+    #endregion
+
+    #region Anagram search
     // Recursive helper for both functions
     private void FindWordsUsingLetters(
         LetterNode currentNode,
@@ -57,6 +192,10 @@ public class GadDagSearchCore
         WordResults results,
         bool requireExactMatch)
     {
+        if (results.Words.Count == MaxResults)
+        {
+            return;
+        }
         foreach (var child in currentNode.Children)
         {
             if (child.Letter != TilesUtils.PivotByte)
@@ -112,6 +251,7 @@ public class GadDagSearchCore
             }
         }
     }
+    #endregion
 }
 
 

@@ -144,7 +144,7 @@ public class GadDagSearch : IDawgSearch
 
         byte currentByte = bytePattern[patternIndex];
 
-        if (currentByte == 31) // '*' wildcard
+        if (currentByte == TilesUtils.WildcardByte) // '*' wildcard
         {
             // Match zero or more characters
             // First, try skipping the '*'
@@ -161,7 +161,7 @@ public class GadDagSearch : IDawgSearch
                 }
             }
         }
-        else if (currentByte == 30) // '?' wildcard
+        else if (currentByte == TilesUtils.JokerByte) // '?' wildcard
         {
             // Match exactly one character
             foreach (var child in currentNode.Children)
@@ -193,9 +193,9 @@ public class GadDagSearch : IDawgSearch
         foreach (char c in pattern)
         {
             if (c == '*')
-                bytePattern.Add(31); // '*' wildcard
+                bytePattern.Add(TilesUtils.WildcardByte); // '*' wildcard
             else if (c == '?')
-                bytePattern.Add(30); // '?' wildcard
+                bytePattern.Add(TilesUtils.JokerByte); // '?' wildcard
             else
                 bytePattern.Add((byte)(c - 'a'));
         }

@@ -5,6 +5,7 @@ using Crolow.FastDico.Utils;
 using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using Radzen.Blazor;
 using System.Collections.ObjectModel;
 
 namespace Crolow.TopMachine.ComponentControls.Finder
@@ -21,9 +22,10 @@ namespace Crolow.TopMachine.ComponentControls.Finder
 
 
         public ObservableCollection<FinderResult> Results = new ObservableCollection<FinderResult>();
-
         private GadDagCompiler gaddag;
         private GadDagSearchCore searcher;
+        public RadzenDataGrid<WordResults> grid;
+        public bool searchActive = false;
 
         protected async override void OnInitialized()
         {
@@ -39,7 +41,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
                 string f = FileSystem.AppDataDirectory + "\\" + currentDico.DictionaryFile;
                 gaddag = new GadDagCompiler();
                 gaddag.ReadFromFile(f);
-                searcher = new GadDagSearchCore(gaddag.Root);
+                searcher = new GadDagSearchCore(gaddag.Root, 250);
             }
         }
 
@@ -51,106 +53,124 @@ namespace Crolow.TopMachine.ComponentControls.Finder
         public void Search7plus1()
         {
             Results.Clear();
-
-            List<FinderResult> final = new List<FinderResult>();
             WordResults results = new WordResults();
             results.Words.AddRange(searcher.FindAllWordsFromLetters(SearchPattern, "").Words);
             results.Words.AddRange(searcher.FindAllWordsFromLetters(SearchPattern, "?").Words);
+            ComposeResults(results, 1);
 
-            foreach (var r in results.Words)
-            {
-                var row = new FinderResult();
-                row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
-                row.Additional = WordTilesUtils.ConvertBytesToWordByStatus(r, 1).ToUpper();
-
-                var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
-
-                row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
-                row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
-                final.Add(row);
-            }
-
-            foreach (var item in final.OrderBy(p => p.Additional))
-            {
-                Results.Add(item);
-            }
-
-            StateHasChanged(); // Ensure the UI is updated
         }
 
         public void SearchSmaller()
         {
             Results.Clear();
-
-            List<FinderResult> final = new List<FinderResult>();
-            WordResults results = new WordResults();
-            results.Words.AddRange(searcher.FindAllWordsSmaller(SearchPattern).Words);
-
-            foreach (var r in results.Words)
-            {
-                var row = new FinderResult();
-                row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
-
-                var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
-
-                row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
-                row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
-                final.Add(row);
-            }
-
-            foreach (var item in final.OrderBy(p => p.Additional))
-            {
-                Results.Add(item);
-            }
-
-            StateHasChanged(); // Ensure the UI is updated
+            WordResults results = searcher.FindAllWordsSmaller(SearchPattern);
+            ComposeResults(results, 2);
         }
 
         public void SearchGreater()
         {
             Results.Clear();
-
-            List<FinderResult> final = new List<FinderResult>();
-            WordResults results = new WordResults();
-            results.Words.AddRange(searcher.FindAllWordsGreater(SearchPattern, 5).Words);
-
-            foreach (var r in results.Words)
-            {
-                var row = new FinderResult();
-                row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
-                row.Additional = WordTilesUtils.ConvertBytesToWordByStatus(r, 1).ToUpper();
-
-                var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
-
-                row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
-                row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
-                final.Add(row);
-            }
-
-            foreach (var item in final.OrderBy(p => p.Additional))
-            {
-                Results.Add(item);
-            }
-
-            StateHasChanged(); // Ensure the UI is updated
+            WordResults results = searcher.FindAllWordsGreater(SearchPattern, 5);
+            ComposeResults(results, 1);
         }
 
         public void SearchContaining()
         {
+            Results.Clear();
+            WordResults results = searcher.FindAllWordsContaining(SearchPattern);
+            ComposeResults(results, 1);
         }
 
-        public void SearchMoreOrLess()
+        public async void SearchMoreOrLess()
         {
+            string[] p = new string[] { "", "<1>", "<2>", "-1+", ">1", "<1" };
+            Results.Clear();
+            WordResults results = searcher.FindAllWordsMoreOrLess(SearchPattern);
+
+            searchActive = true;
+            await InvokeAsync((Action)(() =>
+            {
+                List<FinderResult> final = new List<FinderResult>();
+
+                foreach (var r in results.Words)
+                {
+                    var row = new FinderResult();
+                    row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
+                    row.Additional = p[r.Status];
+
+                    if (string.IsNullOrEmpty(row.Additional))
+                    {
+                        Console.Write("pp");
+                    }
+
+                    var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
+
+                    row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
+                    row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
+                    final.Add(row);
+                }
+
+                final = final.OrderBy(p => p.Additional).ThenBy(p => p.Word).ToList();
+                foreach (var item in final)
+                {
+                    Results.Add(item);
+                }
+                searchActive = false;
+                StateHasChanged();
+            }));
+
         }
 
         public void SearchWildcard()
         {
+            Results.Clear();
+            WordResults results = searcher.FindAllWordsWithPattern(SearchPattern);
+            ComposeResults(results, 1);
         }
 
         public void SearchRegex()
         {
         }
 
+
+        private async void ComposeResults(WordResults results, int sortType)
+        {
+            searchActive = true;
+            await InvokeAsync((Action)(() =>
+            {
+                List<FinderResult> final = new List<FinderResult>();
+
+                foreach (var r in results.Words)
+                {
+                    var row = new FinderResult();
+                    row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
+                    row.Additional = WordTilesUtils.ConvertBytesToWordByStatus(r, 1).ToUpper();
+
+                    var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
+
+                    row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
+                    row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
+                    final.Add(row);
+                }
+
+                switch (sortType)
+                {
+                    case 1:
+                        final = final.OrderBy(p => p.Additional.Length).ThenBy(p => p.Additional).ThenBy(p => p.Word).ToList();
+                        break;
+                    case 2:
+                        final = final.OrderByDescending(p => p.Word.Length).ThenBy(p => p.Word).ToList();
+                        break;
+                }
+
+                foreach (var item in final)
+                {
+                    Results.Add(item);
+                }
+                searchActive = false;
+                StateHasChanged();
+            }));
+        }
 
     }
 }
