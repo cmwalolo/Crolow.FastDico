@@ -23,7 +23,6 @@ namespace Crolow.FastDico.ScrabbleApi.Config
                 {
                     Grid[i, j] = new Square
                     {
-                        CurrentLetter = null,
                         IsBorder = config.Grid[i, j].IsBorder,
                         LetterMultiplier = config.Grid[i, j].LetterMultiplier,
                         WordMultiplier = config.Grid[i, j].WordMultiplier

@@ -14,26 +14,21 @@ public partial class ScrabbleAI
         public int Bonus { get; set; }
         public int Pivot { get; set; }
 
-        public void SetTile(Tile tile, int wm, int lm)
+        public void SetTile(Tile tile, Square sq)
         {
-            Tile t = new Tile(tile);
-            t.WordMultiplier = wm;
-            t.LetterMultiplier = lm;
+            Tile t = new Tile(tile, sq);
             Tiles.Add(t);
         }
 
-        public void AddTile(Tile tile, int wm, int lm)
+        public void AddTile(Tile tile, Square sq)
         {
-            tile.WordMultiplier = wm;
-            tile.LetterMultiplier = lm;
+            tile.Parent = sq;
             Tiles.Add(tile);
         }
 
         public Tile RemoveTile()
         {
             var t = Tiles[Tiles.Count - 1];
-            t.WordMultiplier = 1;
-            t.LetterMultiplier = 1;
             Tiles.RemoveAt(Tiles.Count - 1);
             return t;
         }
@@ -87,7 +82,7 @@ public partial class ScrabbleAI
             {
                 m.AddRange(l);
             }
-            Tiles = m.Select(t => new Tile(t)).ToList();
+            Tiles = m.Select(t => new Tile(t, t.Parent)).ToList();
             Pivot = 0;
 
             // If we played vertically, we reset the position

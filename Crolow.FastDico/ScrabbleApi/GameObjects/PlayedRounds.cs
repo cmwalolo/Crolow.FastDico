@@ -25,12 +25,12 @@ public partial class ScrabbleAI
             int pivotTotal = 0;
             foreach (var t in round.Tiles)
             {
-                if (t.Status == 0)
+                if (t.Parent.Status == 0)
                 {
-                    wm *= t.WordMultiplier;
+                    wm *= t.Parent.WordMultiplier;
                     if (t.Mask > 0)
                     {
-                        pivotTotal += (t.Points * t.LetterMultiplier * t.WordMultiplier) + (t.Mask * t.WordMultiplier);
+                        pivotTotal += (t.Points * t.Parent.LetterMultiplier * t.Parent.WordMultiplier) + (t.Mask * t.Parent.WordMultiplier);
                     }
                 }
             }
@@ -40,10 +40,10 @@ public partial class ScrabbleAI
                 // Console.WriteLine("WFT" + round.Position.X + " " + round.Position.Y);
             }
 
-            round.Points = round.Tiles.Where(p => p.Status == 0).Sum(p => p.Points * p.LetterMultiplier) * wm;
-            round.Points += round.Tiles.Where(p => p.Status == 1).Sum(p => p.Points) * wm;
+            round.Points = round.Tiles.Where(p => p.Parent.Status == 0).Sum(p => p.Points * p.Parent.LetterMultiplier) * wm;
+            round.Points += round.Tiles.Where(p => p.Parent.Status == 1).Sum(p => p.Points) * wm;
 
-            var tilesFromRack = round.Tiles.Count(p => p.Status == 0);
+            var tilesFromRack = round.Tiles.Count(p => p.Parent.Status == 0);
             if (tilesFromRack > 0 && tilesFromRack < Config.Bonus.Count())
             {
                 round.Bonus = Config.Bonus[tilesFromRack - 1];
@@ -62,12 +62,12 @@ public partial class ScrabbleAI
                 return;
             }
 
-            round.Tiles = round.Tiles.Select(p => new Tile(p)).ToList();
+            round.Tiles = round.Tiles.Select(p => new Tile(p, p.Parent)).ToList();
 
 #if DEBUG
             Console.WriteLine("WM:" + wm + " PIVOT:" + pivotTotal + " Bonus:" + round.Bonus);
-            Console.WriteLine("From rack " + tilesFromRack + " " + round.Tiles.Where(p => p.Status == 0).Sum(p => p.Points * p.LetterMultiplier) * wm);
-            Console.WriteLine("From board " + round.Tiles.Where(p => p.Status == 1).Sum(p => p.Points) * wm);
+            Console.WriteLine("From rack " + tilesFromRack + " " + round.Tiles.Where(p => p.Parent.Status == 0).Sum(p => p.Points * p.Parent.LetterMultiplier) * wm);
+            Console.WriteLine("From board " + round.Tiles.Where(p => p.Parent.Status == 1).Sum(p => p.Points) * wm);
 
             round.DebugRound("Word found");
 #endif

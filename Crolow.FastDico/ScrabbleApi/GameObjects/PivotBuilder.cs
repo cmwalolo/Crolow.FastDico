@@ -67,7 +67,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
 
             var runs = new List<Run>();
 
-            if (squares.Count(p => p.CurrentLetter != null) == 0)
+            if (squares.Count(p => p.Status == 1) == 0)
             {
                 return;
             }
@@ -75,7 +75,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             // We first calculate runs of adjacent letters
             do
             {
-                while (!squares[startX].IsBorder && squares[startX].CurrentLetter == null)
+                while (!squares[startX].IsBorder && squares[startX].Status == -1)
                 {
                     startX++;
                 }
@@ -86,7 +86,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                 {
 
                     // We are looking for adjactent letters for the pivots to the left
-                    while (!squares[endX].IsBorder && squares[endX].CurrentLetter != null)
+                    while (!squares[endX].IsBorder && squares[endX].Status == 1)
                     {
                         endX++;
                     }
@@ -155,7 +155,7 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
             for (int i = start; i <= end; i++)
             {
                 var sq = squares[i];
-                if (sq.CurrentLetter == null)
+                if (sq.Status == -1)
                 {
                     bytes[i - start] = TilesUtils.JokerByte;
                     pivotSquare = squares[i];

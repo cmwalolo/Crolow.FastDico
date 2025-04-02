@@ -30,13 +30,18 @@ public class Board
         return CurrentBoard[grid].Grid[x, y];
     }
 
-    public void SetTile(int grid, int X, int Y, Tile tile)
+    public void SetTile(int grid, int X, int Y, Tile tile, int status)
     {
         // WE set definetly the tile on the rack
-        tile.Status = 1;
-        tile.LetterMultiplier = 1;
-        tile.WordMultiplier = 1;
         CurrentBoard[grid].Grid[X, Y].CurrentLetter = tile;
+        CurrentBoard[grid].Grid[X, Y].Status = status;
+    }
+
+    public void RemoveTile(int grid, int X, int Y)
+    {
+        // WE set definetly the tile on the rack
+        CurrentBoard[grid].Grid[X, Y].CurrentLetter = new Tile();
+        CurrentBoard[grid].Grid[X, Y].Status = -1;
     }
 
     public void SetRound(PlayedRound round)
@@ -64,8 +69,7 @@ public class Board
             {
                 newTile = currentGame.LetterBag.ReplaceJoker(tile);
             }
-            newTile.Status = 1;
-            SetTile(0, x, y, newTile);
+            SetTile(0, x, y, newTile, 1);
             x += incH;
             y += incV;
         }

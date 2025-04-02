@@ -127,15 +127,10 @@ public partial class ScrabbleAI
         // We remove letters played from the rack
         foreach (var letter in selectedRound.Tiles)
         {
-            if (letter.Status == 0)
+            if (letter.Parent.Status != 1)
             {
                 rack.RemoveTile(letter);
             }
-
-            //if (letter.IsJoker)
-            //{
-            //    letter.Letter = TilesUtils.JokerByte;
-            //}
         }
 
         selectedRound.FinalizeRound();
@@ -145,7 +140,7 @@ public partial class ScrabbleAI
         currentGame.Round++;
 #if DEBUG
         PrintGrid();
-        Console.ReadLine();
+        //Console.ReadLine();
 #endif 
         NextRound(false);
     }
@@ -162,7 +157,7 @@ public partial class ScrabbleAI
                 playedRounds.CurrentRound = new PlayedRound();
 
                 var sq = board.GetSquare(grid, j, i);
-                if (sq.CurrentLetter == null)
+                if (sq.Status == -1)
                 {
                     if (CheckConnect(grid, j, i))
                     {
@@ -175,7 +170,7 @@ public partial class ScrabbleAI
                         // If there is a filled squared on the left
                         // We need to prefill the current solution
                         var sqLeft = board.GetSquare(grid, j - 1, i);
-                        if (sqLeft.CurrentLetter != null && sqLeft.CurrentLetter.Status == 1)
+                        if (sqLeft.Status == 1)
                         {
                             rightToLeft = false;
                             var sql = new List<Square>();
@@ -184,7 +179,7 @@ public partial class ScrabbleAI
                             while (true)
                             {
                                 var sqNext = board.GetSquare(grid, pos, i);
-                                if (sqNext.CurrentLetter != null && sqNext.CurrentLetter.Status == 1)
+                                if (sqNext.Status == 1)
                                 {
                                     sql.Add(sqNext);
                                     pos--;
@@ -195,10 +190,13 @@ public partial class ScrabbleAI
                                     playedRounds.CurrentRound = new PlayedRound();
                                     firstPosition = new Position(pos + 1, firstPosition.Y, grid);
                                     playedRounds.CurrentRound.Position = firstPosition;
+                                    int x = firstPosition.X;
+                                    int y = firstPosition.Y;
 
                                     foreach (var item in sql)
                                     {
-                                        playedRounds.CurrentRound.AddTile(item.CurrentLetter, 1, 1);
+                                        var parent = board.GetSquare(grid, x++, y);
+                                        playedRounds.CurrentRound.AddTile(item.CurrentLetter, parent);
                                     }
                                     break;
                                 }
@@ -235,10 +233,10 @@ public partial class ScrabbleAI
     }
     private bool CheckConnect(int grid, int j, int i)
     {
-        if (board.GetSquare(grid, j - 1, i).CurrentLetter != null
-           || board.GetSquare(grid, j + 1, i).CurrentLetter != null
-           || board.GetSquare(grid, j, i + 1).CurrentLetter != null
-           || board.GetSquare(grid, j, i - 1).CurrentLetter != null)
+        if (board.GetSquare(grid, j - 1, i).Status == 1
+           || board.GetSquare(grid, j + 1, i).Status == 1
+           || board.GetSquare(grid, j, i + 1).Status == 1
+           || board.GetSquare(grid, j, i - 1).Status == 1)
         {
             return true;
         }
@@ -297,13 +295,13 @@ public partial class ScrabbleAI
                 var sq = board.GetSquare(0, y, x);
                 var cclass = $"cell cell-{sq.LetterMultiplier} cell{sq.WordMultiplier}";
 
-                if (sq.CurrentLetter != null)
+                if (sq.Status == 1)
                 {
                     cclass += sq.CurrentLetter.IsJoker ? " tileJoker" : " tile";
                 }
 
                 sb.AppendLine($"<td class='{cclass}'>");
-                if (sq.CurrentLetter != null)
+                if (sq.Status == 1)
                 {
                     var c = (char)(sq.CurrentLetter.Letter + 97);
                     sb.AppendLine(char.ToUpper(c).ToString());
@@ -322,7 +320,7 @@ public partial class ScrabbleAI
 
     private void SearchNodes(int grid, LetterNode parentNode, int increment, Position p, List<Tile> letters, PlayedRounds rounds, Position firstPosition, bool rightToLeft = true)
     {
-        if (rounds.CurrentRound.Tiles.Count(p => p.Status == 0) >= currentGameConfig.PlayableLetters)
+        if (rounds.CurrentRound.Tiles.Count(p => p.Parent.Status == 0) >= currentGameConfig.PlayableLetters)
         {
             return;
         }
@@ -330,15 +328,17 @@ public partial class ScrabbleAI
         int x = p.X;
         int y = p.Y;
 
-        // We first Get the Square according to the current position
+        // We first Get the Square according to the cur
+        //
+        //
+        // rent position
         var square = board.GetSquare(grid, x, y);
 
 
         // We load the nodes to be checked
         var nodes = new List<LetterNode>();
 
-
-        if (square == null || square.IsBorder)
+        if (square.IsBorder)
         {
             nodes = parentNode.Children.Where(p => p.Letter == TilesUtils.PivotByte).ToList();
         }
@@ -349,13 +349,13 @@ public partial class ScrabbleAI
 
 
         // We set the word/letter multipliers
-        Tile tileLetter = null;
+        Tile tileLetter = new Tile();
 
         if (square != null && !parentNode.IsPivot)
         {
-            tileLetter = square.CurrentLetter;
-            if (square.CurrentLetter != null)
+            if (square.Status == 1)
             {
+                tileLetter = square.CurrentLetter;
                 nodes = nodes.Where(p => p.Letter == tileLetter.Letter).ToList();
             }
         }
@@ -368,12 +368,14 @@ public partial class ScrabbleAI
             {
                 var letter = tileLetter;
                 // The current square is empty so we can take a new letter from the rack
-                if (letter == null)
+                if (square.Status == -1)
                 {
-                    letter = letters.FirstOrDefault(p => p.Letter == node.Letter || p.IsJoker);
-                    // if the letter is available in the rack or is a joker
-                    if (letter != null)
+                    if (letters.Any(p => p.Letter == node.Letter || p.IsJoker))
                     {
+                        // if the letter is available in the rack or is a joker
+                        letter = letters.FirstOrDefault(p => p.Letter == node.Letter || p.IsJoker);
+
+                        // Is it possible to place this letter
                         if (!square.GetPivot(letter, grid, node.Letter))
                         {
                             continue;
@@ -382,83 +384,67 @@ public partial class ScrabbleAI
                         letter.Mask = square.GetPivotPoints(grid);
 
                         // We remove the letter from the rack
-                        letters.Remove(letter);
+                        int ndx = letters.FindIndex(p => p.Letter == node.Letter || p.IsJoker);
+                        letters.RemoveAt(ndx);
 
                         // if the letter is a joker we asssign assign the current node letter
                         if (letter.IsJoker)
                         {
                             letter.Letter = node.Letter;
                         }
+
+                        square.Status = 0;
+                        rounds.CurrentRound.AddTile(letter, square);
                     }
                     else
                     {
                         continue;
                     }
+
+                }
+                else
+                {
+                    rounds.CurrentRound.AddTile(letter, square);
                 }
 
-                // We add a letter to round if not null
-                if (letter != null)
+                // If the node isEnd we check the round 
+                if (node.IsEnd)
                 {
-                    var wm = 1;
-                    var lm = 1;
-
-                    if (square != null)
+                    // For a round to be valid the next tile needs to be empty 
+                    var nextTile = board.GetSquare(grid, x + increment, y);
+                    if (nextTile.Status == -1)
                     {
-                        wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
-                        lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
-                    }
-
-                    if (wm == 3)
-                    {
-                        if (x != 15 && x != 1 && x != 8
-                            && y != 15 && y != 1 && y != 8)
+                        // We update the position of the current word
+                        if (firstPosition.ISGreater(p))
                         {
-                            Console.WriteLine("Missed Tile");
+                            rounds.CurrentRound.Position = new Position(p);
                         }
-                    }
-
-                    // We set a new tile 
-                    rounds.CurrentRound.AddTile(letter, wm, lm);
-
-                    // If the node isEnd we check the round 
-                    if (node.IsEnd)
-                    {
-                        // For a round to be valid the next tile needs to be empty 
-                        var nextTile = board.GetSquare(grid, x + increment, y);
-                        if (nextTile.CurrentLetter == null)
+                        else
                         {
-                            // We update the position of the current word
-                            if (firstPosition.ISGreater(p))
-                            {
-                                rounds.CurrentRound.Position = new Position(p);
-                            }
-                            else
-                            {
-                                rounds.CurrentRound.Position = new Position(firstPosition);
-                            }
-
-
-                            // We check the and calculate his score
-                            rounds.SetRound(rounds.CurrentRound);
-                            // We create a new round
-                            rounds.CurrentRound = new PlayedRound(rounds.CurrentRound);
+                            rounds.CurrentRound.Position = new Position(firstPosition);
                         }
-                    }
 
-                    // if we reach the maximum number of playables we stop 
-                    var oldPosition = new Position(x + increment, y, grid);
-                    // We continue the search in the nodes 
-                    SearchNodes(grid, node, increment, oldPosition, letters, rounds, firstPosition);
-                    rounds.CurrentRound.Position = new Position(oldPosition);
-                    // We reset letter on the rack.
-                    rounds.CurrentRound.RemoveTile();
 
-                    // If letter comes from rack we put it back
-                    if (letter.Status == 0)
-                    {
-                        letter.WordMultiplier = letter.LetterMultiplier = 1;
-                        letters.Add(letter);
+                        // We check the and calculate his score
+                        rounds.SetRound(rounds.CurrentRound);
+                        // We create a new round
+                        rounds.CurrentRound = new PlayedRound(rounds.CurrentRound);
                     }
+                }
+
+                // if we reach the maximum number of playables we stop 
+                var oldPosition = new Position(x + increment, y, grid);
+                // We continue the search in the nodes 
+                SearchNodes(grid, node, increment, oldPosition, letters, rounds, firstPosition);
+                rounds.CurrentRound.Position = new Position(oldPosition);
+                // We reset letter on the rack.
+                rounds.CurrentRound.RemoveTile();
+
+                // If letter comes from rack we put it back
+                if (square.Status == 0)
+                {
+                    letters.Add(letter);
+                    square.Status = -1;
                 }
             }
             else

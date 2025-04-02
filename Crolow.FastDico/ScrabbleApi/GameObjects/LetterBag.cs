@@ -20,7 +20,7 @@ public class LetterBag
         {
             for (var i = 0; i < kvp.TotalLetters; i++)
             {
-                Letters.Add(new Tile(kvp));
+                Letters.Add(new Tile(kvp, null));
             }
         }
     }
@@ -133,7 +133,7 @@ public class LetterBag
                 // Do not change this !!! 
                 // Any where you find new Tile(tile) 
                 // to make sure that referenced objects are not modified.
-                Letters.Add(new Tile(tile));
+                Letters.Add(new Tile(tile, tile.Parent));
                 return newTile;
             }
         }
