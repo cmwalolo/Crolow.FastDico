@@ -143,6 +143,10 @@ public partial class ScrabbleAI
         currentGame.RoundsPlayed.Add(selectedRound);
         selectedRound = new PlayedRound();
         currentGame.Round++;
+#if DEBUG
+        PrintGrid();
+        Console.ReadLine();
+#endif 
         NextRound(false);
     }
 
@@ -244,8 +248,15 @@ public partial class ScrabbleAI
 
     private void EndGame()
     {
-        StringBuilder sb = new StringBuilder();
 #if DEBUG
+        PrintGrid();
+#endif
+    }
+
+    public void PrintGrid()
+    {
+#if DEBUG
+        StringBuilder sb = new StringBuilder();
         sb.AppendLine("<html>");
         sb.AppendLine("<head>");
         sb.AppendLine("<link rel=\"stylesheet\" href=\"grid.css\" />");
@@ -338,15 +349,11 @@ public partial class ScrabbleAI
 
 
         // We set the word/letter multipliers
-        var wm = 1;
-        var lm = 1;
         Tile tileLetter = null;
 
         if (square != null && !parentNode.IsPivot)
         {
             tileLetter = square.CurrentLetter;
-            wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
-            lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
             if (square.CurrentLetter != null)
             {
                 nodes = nodes.Where(p => p.Letter == tileLetter.Letter).ToList();
@@ -392,22 +399,24 @@ public partial class ScrabbleAI
                 // We add a letter to round if not null
                 if (letter != null)
                 {
-#if DEBUG
-                    //if (node.IsEnd)
-                    //{
-                    //    var res = $"{rounds.CurrentRound.GetDebugWord(true)}";
-                    //    if (res == "yre" || res == "entry")
-                    //    {
-                    //        Console.WriteLine($"found : {rounds.CurrentRound.GetDebugWord(true)}");
-                    //    }
-                    //}
+                    var wm = 1;
+                    var lm = 1;
 
-                    letter.x = x;
-                    if (rounds.CurrentRound.Tiles.Any(p => p.WordMultiplier == 2) && wm == 2)
+                    if (square != null)
                     {
-                        //Console.Write("Double word multiplier ?");
+                        wm = square.CurrentLetter == null ? square.WordMultiplier : 1;
+                        lm = square.CurrentLetter == null ? square.LetterMultiplier : 1;
                     }
-#endif
+
+                    if (wm == 3)
+                    {
+                        if (x != 15 && x != 1 && x != 8
+                            && y != 15 && y != 1 && y != 8)
+                        {
+                            Console.WriteLine("Missed Tile");
+                        }
+                    }
+
                     // We set a new tile 
                     rounds.CurrentRound.AddTile(letter, wm, lm);
 
@@ -447,6 +456,7 @@ public partial class ScrabbleAI
                     // If letter comes from rack we put it back
                     if (letter.Status == 0)
                     {
+                        letter.WordMultiplier = letter.LetterMultiplier = 1;
                         letters.Add(letter);
                     }
                 }

@@ -1,5 +1,4 @@
 ﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
-using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi;
@@ -33,10 +32,9 @@ public partial class ScrabbleAI
         public Tile RemoveTile()
         {
             var t = Tiles[Tiles.Count - 1];
-            Tiles.RemoveAt(Tiles.Count - 1);
             t.WordMultiplier = 1;
             t.LetterMultiplier = 1;
-
+            Tiles.RemoveAt(Tiles.Count - 1);
             return t;
         }
 

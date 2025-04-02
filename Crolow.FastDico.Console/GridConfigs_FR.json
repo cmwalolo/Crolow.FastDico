@@ -10,7 +10,7 @@
       "InRackLetters": 7,
       "TimeByTurn": 90,
       "DifficultRatio": 40,
-      "JokerMode": true,
+      "JokerMode": false,
       "ToppingMode": true,
       "DifficultMode": false,
       "CheckDistributionRound": 15

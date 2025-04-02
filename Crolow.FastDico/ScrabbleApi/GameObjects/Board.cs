@@ -64,7 +64,7 @@ public class Board
             {
                 newTile = currentGame.LetterBag.ReplaceJoker(tile);
             }
-
+            newTile.Status = 1;
             SetTile(0, x, y, newTile);
             x += incH;
             y += incV;

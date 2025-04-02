@@ -1,17 +1,17 @@
 ﻿namespace Crolow.FastDico.ScrabbleApi.GameObjects;
-public class Tile
+public struct Tile
 {
     public Tile()
     {
-
+        Status = -1;
     }
 
-    public Tile(Tile tile, int status = 0)
+    public Tile(Tile tile, int status = -1)
     {
         Letter = tile.Letter;
         IsVowel = tile.IsVowel;
         IsConsonant = tile.IsConsonant;
-        Status = status;
+        Status = status == -1 ? tile.Status : 0;
         Points = tile.Points;
         IsJoker = tile.IsJoker;
         WordMultiplier = tile.LetterMultiplier;

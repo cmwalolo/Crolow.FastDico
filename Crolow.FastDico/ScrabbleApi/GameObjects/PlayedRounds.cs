@@ -25,15 +25,23 @@ public partial class ScrabbleAI
             int pivotTotal = 0;
             foreach (var t in round.Tiles)
             {
-                wm *= t.WordMultiplier;
-
-                if (t.Status == 0 && t.Mask > 0)
+                if (t.Status == 0)
                 {
-                    pivotTotal += (t.Points * t.LetterMultiplier * t.WordMultiplier) + (t.Mask * t.WordMultiplier);
+                    wm *= t.WordMultiplier;
+                    if (t.Mask > 0)
+                    {
+                        pivotTotal += (t.Points * t.LetterMultiplier * t.WordMultiplier) + (t.Mask * t.WordMultiplier);
+                    }
                 }
             }
 
-            round.Points = round.Tiles.Sum(p => p.Points * p.LetterMultiplier) * wm;
+            if (wm > 2)
+            {
+                // Console.WriteLine("WFT" + round.Position.X + " " + round.Position.Y);
+            }
+
+            round.Points = round.Tiles.Where(p => p.Status == 0).Sum(p => p.Points * p.LetterMultiplier) * wm;
+            round.Points += round.Tiles.Where(p => p.Status == 1).Sum(p => p.Points) * wm;
 
             var tilesFromRack = round.Tiles.Count(p => p.Status == 0);
             if (tilesFromRack > 0 && tilesFromRack < Config.Bonus.Count())
@@ -42,7 +50,6 @@ public partial class ScrabbleAI
             }
 
             round.Points += round.Bonus + pivotTotal;
-
 
             if (round.Points > MaxPoints)
             {
@@ -58,7 +65,11 @@ public partial class ScrabbleAI
             round.Tiles = round.Tiles.Select(p => new Tile(p)).ToList();
 
 #if DEBUG
-            //   round.DebugRound("Word found");
+            Console.WriteLine("WM:" + wm + " PIVOT:" + pivotTotal + " Bonus:" + round.Bonus);
+            Console.WriteLine("From rack " + tilesFromRack + " " + round.Tiles.Where(p => p.Status == 0).Sum(p => p.Points * p.LetterMultiplier) * wm);
+            Console.WriteLine("From board " + round.Tiles.Where(p => p.Status == 1).Sum(p => p.Points) * wm);
+
+            round.DebugRound("Word found");
 #endif
         }
     }
