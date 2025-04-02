@@ -16,8 +16,8 @@ public partial class ScrabbleAI
 
         public void SetTile(Tile tile, Square sq)
         {
-            Tile t = new Tile(tile, sq);
-            Tiles.Add(t);
+            tile.Parent = sq;
+            Tiles.Add(tile);
         }
 
         public void AddTile(Tile tile, Square sq)

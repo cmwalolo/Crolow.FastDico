@@ -139,9 +139,9 @@ public partial class ScrabbleAI
         selectedRound = new PlayedRound();
         currentGame.Round++;
 #if DEBUG
-        PrintGrid();
+        //  PrintGrid();
         //Console.ReadLine();
-#endif 
+#endif
         NextRound(false);
     }
 

@@ -35,11 +35,6 @@ public partial class ScrabbleAI
                 }
             }
 
-            if (wm > 2)
-            {
-                // Console.WriteLine("WFT" + round.Position.X + " " + round.Position.Y);
-            }
-
             round.Points = round.Tiles.Where(p => p.Parent.Status == 0).Sum(p => p.Points * p.Parent.LetterMultiplier) * wm;
             round.Points += round.Tiles.Where(p => p.Parent.Status == 1).Sum(p => p.Points) * wm;
 
@@ -65,11 +60,11 @@ public partial class ScrabbleAI
             round.Tiles = round.Tiles.Select(p => new Tile(p, p.Parent)).ToList();
 
 #if DEBUG
-            Console.WriteLine("WM:" + wm + " PIVOT:" + pivotTotal + " Bonus:" + round.Bonus);
-            Console.WriteLine("From rack " + tilesFromRack + " " + round.Tiles.Where(p => p.Parent.Status == 0).Sum(p => p.Points * p.Parent.LetterMultiplier) * wm);
-            Console.WriteLine("From board " + round.Tiles.Where(p => p.Parent.Status == 1).Sum(p => p.Points) * wm);
+            //Console.WriteLine("WM:" + wm + " PIVOT:" + pivotTotal + " Bonus:" + round.Bonus);
+            //Console.WriteLine("From rack " + tilesFromRack + " " + round.Tiles.Where(p => p.Parent.Status == 0).Sum(p => p.Points * p.Parent.LetterMultiplier) * wm);
+            //Console.WriteLine("From board " + round.Tiles.Where(p => p.Parent.Status == 1).Sum(p => p.Points) * wm);
 
-            round.DebugRound("Word found");
+            //round.DebugRound("Word found");
 #endif
         }
     }
