@@ -1,45 +1,36 @@
-﻿using Lucene.Net.Documents;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
-using System.Text.Json;
+﻿using Kalow.Apps.Common.DataTypes;
+using LuceneWordExtractor;
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        string indexPath = "C:\\Users\\llequ\\OneDrive\\Documenten\\TopMachineConfig\\Index"; // Set your Lucene index path
-        string outputPath = "C:\\dev\\Crolow.FastDico\\jsondico"; // Output directory
+        LiteDB.BsonMapper.Global.RegisterType<KalowId>
+                (
+                    (oid) => new LiteDB.ObjectId(oid.ToByteArray()),
+                    (bson) => new KalowId(bson.AsObjectId.ToByteArray())
+                );
 
-        int batchSize = 100;
-
-        var dir = FSDirectory.Open(new DirectoryInfo(indexPath));
-        var reader = IndexReader.Open(dir, true);
-
-        int docCount = reader.NumDocs();
-        int fileIndex = 1;
-        var documents = new List<Dictionary<string, object>>();
-
-        for (int i = 0; i < docCount; i++)
+        if (args.Length == 0)
         {
-            var doc = reader.Document(i);
-            var docData = new Dictionary<string, object>();
+            Console.WriteLine("Usage:");
+            Console.WriteLine("-l :  Extract Lucene Index");
+            Console.WriteLine("-w :  Create Wiki DB");
+            Console.WriteLine("-k :  Link words to DB");
 
-            foreach (Field field in doc.GetFields())
-            {
-                docData[field.Name()] = field.StringValue() ?? "";
-            }
-
-            documents.Add(docData);
-
-            if (documents.Count >= batchSize || i == docCount - 1)
-            {
-                string jsonFile = Path.Combine(outputPath, $"data_{fileIndex}.json");
-                System.IO.File.WriteAllText(jsonFile, JsonSerializer.Serialize(documents, new JsonSerializerOptions { WriteIndented = true }));
-                documents.Clear();
-                fileIndex++;
-            }
+            args = new string[] { "-w" };
         }
 
-        Console.WriteLine("Extraction completed.");
+        switch (args[0])
+        {
+            case "-l":
+                Console.WriteLine("Starting Lucene Extractor...");
+                LuceneExtractor.Start();
+                break;
+            case "-w":
+                WiktionaryToDb.Start();
+                break;
+        }
+
     }
 }
