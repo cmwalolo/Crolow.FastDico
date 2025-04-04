@@ -197,7 +197,7 @@ public class GadDagSearch : IDawgSearch
             else if (c == '?')
                 bytePattern.Add(TilesUtils.JokerByte); // '?' wildcard
             else
-                bytePattern.Add((byte)(c - 'a'));
+                bytePattern.Add(TilesUtils.configuration.LettersByChar[c].Letter);
         }
         return bytePattern;
     }

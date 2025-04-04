@@ -145,7 +145,7 @@ public class DawgSearch : IDawgSearch
             else if (c == '?')
                 bytePattern.Add(30); // '?' wildcard
             else
-                bytePattern.Add((byte)(c - 'a'));
+                bytePattern.Add(TilesUtils.configuration.LettersByChar[c].Letter);
         }
         return bytePattern;
     }
@@ -219,7 +219,7 @@ public class DawgSearch : IDawgSearch
                 }
 
                 currentWord.RemoveAt(currentWord.Count - 1);
-                currentJokers.RemoveAt(currentWord.Count - 1);
+                currentJokers.RemoveAt(currentJokers.Count - 1);
                 isJoker = false;
             }
         }
