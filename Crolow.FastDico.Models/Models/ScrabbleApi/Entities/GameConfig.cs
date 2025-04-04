@@ -14,6 +14,7 @@ namespace Crolow.FastDico.Models.Models.ScrabbleApi.Entities
 
         public int[] Bonus { get; }
         public string GridConfigFile { get; set; }
+        public string LetterConfigFile { get; set; }
         public int GameType { get; set; }
         public int GridType { get; set; }
         public int PlayableLetters { get; set; }

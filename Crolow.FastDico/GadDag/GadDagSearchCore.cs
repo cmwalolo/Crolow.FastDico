@@ -17,7 +17,7 @@ public class GadDagSearchCore
     // Anagramic searches From Letters + 1, Greater, smaller
     public WordResults FindAllWordsFromLetters(string pattern, string optional)
     {
-        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), optional.ToLower());
+        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToUpper(), optional.ToLower());
         var results = new WordResults();
 
 
@@ -27,7 +27,7 @@ public class GadDagSearchCore
 
     public WordResults FindAllWordsSmaller(string pattern, int minLength = 0)
     {
-        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), "");
+        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToUpper(), "");
         var results = new WordResults();
 
         FindWordsUsingLetters(Root, letters, new WordResults.Word(), results, false);
@@ -43,7 +43,7 @@ public class GadDagSearchCore
 
         for (int x = 0; x < maxLength; x++)
         {
-            var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), optional);
+            var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToUpper(), optional);
             FindWordsUsingLetters(Root, letters, new WordResults.Word(), results, true);
             optional += "?";
         }
@@ -52,7 +52,7 @@ public class GadDagSearchCore
 
     public WordResults FindAllWordsContaining(string pattern)
     {
-        string search = $"*{pattern}*";
+        string search = $"*{pattern.ToUpper()}*";
         var letters = WordTilesUtils.ConvertWordToBytes(search.ToLower(), "");
         var results = new WordResults();
         var optional = "?";
@@ -62,17 +62,17 @@ public class GadDagSearchCore
 
     public WordResults FindAllWordsWithPattern(string pattern)
     {
-        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToLower(), "");
+        var letters = WordTilesUtils.ConvertWordToBytes(pattern.ToUpper(), "");
         var results = new WordResults();
         var optional = "?";
         SearchByPatternRecursive(Root, letters, 0, new WordResults.Word(), results);
         return results;
     }
 
-    public WordResults FindAllWordsMoreOrLess(string pattern)
+    public WordResults FindAllWordsMoreOrLess(string searchPattern)
     {
         var results = new WordResults();
-
+        var pattern = searchPattern.ToUpper();
         results.Words.AddRange(FindAllWordsFromLetters(pattern, "").Words);
 
 

@@ -1,14 +1,18 @@
-﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
+﻿using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.ScrabbleApi.GameObjects;
+using System.Diagnostics.Metrics;
 
 namespace Crolow.FastDico.Utils;
 
 public static class TilesUtils
 {
+    public static BagConfiguration configuration { get; set; }
+
     public const byte IsEnd = 1;
-    public const byte PivotByte = 31;
-    public const byte WildcardByte = 32;
-    public const byte SingleByte = 33;
-    public const byte JokerByte = 30;
+    public const byte PivotByte = 255;          // "#"
+    public const byte WildcardByte = 254;       // "*"
+    public const byte SingleMatchByte = 253;    // "? => for search purpose"
+    public const byte JokerByte = 252;          // "?" 
 
     // Convert a string (lowercase letters) to a byte array
     public static List<byte> ConvertWordToBytes(string word)
@@ -28,7 +32,7 @@ public static class TilesUtils
                     byteArray.Add(TilesUtils.WildcardByte);
                     break;
                 default:
-                    byteArray.Add((byte)(letter - 'a'));
+                    byteArray.Add(configuration.LettersByChar[letter].Letter);
                     break;
             }
         }
@@ -42,7 +46,7 @@ public static class TilesUtils
         for (int i = 0; i < byteArray.Count; i++)
         {
             byte b = byteArray[i];
-            wordChars[i] = b == 31 ? '#' : (b == TilesUtils.JokerByte ? '?' : (char)(byteArray[i] + 'a'));
+            wordChars[i] = b == PivotByte ? '#' : (b == TilesUtils.JokerByte ? '?' : configuration.LettersByByte[b].Char);
         }
         return new string(wordChars);
     }
@@ -52,9 +56,10 @@ public static class TilesUtils
         char[] wordChars = new char[m.Count];
         for (int i = 0; i < m.Count; i++)
         {
-            wordChars[i] = (char)(m[i].Letter == 31 ? '#' : m[i].IsJoker ? ((char)m[i].Letter + 'A') : ((char)m[i].Letter + 'a'));
+            var c = configuration.LettersByByte[m[i].Letter].Char;
+            wordChars[i] = (char)(m[i].Letter == PivotByte ? '#' : (m[i].IsJoker ? (m[i].Letter == JokerByte ? '?' : char.ToLower(c)) : c));
         }
-        return new string(wordChars).Replace('[', '?');
+        return new string(wordChars);
     }
 
     public static string ConvertBytesToWordForDisplay(List<byte> byteArray, List<byte> jokers = null)
@@ -65,7 +70,7 @@ public static class TilesUtils
             for (int i = 0; i < byteArray.Count; i++)
             {
                 byte b = byteArray[i];
-                wordChars[i] = (char)(byteArray[i] + 'A');
+                wordChars[i] = b == JokerByte ? '?' : configuration.LettersByByte[b].Char;
             }
         }
         else
@@ -73,7 +78,8 @@ public static class TilesUtils
             for (int i = 0; i < byteArray.Count; i++)
             {
                 byte b = byteArray[i];
-                wordChars[i] = jokers[i] == 1 ? (char)(byteArray[i] + 'a') : (char)(byteArray[i] + 'A');
+                var c = configuration.LettersByByte[b].Char;
+                wordChars[i] = jokers[i] == 1 ? char.ToLower(c) : c;
             }
         }
         return new string(wordChars);

@@ -17,7 +17,7 @@ public class DawgSearch : IDawgSearch
     public bool SearchWord(string word)
     {
         var currentNode = Root;
-        List<byte> byteWord = TilesUtils.ConvertWordToBytes(word);
+        List<byte> byteWord = TilesUtils.ConvertWordToBytes(word.ToUpper());
 
         foreach (var byteVal in byteWord)
         {
@@ -36,7 +36,7 @@ public class DawgSearch : IDawgSearch
     public List<string> SearchByPrefix(string prefix)
     {
         var currentNode = Root;
-        List<byte> bytePrefix = TilesUtils.ConvertWordToBytes(prefix);
+        List<byte> bytePrefix = TilesUtils.ConvertWordToBytes(prefix.ToUpper());
         List<string> results = new List<string>();
 
         // Traverse to the node that represents the end of the prefix
@@ -57,7 +57,7 @@ public class DawgSearch : IDawgSearch
 
     public List<string> SearchBySuffix(string prefix)
     {
-        return SearchByPattern("*" + prefix);
+        return SearchByPattern("*" + prefix.ToUpper());
     }
 
     // Helper method to find all words from a given node
@@ -78,7 +78,7 @@ public class DawgSearch : IDawgSearch
     public List<string> SearchByPattern(string pattern)
     {
         // Convert the pattern into bytes
-        List<byte> bytePattern = ConvertPatternToBytes(pattern);
+        List<byte> bytePattern = ConvertPatternToBytes(pattern.ToUpper());
         List<string> results = new List<string>();
         SearchByPatternRecursive(Root, bytePattern, 0, new List<byte>(), results);
         return results;
@@ -153,7 +153,7 @@ public class DawgSearch : IDawgSearch
     // Function 1: Find all words that can be formed using exactly the given letters
     public List<string> FindAllWordsFromLetters(string pattern)
     {
-        var letters = TilesUtils.ConvertWordToBytes(pattern);
+        var letters = TilesUtils.ConvertWordToBytes(pattern.ToUpper());
 
         var results = new List<string>();
         FindWordsUsingLetters(Root, letters, new List<byte>(), new List<byte>(), results, true);
@@ -163,7 +163,7 @@ public class DawgSearch : IDawgSearch
     // Function 2: Find all words that contain at least one of the given letters
     public List<string> FindAllWordsContainingLetters(string pattern)
     {
-        var letters = TilesUtils.ConvertWordToBytes(pattern);
+        var letters = TilesUtils.ConvertWordToBytes(pattern.ToUpper());
         var results = new List<string>();
         FindWordsUsingLetters(Root, letters, new List<byte>(), new List<byte>(), results, false);
         return results;

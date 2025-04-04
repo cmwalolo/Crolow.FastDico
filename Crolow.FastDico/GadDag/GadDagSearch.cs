@@ -15,7 +15,7 @@ public class GadDagSearch : IDawgSearch
 
     public bool SearchWord(string word)
     {
-        var bytes = TilesUtils.ConvertWordToBytes(word);
+        var bytes = TilesUtils.ConvertWordToBytes(word.ToUpper());
         return SearchWordRecursive(Root, bytes, 0, false);
     }
 
@@ -45,7 +45,7 @@ public class GadDagSearch : IDawgSearch
 
     public List<string> SearchByPrefix(string prefix)
     {
-        var bytes = TilesUtils.ConvertWordToBytes(prefix);
+        var bytes = TilesUtils.ConvertWordToBytes(prefix.ToUpper());
         var results = new List<string>();
         var currentNode = Root;
 
@@ -83,7 +83,7 @@ public class GadDagSearch : IDawgSearch
 
     public List<string> SearchBySuffix(string suffix)
     {
-        var patternedSuffix = suffix + "#";
+        var patternedSuffix = suffix.ToUpper() + "#";
 
         var bytes = TilesUtils.ConvertWordToBytes(patternedSuffix);
         var results = new List<string>();
@@ -124,7 +124,7 @@ public class GadDagSearch : IDawgSearch
     public List<string> SearchByPattern(string pattern)
     {
         // Convert the pattern into bytes
-        List<byte> bytePattern = ConvertPatternToBytes(pattern);
+        List<byte> bytePattern = ConvertPatternToBytes(pattern.ToUpper());
         List<string> results = new List<string>();
         SearchByPatternRecursive(Root, bytePattern, 0, new List<byte>(), results);
         return results;
@@ -205,7 +205,7 @@ public class GadDagSearch : IDawgSearch
     // Function 1: Find all words that can be formed using exactly the given letters
     public List<string> FindAllWordsFromLetters(string pattern)
     {
-        var letters = TilesUtils.ConvertWordToBytes(pattern);
+        var letters = TilesUtils.ConvertWordToBytes(pattern.ToUpper());
         var results = new List<string>();
 
         FindWordsUsingLetters(Root, letters, new List<byte>(), new List<byte>(), results, true);
@@ -215,7 +215,7 @@ public class GadDagSearch : IDawgSearch
     // Function 2: Find all words that contain at least one of the given letters
     public List<string> FindAllWordsContainingLetters(string pattern)
     {
-        var letters = TilesUtils.ConvertWordToBytes(pattern);
+        var letters = TilesUtils.ConvertWordToBytes(pattern.ToUpper());
         var results = new List<string>();
         FindWordsUsingLetters(Root, letters, new List<byte>(), new List<byte>(), results, false);
         return results;

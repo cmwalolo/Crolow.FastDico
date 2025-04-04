@@ -8,7 +8,7 @@ public class DawgCompiler : BaseCompiler
 {
     public override void Insert(string word)
     {
-        var chars = TilesUtils.ConvertWordToBytes(word);
+        var chars = TilesUtils.ConvertWordToBytes(word.ToUpper());
         var currentNode = RootBuild;
 
         foreach (var letter in chars)

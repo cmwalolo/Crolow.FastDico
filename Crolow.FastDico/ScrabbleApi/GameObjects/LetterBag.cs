@@ -16,11 +16,11 @@ public class LetterBag
         RandomGen = new Random();
 
         // Populate the bag according to the distribution
-        foreach (var kvp in GameConfig.BagConfig.Letters)
+        foreach (var kvp in GameConfig.BagConfig.LettersByByte)
         {
-            for (var i = 0; i < kvp.TotalLetters; i++)
+            for (var i = 0; i < kvp.Value.TotalLetters; i++)
             {
-                Letters.Add(new Tile(kvp, null));
+                Letters.Add(new Tile(kvp.Value, null));
             }
         }
     }
@@ -96,8 +96,10 @@ public class LetterBag
 
     public bool IsValid(List<Tile> letters, List<Tile> rack)
     {
-        int vow = letters.Sum(p => p.IsVowel ? 1 : 0) + (rack?.Sum(p => p.IsVowel ? 1 : 0) ?? 0);
-        int con = letters.Sum(p => p.IsConsonant ? 1 : 0) + (rack?.Sum(p => p.IsConsonant ? 1 : 0) ?? 0);
+        var tileConfig = GameConfig.BagConfig;
+
+        int vow = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsVowel ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsVowel ? 1 : 0) ?? 0);
+        int con = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsConsonant ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsConsonant ? 1 : 0) ?? 0);
 
         if (CurrentGame.Round >= CurrentGame.Configuration.SelectedConfig.CheckDistributionRound)
         {

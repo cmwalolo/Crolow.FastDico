@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Config;
-
+using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Newtonsoft.Json;
 
 namespace Crolow.FastDico.ScrabbleApi.Utils
@@ -8,10 +8,30 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
     public partial class ConfigReader
     {
 
-        private class BoardData
+        public class BoardData
         {
-            public BagConfigurationContainer BagConfiguration { get; set; }
             public BoardGrid Grid { get; set; }
+        }
+
+        public class LetterData
+        {
+            public string Name { get; set; }
+            public List<TileConfig> Letters { get; set; }
+        }
+
+        public static BagConfiguration ReadLetterConfig(string language)
+        {
+            var letterConfig = System.IO.File.ReadAllText($"Letters_{language}.json");
+            var letterData = JsonConvert.DeserializeObject<LetterData>(letterConfig);
+            var config = new BagConfiguration();
+
+            config.Name = letterData.Name;
+            foreach (var letter in letterData.Letters)
+            {
+                config.LettersByByte.Add(letter.Letter, letter);
+                config.LettersByChar.Add(letter.Char, letter);
+            }
+            return config;
         }
 
         public PlayConfiguration ReadConfiguration(string configFiles, string configName)
@@ -26,14 +46,13 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
 
         public static PlayConfiguration FillGridConfig(PlayConfiguration g)
         {
-            var gridConfig = System.IO.File.ReadAllText(g.SelectedConfig.GridConfigFile);
 
-            // Deserialize JSON data into BoardData
+            g.BagConfig = ReadLetterConfig(g.SelectedConfig.LetterConfigFile);
+
+            var gridConfig = System.IO.File.ReadAllText($"GridConfig_{g.SelectedConfig.LetterConfigFile}.json");
             var boardData = JsonConvert.DeserializeObject<BoardData>(gridConfig);
 
             g.GridConfig = new GridConfigurationContainer(boardData.Grid.SizeH, boardData.Grid.SizeV);
-            g.BagConfig = boardData.BagConfiguration;
-
             int sizeH = g.GridConfig.SizeH;
             foreach (var multiplierData in boardData.Grid.Configuration)
             {

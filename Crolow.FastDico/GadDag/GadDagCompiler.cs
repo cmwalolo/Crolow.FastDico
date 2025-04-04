@@ -9,7 +9,7 @@ namespace Crolow.FastDico.GadDag
         public override void Insert(string word)
         {
             // Convert word to bytes
-            List<byte> byteWord = TilesUtils.ConvertWordToBytes(word);
+            List<byte> byteWord = TilesUtils.ConvertWordToBytes(word.ToUpper());
 
             // Add the full word in left-to-right order
             Insert(byteWord);
