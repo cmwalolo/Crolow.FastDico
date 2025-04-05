@@ -7,6 +7,7 @@ namespace Crolow.TopMachine.Data.Interfaces
         Task Add<T>(T item);
         Task AddBulk<T>(IEnumerable<T> items);
         void CreateIndex<T>(string name, string fields);
+        void DropIndex<T>(string name);
         Task<T> Get<T>(Expression<Func<T, bool>> filter);
         Task<IEnumerable<T>> GetAll<T>();
         Task<IEnumerable<T>> List<T>(Expression<Func<T, bool>> filter);

@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
+﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities.Partials;
 
 namespace Crolow.FastDico.ScrabbleApi.Config
 {

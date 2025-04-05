@@ -53,7 +53,7 @@ public class GadDagSearchCore
     public WordResults FindAllWordsContaining(string pattern)
     {
         string search = $"*{pattern.ToUpper()}*";
-        var letters = WordTilesUtils.ConvertWordToBytes(search.ToLower(), "");
+        var letters = WordTilesUtils.ConvertWordToBytes(search, "");
         var results = new WordResults();
         var optional = "?";
         SearchByPatternRecursive(Root, letters, 0, new WordResults.Word(), results);
@@ -101,12 +101,12 @@ public class GadDagSearchCore
         var finalResults = new WordResults();
 
         var group = results.Words
-            .Select(p => new { w = WordTilesUtils.ConvertBytesToWordForDisplay(p).ToLower(), i = p })
+            .Select(p => new { w = WordTilesUtils.ConvertBytesToWordForDisplay(p).ToUpper(), i = p })
             .GroupBy(p => p.w);
 
         foreach (var item in group)
         {
-            var w = item.First().w.ToLower();
+            var w = item.First().w.ToUpper();
             var r = WordResultEvaluator.CompareWords(pattern, w);
 
             if (r.HasAnySet())

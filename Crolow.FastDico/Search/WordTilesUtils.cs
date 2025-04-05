@@ -10,7 +10,7 @@ public static class WordTilesUtils
         for (int i = 0; i < word.Tiles.Count; i++)
         {
             var b = word.Tiles[i];
-            wordChars[i] = b.IsJoker ? (char)(b.Letter + 'a') : (char)(b.Letter + 'A');
+            wordChars[i] = b.IsJoker ? (char)(b.Letter + 'A') : (char)(b.Letter + 'A');
         }
         return new string(wordChars);
     }
@@ -22,7 +22,7 @@ public static class WordTilesUtils
         for (int i = 0; i < tiles.Count(); i++)
         {
             var b = tiles[i];
-            wordChars[i] = b.IsJoker ? (char)(b.Letter + 'a') : (char)(b.Letter + 'A');
+            wordChars[i] = b.IsJoker ? (char)(b.Letter + 'A') : (char)(b.Letter + 'A');
         }
         return new string(wordChars);
     }
@@ -41,7 +41,7 @@ public static class WordTilesUtils
                     byteArray.Add(new WordResults.Tile(TilesUtils.WildcardByte, true, 0));
                     break;
                 default:
-                    byteArray.Add(new WordResults.Tile((byte)(letter - 'a'), false, 0));
+                    byteArray.Add(new WordResults.Tile((byte)(letter - 'A'), false, 0));
                     break;
             }
         }
@@ -54,7 +54,7 @@ public static class WordTilesUtils
                     byteArray.Add(new WordResults.Tile(TilesUtils.JokerByte, true, 1));
                     break;
                 default:
-                    byteArray.Add(new WordResults.Tile((byte)(letter - 'a'), false, 1));
+                    byteArray.Add(new WordResults.Tile((byte)(letter - 'A'), false, 1));
                     break;
             }
         }

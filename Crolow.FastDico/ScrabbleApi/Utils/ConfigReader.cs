@@ -1,6 +1,5 @@
 ﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Config;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Newtonsoft.Json;
 
 namespace Crolow.FastDico.ScrabbleApi.Utils
@@ -11,12 +10,6 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
         public class BoardData
         {
             public BoardGrid Grid { get; set; }
-        }
-
-        public class LetterData
-        {
-            public string Name { get; set; }
-            public List<TileConfig> Letters { get; set; }
         }
 
         public static BagConfiguration ReadLetterConfig(string language)

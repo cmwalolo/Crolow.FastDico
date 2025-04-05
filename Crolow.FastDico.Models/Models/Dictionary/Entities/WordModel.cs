@@ -12,7 +12,7 @@ namespace Crolow.FastDico.Models.Models.Dictionary.Entities
         public List<string> Usages { get; set; } = new List<string>();
     }
 
-    public class WordModel : DataObject
+    public class WordEntryModel : DataObject
     {
         public string Word { get; set; }
         public string NormalizedWord { get; set; }

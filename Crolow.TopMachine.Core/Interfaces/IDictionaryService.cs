@@ -6,5 +6,6 @@ namespace Crolow.TopMachine.Core.Interfaces
     {
         List<DictionaryModel> LoadAll();
         void Update(DictionaryModel album);
+        public List<WordEntryModel> GetDefinitions(string word);
     }
 }

@@ -32,11 +32,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="GridConfigs_FR.json">
+		<None Update="GridConfigurationss.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="GridConfig_FR.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="LetterConfigurations.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Letters_FR.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

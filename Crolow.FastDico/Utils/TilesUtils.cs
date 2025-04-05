@@ -1,6 +1,5 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
-using System.Diagnostics.Metrics;
 
 namespace Crolow.FastDico.Utils;
 
@@ -18,23 +17,30 @@ public static class TilesUtils
     public static List<byte> ConvertWordToBytes(string word)
     {
         List<byte> byteArray = new List<byte>();
-        foreach (var letter in word)
+        try
         {
-            switch (letter)
+            foreach (var letter in word)
             {
-                case '#':
-                    byteArray.Add(TilesUtils.PivotByte);
-                    break;
-                case '?':
-                    byteArray.Add(TilesUtils.JokerByte);
-                    break;
-                case '*':
-                    byteArray.Add(TilesUtils.WildcardByte);
-                    break;
-                default:
-                    byteArray.Add(configuration.LettersByChar[letter].Letter);
-                    break;
+                switch (letter)
+                {
+                    case '#':
+                        byteArray.Add(TilesUtils.PivotByte);
+                        break;
+                    case '?':
+                        byteArray.Add(TilesUtils.JokerByte);
+                        break;
+                    case '*':
+                        byteArray.Add(TilesUtils.WildcardByte);
+                        break;
+                    default:
+                        byteArray.Add(configuration.LettersByChar[letter].Letter);
+                        break;
+                }
             }
+        }
+        catch (Exception)
+        {
+            ;
         }
         return byteArray;
     }

@@ -21,15 +21,15 @@ namespace LuceneWordExtractor
 
             settings.Values.Add(setting);
 
-            DicoWordsDataManager<WordModel> dm = new DicoWordsDataManager<WordModel>(settings);
+            DicoWordsDataManager<WordEntryModel> dm = new DicoWordsDataManager<WordEntryModel>(settings);
 
-            var words = new List<WordModel>();
+            var words = new List<WordEntryModel>();
             int c = 0;
             var files = Directory.GetFiles("C:\\dev\\Crolow.FastDico\\TextFiles\\DicoDefinitions\\Wikitionnaire");
             foreach (var file in files)
             {
                 string obj = File.ReadAllText(file);
-                var word = JsonConvert.DeserializeObject<WordModel>(obj);
+                var word = JsonConvert.DeserializeObject<WordEntryModel>(obj);
                 if (word.Definitions != null && word.Definitions.Any())
                 {
                     word.Id = KalowId.NewObjectId();
@@ -37,7 +37,7 @@ namespace LuceneWordExtractor
                     words.Add(word);
                     if (c++ == 100)
                     {
-                        dm.UpdateAll(words.ToArray());
+                        dm.UpdateAll(words);
                         words.Clear();
                         c = 0;
                     }
@@ -46,7 +46,7 @@ namespace LuceneWordExtractor
 
             if (words.Any())
             {
-                dm.UpdateAll(words.ToArray());
+                dm.UpdateAll(words);
                 c = 0;
             }
 

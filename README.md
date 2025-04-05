@@ -30,5 +30,10 @@ Any commercial usage is prohibited without any mutual agreement
 For any information and credits : llequenne at hotmail.com
 And if you want to support me, donations are welcome. 
 
+French Dictionary files are available on request, and it's only paying... 
+As it hundred of hours of work : Word list, definitions, and classifications.
+
+Other languages will be available later.
+
 
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=GXN5ACMFKDSF6)

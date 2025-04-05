@@ -1,0 +1,36 @@
+﻿@using Crolow.FastDico.Models.Models.Dictionary.Entities
+
+<div>
+    <h2>Word: @Word.Word</h2>
+    <p><strong>Source:</strong> @Word.Source</p>
+    @if (!Word.Etymology?.Contains("Etymologie manquaunte") ?? false)
+    {
+        <p><strong>Etymology:</strong> @Word.Etymology</p>
+    }
+
+    @foreach (var definition in Word.Definitions)
+    {
+        <div>
+            <h5>@definition.CatGram</h5>
+            <ul>
+                @foreach (var def in definition.Definitions)
+                {
+                    <li>@def</li>
+                }
+            </ul>
+            @if (definition.Domains?.Any() ?? false)
+            {
+                <p><strong>Domains:</strong> @string.Join(", ", definition.Domains)</p>
+            }
+
+            @if (definition.Usages?.Any() ?? false)
+            {
+                <p><strong>Usages:</strong> @string.Join(", ", definition.Usages)</p>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public WordEntryModel Word { get; set; }
+}

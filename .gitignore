@@ -363,3 +363,10 @@ MigrationBackup/
 FodyWeavers.xsd
 /jsondico
 /textfiles
+/Sources/dawg_data.gz
+/Sources/gaddag_fr.gz
+/Sources/ODS8defNew.txt
+/Sources/ODS9-complet.txt
+/Catalog/Dictionary.db
+/Catalog/TopMachine.db
+/Catalog - Copy

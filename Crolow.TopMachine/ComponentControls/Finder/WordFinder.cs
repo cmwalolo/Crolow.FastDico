@@ -1,4 +1,5 @@
 ﻿using Crolow.FastDico.GadDag;
+using Crolow.FastDico.Models.Models.Dictionary.Entities;
 using Crolow.FastDico.Models.Models.Finder;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
@@ -26,9 +27,12 @@ namespace Crolow.TopMachine.ComponentControls.Finder
         private GadDagSearchCore searcher;
         public RadzenDataGrid<WordResults> grid;
         public bool searchActive = false;
+        public ObservableCollection<WordEntryModel> definitions = new ObservableCollection<WordEntryModel>();
 
         protected async override void OnInitialized()
         {
+            TileConfigFactory.CreateFrenchTileSet();
+
             var results = DictionaryService.LoadAll();
             var currentDico = results.FirstOrDefault(p => p.IsDefault);
             if (currentDico == null)
@@ -43,6 +47,8 @@ namespace Crolow.TopMachine.ComponentControls.Finder
                 gaddag.ReadFromFile(f);
                 searcher = new GadDagSearchCore(gaddag.Root, 250);
             }
+
+
         }
 
         public void Dispose()
@@ -103,7 +109,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
                         Console.Write("pp");
                     }
 
-                    var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
+                    var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToUpper());
 
                     row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
                     row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
@@ -146,7 +152,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
                     row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
                     row.Additional = WordTilesUtils.ConvertBytesToWordByStatus(r, 1).ToUpper();
 
-                    var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToLower());
+                    var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToUpper());
 
                     row.Prefix = string.Join("", list.Where(p => p.Key == 0).Select(p => p.Value).ToArray()).ToUpper();
                     row.Suffix = string.Join("", list.Where(p => p.Key == 1).Select(p => p.Value).ToArray()).ToUpper();
@@ -172,5 +178,16 @@ namespace Crolow.TopMachine.ComponentControls.Finder
             }));
         }
 
+        public async Task<bool> OpenDictionary(FinderResult item)
+        {
+
+            definitions.Clear();
+            foreach (var f in DictionaryService.GetDefinitions(item.Word))
+            {
+                definitions.Add(f);
+            }
+            StateHasChanged();
+            return true;
+        }
     }
 }

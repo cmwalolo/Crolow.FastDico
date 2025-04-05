@@ -13,18 +13,31 @@ namespace Crolow.Pix.Core.Services.Storage
         public DictionaryService(IDataFactory dataFactory)
         {
             this.dataFactory = dataFactory;
-            dicoRepository = dataFactory.Dictionaries;
         }
 
         public List<DictionaryModel> LoadAll()
         {
-            return dicoRepository.GetAllNodes().ToList();
+            return dataFactory.Dictionaries.GetAllNodes().Result.ToList();
         }
+
+
 
         public void Update(DictionaryModel album)
         {
             dicoRepository.Update(album);
             album.EditState = EditState.Unchanged;
+        }
+
+        public List<WordEntryModel> GetDefinitions(string word)
+        {
+            var words = dataFactory.DicoWords.GetAllNodes(p => p.Word == word.ToLower());
+            var defs = new List<WordEntryModel>();
+            foreach (var wordEntry in words)
+            {
+                defs.AddRange(dataFactory.DicoEntries.GetAllNodes(p => p.Id == wordEntry.Parent));
+            }
+
+            return defs.ToList();
         }
     }
 }

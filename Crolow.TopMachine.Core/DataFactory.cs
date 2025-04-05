@@ -17,5 +17,7 @@ namespace Crolow.TopMachine.Core
         public BoardConfigDataManager<BoardGrid> Boards => new BoardConfigDataManager<BoardGrid>(settings);
         public GameConfigDataManager<GameConfig> Games => new GameConfigDataManager<GameConfig>(settings);
         public DictionaryDataManager<DictionaryModel> Dictionaries => new DictionaryDataManager<DictionaryModel>(settings);
+        public DicoWordsDataManager<WordEntryModel> DicoEntries => new DicoWordsDataManager<WordEntryModel>(settings);
+        public DicoWordsToDicoDataManager<WordToDicoModel> DicoWords => new DicoWordsToDicoDataManager<WordToDicoModel>(settings);
     }
 }

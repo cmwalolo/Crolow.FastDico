@@ -1,0 +1,84 @@
+{
+  "mot": "lion",
+  "grammaticale": {
+    "categorie": "nom",
+    "genre": "masculin",
+    "nombre": "singulier",
+    "verbe": {}
+  },
+  "semantique": [
+    {
+      "domaine": "zoologie",
+      "sousdomaine": [
+        {
+          "domaine": "animal",
+          "sousdomaine": [
+            {
+              "classification": "famille",
+              "valeur": "Felidae",
+              "definition": "Le lion est un grand félin carnivore, souvent considéré comme le roi des animaux.",
+              "exemple": "Le lion vit dans les savanes d'Afrique."
+            },
+            {
+              "classification": "régime",
+              "valeur": "carnivore",
+              "definition": "Le lion est un prédateur carnivore qui se nourrit principalement de grandes proies comme les zèbres, les gazelles, et parfois d'autres carnivores.",
+              "exemple": "Le lion chasse pour se nourrir de gros herbivores."
+            },
+            {
+              "classification": "habitat",
+              "valeur": "savane",
+              "definition": "Le lion vit principalement dans les savanes africaines et quelques zones de l'Asie.",
+              "exemple": "Les lions de l'Afrique subsaharienne préfèrent les vastes savanes ouvertes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domaine": "culture",
+      "sousdomaine": [
+        {
+          "classification": "symbole",
+          "valeur": "royauté, force, courage",
+          "definition": "Le lion est un symbole de puissance, de royauté et de courage dans de nombreuses cultures à travers le monde.",
+          "exemple": "Le lion est souvent représenté sur les blasons royaux."
+        }
+      ]
+    }
+  ],
+  "morphologique": {
+    "radical": "lion",
+    "famille": [ "lionceau", "lionne", "lionisme" ],
+    "origine": "latin, de 'leo, leonis' (lions)"
+  },
+  "lexicale": {
+    "registre": "courant",
+    "sens_figuré": "Un lion peut aussi être utilisé pour décrire une personne qui se distingue par sa bravoure ou sa force.",
+    "expressions": [
+      "Être un lion dans une bataille",
+      "Un lion de pouvoir",
+      "Lion de théâtre"
+    ]
+  },
+  "ontologique": {
+    "nature": "être vivant, animal"
+  },
+  "culturelle_et_historique": {
+    "contexte": "Le lion est un symbole de force et de royauté depuis l'Antiquité. Il est très présent dans la mythologie, l'art et les armoiries.",
+    "symboles_et_associations": "Dans l'Égypte ancienne, le lion représentait la déesse Sekhmet, déesse de la guerre et de la guérison. Il est également associé au courage et à la noblesse dans de nombreuses cultures."
+  },
+  "etymologie": {
+    "origine": "Le mot 'lion' vient du latin 'leo' qui désignait le lion dans l'Antiquité.",
+    "evolution": "Le terme 'lion' a évolué pour désigner non seulement l'animal, mais aussi une série de symboles associés à la royauté et à la force."
+  },
+  "tags": [
+    "animal",
+    "félin",
+    "carnivore",
+    "royaume animal",
+    "savage",
+    "force",
+    "symbole de courage"
+  ]
+}

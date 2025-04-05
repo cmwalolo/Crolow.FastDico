@@ -98,7 +98,7 @@ public class DawgSearch : IDawgSearch
 
         byte currentByte = bytePattern[patternIndex];
 
-        if (currentByte == 31) // '*' wildcard
+        if (currentByte == TilesUtils.WildcardByte) // '*' wildcard
         {
             // Match zero or more characters
             // First, try skipping the '*'
@@ -112,7 +112,7 @@ public class DawgSearch : IDawgSearch
                 currentWord.RemoveAt(currentWord.Count - 1); // Backtrack
             }
         }
-        else if (currentByte == 30) // '?' wildcard
+        else if (currentByte == TilesUtils.SingleMatchByte) // '?' wildcard
         {
             // Match exactly one character
             foreach (var child in currentNode.Children)
@@ -141,9 +141,9 @@ public class DawgSearch : IDawgSearch
         foreach (char c in pattern)
         {
             if (c == '*')
-                bytePattern.Add(31); // '*' wildcard
+                bytePattern.Add(TilesUtils.WildcardByte); // '*' wildcard
             else if (c == '?')
-                bytePattern.Add(30); // '?' wildcard
+                bytePattern.Add(TilesUtils.SingleMatchByte); // '?' wildcard
             else
                 bytePattern.Add(TilesUtils.configuration.LettersByChar[c].Letter);
         }

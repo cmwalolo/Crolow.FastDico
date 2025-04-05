@@ -41,6 +41,10 @@ namespace Crolow.TopMachine.Data
             Collection<T>().EnsureIndex(name, fields);
         }
 
+        public void DropIndex<T>(string name)
+        {
+            Collection<T>().DropIndex(name);
+        }
 
         public LiteDatabase GetClient(string connectionString)
         {

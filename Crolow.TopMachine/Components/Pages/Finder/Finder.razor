@@ -5,7 +5,18 @@
 <RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
     <RadzenSidebar Style="width:400px" @bind-Expanded="@sidebar1Expanded">
         <div class="rz-p-4">
-            Sidebar
+            @if (definitions.Any())
+            {
+                foreach (var def in definitions)
+                {
+                    <Definition Word=def></Definition>
+                }
+            }
+            else
+            {
+                <h2>Select a word from the finder to view a definition</h2>
+            }
+
         </div>
     </RadzenSidebar>
     <RadzenBody>
@@ -34,23 +45,31 @@
                             @{
                                 if (searchActive)
                                 {
-                                                                                                                                                                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Searching ...</p>
+                                    <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">Searching ...</p>
                                 }
                                 else
                                 {
-                                                                                                                                                                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                                    <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
                                 }
                             }
                         </EmptyTemplate>
                         <Columns>
                             <RadzenDataGridColumn Width="50px" Property="@nameof(FinderResult.Additional)" Title="+" />
                             <RadzenDataGridColumn TextAlign="TextAlign.Right" Width="90px" Property="@nameof(FinderResult.Prefix)" Title="<1" />
-                            <RadzenDataGridColumn Property="@nameof(FinderResult.Word)" Title="Word">
+                            <RadzenDataGridColumn TItem="FinderResult" Property="@nameof(FinderResult.Word)" Title="Word">
                                 <Template Context="result">
-                                    @result.Word
+                                    <a style="cursor: pointer; text-decoration: none; color: inherit;"
+                                    @onclick:preventDefault onclick=@(() => OpenDictionary(result))>
+                                        @result.Word
+                                    </a>
                                 </Template>
                             </RadzenDataGridColumn>
                             <RadzenDataGridColumn Width="90px" Property="@nameof(FinderResult.Suffix)" Title=">1" />
+                            <RadzenDataGridColumn TItem="FinderResult" Width="35px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => OpenDictionary(data)) Icon="dictionary" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
                         </Columns>
                     </RadzenDataGrid>
                 </RadzenBody>
