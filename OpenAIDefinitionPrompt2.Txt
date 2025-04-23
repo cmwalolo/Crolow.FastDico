@@ -1,43 +1,42 @@
-Dans le choix sémantique, classe les domaines et les sous-domaines dans le champ de tes connaissances. Si c'est un animal, tu 
-peux étendre les sous-domaines à sa classification complète,  famille, régime, son habitat, .... Si c'est un médicament à son champ d'action. Pour tout mot qui peut être classifié à une spécialisation ou un domaine technique étend la classification en domaine et sous-domaines. Le champ **classification** doit représenter le type de classification, la **valeur** doit être le terme en français si possible
-
-
-'''format json 
-Analyse le mot "[INSÉRER LE MOT]" sous différents angles linguistiques. Voici les informations attendues :
+Analyse le mot "[INSÉRER LE MOT]" sous différents angles linguistiques. Voici les informations attendues : 
 
 1. **Grammaticale** : 
    - Catégorie du mot (nom, verbe, adjectif, etc.)
    - Genre (masculin, féminin, invariable)
    - Nombre (singulier, pluriel)
-   - Si c’est un verbe, indique les temps, les participes présents et passés
+   - Si c’est un verbe, indique les temps, les participes présents et passés.
 
 2. **Sémantique** : 
-   - Domaine d’utilisation (zoologie, médecine, musique, informatique, etc.) et sous-domaines
-   - Définition du mot
-   - Exemples d’utilisation dans chaque domaine spécifique
+   - Domaine d’utilisation (zoologie, médecine, musique, informatique, etc.) et sous-domaines.
+   - Définition du mot.
+   - Exemples d’utilisation dans chaque domaine spécifique.
+   - Pour les animaux, inclure la classification biologique complète (règne, embranchement, classe, ordre, famille, genre, espèce).
    - Si le mot a plusieurs sens, sépare chaque sens sous une entrée distincte.
 
 3. **Morphologique** : 
-   - Radical du mot
-   - Mots de la même famille
-   - Origine étymologique (latin, grec, onomatopée, etc.)
+   - Radical du mot.
+   - Mots de la même famille.
+   - Origine étymologique (latin, grec, onomatopée, etc.).
 
 4. **Lexicale** : 
-   - Registre de langue (courant, familier, soutenu, technique, archaïque)
-   - Sens figuré, s’il existe
-   - Expressions ou proverbes liés au mot
+   - Registre de langue (courant, familier, soutenu, technique, archaïque).
+   - Sens figuré, s’il existe.
+   - Expressions ou proverbes liés au mot.
 
 5. **Ontologique** : 
-   - Quelle est la nature de l'objet désigné par le mot ? (concret, abstrait, être vivant, etc.)
+   - Quelle est la nature de l'objet désigné par le mot ? (concret, abstrait, être vivant, etc.).
+   - Si c’est un être vivant, indiquer ses caractéristiques principales (habitat, régime alimentaire, etc.).
 
 6. **Culturelle et Historique** : 
    - Contexte historique ou culturel du mot, ses symboles ou associations dans différentes cultures.
 
-7. **Etymologique
-   - Contexte historique ou culturel du mot, ses symboles ou associations dans différentes cultures.
-8. **Tags
-   - Une liste de mot-clés définissant le mot sous toutes ses formes
+7. **Etymologique** : 
+   - Origine et évolution historique du mot.
 
+8. **Tags** : 
+   - Une liste de mots-clés définissant le mot sous toutes ses formes.
+
+Le tout doit être formaté en JSON de manière compressée et cohérente.
 
 '''json format MAKE SURE THE JSON Schema YOU SNED IS COMPRESSED if you do bulk
 ''' Search you will win 20% of the tokens

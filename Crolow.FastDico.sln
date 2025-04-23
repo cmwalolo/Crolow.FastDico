@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extra", "Extra", "{79DAC9A0
 		Sources\lion.json = Sources\lion.json
 		Sources\ODS9-complet.txt = Sources\ODS9-complet.txt
 		OpenAiDefinitionPrompt.txt = OpenAiDefinitionPrompt.txt
+		OpenAIDefinitionPrompt2.Txt = OpenAIDefinitionPrompt2.Txt
 		Sources\PhotoRatingPrompt.txt = Sources\PhotoRatingPrompt.txt
 		README.md = README.md
 	EndProjectSection
