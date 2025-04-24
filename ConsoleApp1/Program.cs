@@ -22,8 +22,8 @@ class Program
             Console.WriteLine("-k {new} {onlyMultiple}:  Link words to DB {only unlined}");
             Console.WriteLine("-c {site} {new} {clean} :  Crawl {site} for undefined words");
 
-            //args = new string[] { "-c", "Wikitionnaire", "new" };
-            args = new string[] { "-k", "" };
+            args = new string[] { "-c", "Wikitionnaire", "new" };
+            //args = new string[] { "-k", "" };
             //args = new string[] { "-cw" };
             //args = new string[] { "-i" };
         }

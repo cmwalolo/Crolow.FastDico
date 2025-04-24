@@ -6,7 +6,7 @@ using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
 
 
-TilesUtils.configuration = ConfigReader.ReadLetterConfig("FR");
+TilesUtils.configuration = Crolow.FastDico.Console.ConfigReader.ReadLetterConfig("FR");
 
 var tester = new Tester();
 tester.TestDawg(false);

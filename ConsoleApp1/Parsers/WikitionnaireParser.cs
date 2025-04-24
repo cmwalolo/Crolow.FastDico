@@ -22,120 +22,98 @@ namespace Kalow.Apps.ApiTester.Parsers
 
             if (languageNode != null)
             {
-                var currentNode = languageNode.ParentNode.NextSibling;
-                var navigate = true;
-                var searchType = 0;
-                while (navigate && currentNode != null)
+                var sectionNodes = languageNode.ParentNode.ParentNode.ChildNodes.Where(p => p.OriginalName == "section");
+
+                foreach (var sectionNode in sectionNodes)
                 {
-                    if (currentNode.HasClass("mw-heading2"))
+                    if (sectionNode.ChildNodes.Any(p => p.HasClass("mw-heading3")))
                     {
+                        if (sectionNode.DescendantNodes().Any(p => p.Id == "Étymologie"))
+                        {
+                            var node = sectionNode.ChildNodes.FirstOrDefault(p => p.OriginalName == "dl");
+                            if (node != null)
+                            {
+                                var text = node.InnerText;
+                                w.Etymology = HtmlEntity.DeEntitize(text);
+                            }
+                            continue;
+                        }
+
+                        var catgramNode = sectionNode.DescendantNodes().FirstOrDefault(p => p.HasClass("titredef"));
+                        if (catgramNode != null)
+                        {
+                            currentDefinition = new DefinitionModel();
+                            w.Definitions.Add(currentDefinition);
+                            currentDefinition.CatGram = catgramNode.InnerText;
+                            ParseDefinition(sectionNode, currentDefinition);
+                        }
                         break;
+
                     }
-                    if (currentNode.HasClass("mw-heading3"))
-                    {
-                        // Is there Etymology or CatGram
-                        switch (searchType)
-                        {
-                            case int i when i < 2:
-                                if (currentNode.ChildNodes.Any(p => p.Id == "Étymologie"))
-                                {
-
-                                    var etymologyNode = GetNextSiblingByName(currentNode, "dl");
-                                    if (etymologyNode != null)
-                                    {
-                                        var text = etymologyNode.InnerText;
-                                        w.Etymology = HtmlEntity.DeEntitize(text);
-                                    }
-
-                                    searchType = 1;
-                                    break;
-                                }
-
-                                var catgramNode = currentNode.DescendantNodes().FirstOrDefault(p => p.HasClass("titredef"));
-                                if (catgramNode != null)
-                                {
-                                    currentDefinition = new DefinitionModel();
-                                    w.Definitions.Add(currentDefinition);
-                                    currentDefinition.CatGram = catgramNode.InnerText;
-                                    searchType = 2;
-                                }
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (searchType)
-                        {
-                            case 2:
-                                // We extend the catgram
-                                if (currentNode.OriginalName.Equals("p"))
-                                {
-                                    currentDefinition.Word = currentNode.ChildNodes.FirstOrDefault(p => p.Name.Equals("b"))?.InnerText ?? "";
-                                    var forms = currentNode.ChildNodes.Where(p => p.HasClass("ligne-de-forme"));
-                                    if (forms.Any())
-                                    {
-                                        currentDefinition.CatGram += " " + string.Join(" ", forms.Select(p => p.InnerText));
-                                    }
-                                    searchType = 3;
-                                }
-                                break;
-                            case 3:
-                                // We scan definitions
-                                if (currentNode.OriginalName.Equals("ol"))
-                                {
-                                    foreach (var defNode in currentNode.ChildNodes.Where(p => p.Name == "li"))
-                                    {
-                                        var exampleNode = defNode.ChildNodes.FirstOrDefault(p => p.OriginalName == "ul");
-                                        if (exampleNode != null)
-                                        {
-                                            exampleNode.Remove();
-                                        }
-
-                                        var tagNodes = defNode.ChildNodes;
-                                        foreach (var tagnode in tagNodes.ToList())
-                                        {
-                                            if (tagnode.OriginalName.Equals("span") || tagnode.OriginalName.Equals("i"))
-                                            {
-                                                string text = tagnode.InnerText.Replace("(", "").Replace(")", "");
-
-                                                if (tagnode.HasClass("emploi"))
-                                                {
-                                                    if (!currentDefinition.Usages.Any(p => p == text))
-                                                    {
-                                                        currentDefinition.Usages.Add(HtmlEntity.DeEntitize(text));
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if (!currentDefinition.Domains.Any(p => p == text))
-                                                    {
-                                                        currentDefinition.Domains.Add(HtmlEntity.DeEntitize(text));
-                                                    }
-                                                }
-                                                // tagnode.Remove();
-                                            }
-                                            else
-                                            {
-                                                if (tagnode.InnerText != " ")
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        var def = defNode.InnerText.Replace("\n", "").Trim();
-                                        currentDefinition.Definitions.Add(HtmlEntity.DeEntitize(def));
-                                    }
-
-                                    searchType = 0;
-                                }
-                                break;
-                        }
-                    }
-                    currentNode = currentNode.NextSibling;
                 }
             }
             return w;
         }
 
+        private void ParseDefinition(HtmlNode sectionNode, DefinitionModel currentDefinition)
+        {
+            var nameNode = sectionNode.ChildNodes.FirstOrDefault(p => p.OriginalName == "p");
+            if (nameNode != null)
+            {
+                currentDefinition.Word = nameNode.ChildNodes.FirstOrDefault(p => p.Name.Equals("b"))?.InnerText ?? "";
+                var forms = sectionNode.ChildNodes.Where(p => p.HasClass("ligne-de-forme"));
+                if (forms.Any())
+                {
+                    currentDefinition.CatGram += " " + string.Join(" ", forms.Select(p => p.InnerText));
+                }
+            }
+
+            var defnodes = sectionNode.ChildNodes.FirstOrDefault(p => p.OriginalName == "ol");
+            if (defnodes != null)
+            {
+                foreach (var defNode in defnodes.ChildNodes.Where(p => p.OriginalName == "li"))
+                {
+                    var exampleNode = defNode.ChildNodes.FirstOrDefault(p => p.OriginalName == "ul");
+                    if (exampleNode != null)
+                    {
+                        exampleNode.Remove();
+                    }
+
+                    var tagNodes = defNode.ChildNodes;
+                    foreach (var tagnode in tagNodes.ToList())
+                    {
+                        if (tagnode.OriginalName.Equals("span") || tagnode.OriginalName.Equals("i"))
+                        {
+                            string text = tagnode.InnerText.Replace("(", "").Replace(")", "");
+
+                            if (tagnode.HasClass("emploi"))
+                            {
+                                if (!currentDefinition.Usages.Any(p => p == text))
+                                {
+                                    currentDefinition.Usages.Add(HtmlEntity.DeEntitize(text));
+                                }
+                            }
+                            else
+                            {
+                                if (!currentDefinition.Domains.Any(p => p == text))
+                                {
+                                    currentDefinition.Domains.Add(HtmlEntity.DeEntitize(text));
+                                }
+                            }
+                            // tagnode.Remove();
+                        }
+                        else
+                        {
+                            if (tagnode.InnerText != " ")
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    var def = defNode.InnerText.Replace("\n", "").Trim();
+                    currentDefinition.Definitions.Add(HtmlEntity.DeEntitize(def));
+                }
+            }
+        }
     }
 }
