@@ -17,10 +17,21 @@
             PivotPoints[direction] = points;
         }
 
+        public void SetPivot(uint letter, int direction, int points)
+        {
+            Pivots[direction] = letter;
+            PivotPoints[direction] = points;
+        }
+
         public bool GetPivot(Tile letter, int direction, byte joker)
         {
             var c = letter.IsJoker ? joker : letter.Letter;
             return (Pivots[direction] & 1u << c) > 0;
+        }
+
+        public uint GetPivot(int direction)
+        {
+            return Pivots[direction];
         }
 
         public int GetPivotPoints(int direction)
