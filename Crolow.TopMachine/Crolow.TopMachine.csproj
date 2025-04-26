@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup Label="Globals">
-	  <WebView2UseWinRT>False</WebView2UseWinRT>
+		<WebView2UseWinRT>False</WebView2UseWinRT>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0-maccatalyst</TargetFrameworks>
+		<!--<TargetFrameworks>net9.0-maccatalyst</TargetFrameworks>-->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
@@ -77,17 +77,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Remove="Resources\Raw\GameConfigs_FR.json" />
-	  <Content Remove="Resources\Raw\GridConfigs_FR.json" />
-	  <Content Remove="Resources\Raw\GridConfigurations.json" />
-	  <Content Remove="Resources\Raw\Letters_FR.json" />
+		<Content Remove="Resources\Raw\GameConfigs_FR.json" />
+		<Content Remove="Resources\Raw\GridConfigs_FR.json" />
+		<Content Remove="Resources\Raw\GridConfigurations.json" />
+		<Content Remove="Resources\Raw\Letters_FR.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiAsset Remove="Resources\Raw\GameConfigs_FR.json" />
-	  <MauiAsset Remove="Resources\Raw\GridConfigs_FR.json" />
-	  <MauiAsset Remove="Resources\Raw\GridConfigurations.json" />
-	  <MauiAsset Remove="Resources\Raw\Letters_FR.json" />
+		<MauiAsset Remove="Resources\Raw\GameConfigs_FR.json" />
+		<MauiAsset Remove="Resources\Raw\GridConfigs_FR.json" />
+		<MauiAsset Remove="Resources\Raw\GridConfigurations.json" />
+		<MauiAsset Remove="Resources\Raw\Letters_FR.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -116,16 +116,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="Resources\Raw\GameConfigs_FR.json" />
-	  <None Include="Resources\Raw\GridConfigs_FR.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Resources\Raw\GridConfigurations.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Resources\Raw\Letters_FR.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Include="Resources\Raw\GameConfigs_FR.json" />
+		<None Include="Resources\Raw\GridConfigs_FR.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="Resources\Raw\GridConfigurations.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="Resources\Raw\Letters_FR.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
