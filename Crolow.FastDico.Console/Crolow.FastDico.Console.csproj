@@ -24,6 +24,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="gaddag_fr.gz">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+		</None>
+		<None Update="GridConfigs_FR.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="GridConfigurationss.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

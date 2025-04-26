@@ -9,13 +9,13 @@ namespace Crolow.FastDico.Console
 
         public class BoardData
         {
-            public BoardGrid Grid { get; set; }
+            public BoardGridModel Grid { get; set; }
         }
 
         public static BagConfiguration ReadLetterConfig(string language)
         {
             var letterConfig = File.ReadAllText($"Letters_{language}.json");
-            var letterData = JsonConvert.DeserializeObject<LetterData>(letterConfig);
+            var letterData = JsonConvert.DeserializeObject<LetterConfigModel>(letterConfig);
             var config = new BagConfiguration();
 
             config.Name = letterData.Name;

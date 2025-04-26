@@ -25,12 +25,12 @@ public partial class ScrabbleAI
     private GadDagCompiler dico;
     private PlayConfiguration playConfiguration;
     private Board board;
-    private GameConfig gameConfig;
+    private GameConfigModel gameConfig;
     private LetterBag letterBag;
     private DawgSearch gaddag;
     private PlayerRack rack;
     private CurrentGame currentGame;
-    private GameConfig currentGameConfig;
+    private GameConfigModel currentGameConfig;
     private PivotBuilder pivotBuilder;
 
     public ScrabbleAI(string configsFile, string configName)

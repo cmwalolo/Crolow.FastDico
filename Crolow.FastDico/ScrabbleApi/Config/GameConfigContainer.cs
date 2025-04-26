@@ -4,6 +4,6 @@ namespace Crolow.FastDico.ScrabbleApi.Config
 {
     public class GameConfigContainer
     {
-        public List<GameConfig> Configurations { get; set; }
+        public List<GameConfigModel> Configurations { get; set; }
     }
 }

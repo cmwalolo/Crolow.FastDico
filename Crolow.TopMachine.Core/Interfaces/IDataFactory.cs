@@ -5,8 +5,9 @@ using Crolow.TopMachine.Data.Repositories;
 namespace Crolow.TopMachine.Core.Interfaces;
 public interface IDataFactory
 {
-    BoardConfigDataManager<BoardGrid> Boards { get; }
-    GameConfigDataManager<GameConfig> Games { get; }
+    LetterConfigDataManager<LetterConfigModel> LetterConfigs { get; }
+    BoardConfigDataManager<BoardGridModel> Boards { get; }
+    GameConfigDataManager<GameConfigModel> Games { get; }
     DictionaryDataManager<DictionaryModel> Dictionaries { get; }
     DicoWordsDataManager<WordEntryModel> DicoEntries { get; }
     DicoWordsToDicoDataManager<WordToDicoModel> DicoWords { get; }

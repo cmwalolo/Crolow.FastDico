@@ -9,13 +9,13 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
 
         public class BoardData
         {
-            public BoardGrid Grid { get; set; }
+            public BoardGridModel Grid { get; set; }
         }
 
         public static BagConfiguration ReadLetterConfig(string language)
         {
             var letterConfig = System.IO.File.ReadAllText($"Letters_{language}.json");
-            var letterData = JsonConvert.DeserializeObject<LetterData>(letterConfig);
+            var letterData = JsonConvert.DeserializeObject<LetterConfigModel>(letterConfig);
             var config = new BagConfiguration();
 
             config.Name = letterData.Name;
@@ -31,8 +31,8 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
         {
             PlayConfiguration g = new PlayConfiguration();
             var gridConfigs = System.IO.File.ReadAllText(configFiles);
-            var configs = JsonConvert.DeserializeObject<GameConfigContainer>(gridConfigs);
-            g.SelectedConfig = configs.Configurations.First(p => p.Name == configName);
+            var configs = JsonConvert.DeserializeObject<GameConfigModel[]>(gridConfigs);
+            g.SelectedConfig = configs.First(p => p.Name == configName);
             FillGridConfig(g);
             return g;
         }

@@ -14,8 +14,9 @@ namespace Crolow.TopMachine.Core
             this.settings = settings;
         }
 
-        public BoardConfigDataManager<BoardGrid> Boards => new BoardConfigDataManager<BoardGrid>(settings);
-        public GameConfigDataManager<GameConfig> Games => new GameConfigDataManager<GameConfig>(settings);
+        public LetterConfigDataManager<LetterConfigModel> LetterConfigs => new LetterConfigDataManager<LetterConfigModel>(settings);
+        public BoardConfigDataManager<BoardGridModel> Boards => new BoardConfigDataManager<BoardGridModel>(settings);
+        public GameConfigDataManager<GameConfigModel> Games => new GameConfigDataManager<GameConfigModel>(settings);
         public DictionaryDataManager<DictionaryModel> Dictionaries => new DictionaryDataManager<DictionaryModel>(settings);
         public DicoWordsDataManager<WordEntryModel> DicoEntries => new DicoWordsDataManager<WordEntryModel>(settings);
         public DicoWordsToDicoDataManager<WordToDicoModel> DicoWords => new DicoWordsToDicoDataManager<WordToDicoModel>(settings);

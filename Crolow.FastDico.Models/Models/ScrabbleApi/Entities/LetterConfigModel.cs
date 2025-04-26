@@ -3,7 +3,7 @@ using Kalow.Apps.Models.Data;
 
 namespace Crolow.FastDico.Models.Models.ScrabbleApi.Entities
 {
-    public class LetterData : DataObject
+    public class LetterConfigModel : DataObject
     {
         public string Name { get; set; }
         public List<TileConfig> Letters { get; set; }

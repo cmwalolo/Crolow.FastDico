@@ -2,9 +2,9 @@
 
 namespace Crolow.FastDico.Models.Models.ScrabbleApi.Entities
 {
-    public class GameConfig : DataObject
+    public class GameConfigModel : DataObject
     {
-        public GameConfig()
+        public GameConfigModel()
         {
             Bonus = new int[] { 0, 0, 0, 0, 0, 0, 50, 75, 100, 125, 150 };
         }

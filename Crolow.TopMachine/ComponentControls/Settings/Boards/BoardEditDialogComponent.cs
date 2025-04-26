@@ -1,17 +1,17 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
+﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
-namespace Crolow.TopMachine.ComponentControls.Settings.Dictionaries
+namespace Crolow.TopMachine.ComponentControls.Settings.Boards
 {
-    public class DictionaryEditDialogComponent : ComponentBase, IDisposable
+    public class BoardEditDialogComponent : ComponentBase, IDisposable
     {
         [Inject]
         DialogService DialogService { get; set; }
 
 
         [Parameter]
-        public DictionaryModel Dictionary { get; set; }
+        public BoardGridModel Board { get; set; }
 
         protected async override void OnInitialized()
         {
@@ -19,7 +19,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Dictionaries
 
         public void SaveAndClose()
         {
-            DialogService.Close(Dictionary);
+            DialogService.Close(Board);
         }
 
         public void CancelDialog()

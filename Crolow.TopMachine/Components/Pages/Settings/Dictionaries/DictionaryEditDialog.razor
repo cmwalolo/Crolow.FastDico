@@ -1,5 +1,5 @@
 ﻿@using Crolow.FastDico.Models.Models.Dictionary.Entities
-@using Crolow.Pix.Maui.ComponentControls.Modules.PhotoManager.Album
+@using Crolow.TopMachine.ComponentControls.Settings.Dictionaries
 
 @inherits DictionaryEditDialogComponent
 @{
@@ -9,7 +9,7 @@
 <RadzenTemplateForm TItem="DictionaryModel" Data="Dictionary">
     <fieldset>
         <RadzenStack Gap="1rem" class="rz-p-sm-3">
-            <RadzenFormField Text="Name" Variant="@variant">
+            <RadzenFormField Text="Is default ?" Variant="@variant">
                 <RadzenCheckBox @bind-Value="@Dictionary.IsDefault" />
             </RadzenFormField>
             <RadzenFormField Text="Name" Variant="@variant">

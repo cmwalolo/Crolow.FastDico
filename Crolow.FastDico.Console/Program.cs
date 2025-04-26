@@ -1,19 +1,17 @@
-﻿using Crolow.FastDico.Console;
-using Crolow.FastDico.Dawg;
+﻿using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Interfaces;
-using Crolow.FastDico.ScrabbleApi.Utils;
+using Crolow.FastDico.ScrabbleApi;
 using Crolow.FastDico.Utils;
-
 
 TilesUtils.configuration = Crolow.FastDico.Console.ConfigReader.ReadLetterConfig("FR");
 
-var tester = new Tester();
-tester.TestDawg(false);
+//var tester = new Tester();
+//tester.TestDawg(false);
 //tester.TestGadDag(false);
 
-//var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
-//ScrabbleAI.StartGame();
+var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
+ScrabbleAI.StartGame();
 public class Tester
 {
     public Tester()

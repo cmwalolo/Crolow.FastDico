@@ -8,12 +8,12 @@ public partial class ScrabbleAI
 {
     public class PlayedRounds
     {
-        GameConfig Config { get; set; }
+        GameConfigModel Config { get; set; }
         public int MaxPoints { get; set; }
         public List<PlayedRound> Rounds { get; set; }
 
         public PlayedRound CurrentRound { get; set; }
-        public PlayedRounds(GameConfig config)
+        public PlayedRounds(GameConfigModel config)
         {
             Config = config;
             Rounds = new List<PlayedRound>();

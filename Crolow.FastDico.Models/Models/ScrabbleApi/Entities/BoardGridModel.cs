@@ -1,7 +1,7 @@
 ﻿using Kalow.Apps.Models.Data;
 
 namespace Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
-public class BoardGrid : DataObject
+public class BoardGridModel : DataObject
 {
     public class MultiplierData
     {

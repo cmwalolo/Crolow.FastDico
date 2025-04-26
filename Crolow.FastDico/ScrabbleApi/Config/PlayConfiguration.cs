@@ -7,7 +7,7 @@ namespace Crolow.FastDico.ScrabbleApi.Config
         public BagConfiguration BagConfig { get; set; }
         public GridConfigurationContainer GridConfig { get; set; }
 
-        public GameConfig SelectedConfig { get; set; }
+        public GameConfigModel SelectedConfig { get; set; }
 
     }
 }
