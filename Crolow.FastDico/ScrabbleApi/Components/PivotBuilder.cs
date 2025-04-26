@@ -3,13 +3,14 @@
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
 using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 
 
-namespace Crolow.FastDico.ScrabbleApi.GameObjects
+namespace Crolow.FastDico.ScrabbleApi.Components
 {
     public class PivotBuilder
     {
@@ -22,8 +23,8 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
         public PivotBuilder(Board board, LetterNode rootNode, PlayConfiguration playConfiguration)
         {
             this.board = board;
-            this.searcher = new GadDagSearch(rootNode);
-            this.letterNode = rootNode;
+            searcher = new GadDagSearch(rootNode);
+            letterNode = rootNode;
             this.playConfiguration = playConfiguration;
         }
 
@@ -167,15 +168,27 @@ namespace Crolow.FastDico.ScrabbleApi.GameObjects
                     points += sq.CurrentLetter.Points;
                 }
             }
-            var results = SearchByPattern(bytes);
 
-            pivotSquare.ResetPivot(targetGrid, 0, 0);
-            if (results.Any())
+            var pattern = TilesUtils.ConvertBytesToWord(bytes.ToList());
+            if (PivotCache.ContainsKey(pattern))
             {
-                foreach (var result in results)
+                pivot = PivotCache[pattern];
+                pivotSquare.SetPivot(pivot, targetGrid, points);
+            }
+            else
+            {
+                var results = SearchByPattern(bytes);
+                pivotSquare.ResetPivot(targetGrid, 0, 0);
+                if (results.Any())
                 {
-                    pivotSquare.SetPivot(result[pivotPosition], targetGrid, points);
+                    foreach (var result in results)
+                    {
+                        pivotSquare.SetPivot(result[pivotPosition], targetGrid, points);
+                    }
                 }
+
+                var mask = pivotSquare.GetPivot(targetGrid);
+                PivotCache.Add(pattern, mask);
             }
 
 #if DEBUGPIVOT
