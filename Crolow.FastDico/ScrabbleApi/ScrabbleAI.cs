@@ -4,6 +4,7 @@ using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Components;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolver;
+using Crolow.FastDico.ScrabbleApi.Components.Rounds;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.ScrabbleApi.Utils;
@@ -46,19 +47,32 @@ public partial class ScrabbleAI
     }
     private void NextRound(bool firstMove)
     {
-        var letters = currentGame.LetterBag.DrawLetters(currentGame.Rack);
 
-        // End Test
-        if (letters == null)
+        XRoundValidator validator = new XRoundValidator(currentGame);
+        var playedRounds = new PlayedRounds(currentGame.GameConfig);
+
+        while (true)
         {
-            EndGame();
-            return;
+            var letters = currentGame.LetterBag.DrawLetters(currentGame.Rack);
+
+            // End Test
+            if (letters == null)
+            {
+                EndGame();
+                return;
+            }
+
+            var boardSolver = new BoardSolver(currentGame);
+            boardSolver.Initialize();
+
+            playedRounds = boardSolver.Solve(letters);
+            playedRounds = validator.ValidateRound(playedRounds);
+
+            if (playedRounds != null)
+            {
+                break;
+            }
         }
-
-        var boardSolver = new BoardSolver(currentGame);
-        boardSolver.Initialize();
-
-        var playedRounds = boardSolver.Solve(letters);
 
         var selectedRound = playedRounds.Tops.FirstOrDefault();
         if (selectedRound == null)

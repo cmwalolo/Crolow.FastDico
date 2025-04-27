@@ -2,6 +2,10 @@
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
+// *******************************
+// Do never Move this to a class ! 
+// *******************************
+
 public struct Tile
 {
     public Tile()

@@ -10,7 +10,7 @@ using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 
 
-namespace Crolow.FastDico.ScrabbleApi.Components
+namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
 {
     public class PivotBuilder
     {
