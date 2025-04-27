@@ -15,13 +15,6 @@ using System.Xml.Linq;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
-/// <summary>
-/// It's just a starting point
-/// Still need implementation
-/// Thinking of using gaddag and dawg together :
-/// - Gaddag to search from RTL and LTR at the first pivot position
-/// - Dawg to search from the first pivot position only LTR
-/// </summary>
 public partial class ScrabbleAI
 {
     private CurrentGame currentGame;
@@ -62,17 +55,12 @@ public partial class ScrabbleAI
             return;
         }
 
-
-        string res = TilesUtils.ConvertBytesToWord(letters);
-        Console.WriteLine($"Rack :#{currentGame.Round}  {res}");
-
-
         var boardSolver = new BoardSolver(currentGame);
         boardSolver.Initialize();
 
         var playedRounds = boardSolver.Solve(letters);
 
-        var selectedRound = playedRounds.Rounds.FirstOrDefault();
+        var selectedRound = playedRounds.Tops.FirstOrDefault();
         if (selectedRound == null)
         {
             EndGame(); return;

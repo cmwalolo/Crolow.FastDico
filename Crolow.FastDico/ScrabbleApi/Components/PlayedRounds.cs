@@ -10,13 +10,20 @@ public partial class ScrabbleAI
     {
         GameConfigModel Config { get; set; }
         public int MaxPoints { get; set; }
-        public List<PlayedRound> Rounds { get; set; }
+        public int MaxSubTopPoints { get; set; }
+        public bool PickAll { get; set; }
+
+        public List<PlayedRound> Tops { get; set; }
+        public List<PlayedRound> SubTops { get; set; }
+        public List<PlayedRound> AllRounds { get; set; }
 
         public PlayedRound CurrentRound { get; set; }
         public PlayedRounds(GameConfigModel config)
         {
             Config = config;
-            Rounds = new List<PlayedRound>();
+            Tops = new List<PlayedRound>();
+            SubTops = new List<PlayedRound>();
+            AllRounds = new List<PlayedRound>();
             CurrentRound = new PlayedRound();
         }
         public void SetRound(PlayedRound round)
@@ -28,9 +35,9 @@ public partial class ScrabbleAI
                 if (t.Parent.Status == 0)
                 {
                     wm *= t.Parent.WordMultiplier;
-                    if (t.Mask > 0)
+                    if (t.PivotPoints > 0)
                     {
-                        pivotTotal += (t.Points * t.Parent.LetterMultiplier * t.Parent.WordMultiplier) + (t.Mask * t.Parent.WordMultiplier);
+                        pivotTotal += (t.Points * t.Parent.LetterMultiplier * t.Parent.WordMultiplier) + (t.PivotPoints * t.Parent.WordMultiplier);
                     }
                 }
             }
@@ -42,18 +49,32 @@ public partial class ScrabbleAI
             if (tilesFromRack > 0 && tilesFromRack < Config.Bonus.Count())
             {
                 round.Bonus = Config.Bonus[tilesFromRack - 1];
+
             }
 
             round.Points += round.Bonus + pivotTotal;
 
+            if (PickAll)
+            {
+                AllRounds.Add(round);
+            }
+
             if (round.Points > MaxPoints)
             {
-                Rounds.Clear();
-                Rounds.Add(round);
+                SubTops = Tops;
+                Tops = new List<PlayedRound>();
+                Tops.Add(round);
+                MaxSubTopPoints = SubTops.Any() ? SubTops[0].Points : 0;
                 MaxPoints = round.Points;
             }
             else
             {
+                if (round.Points > MaxSubTopPoints)
+                {
+                    MaxSubTopPoints = round.Points;
+                    SubTops.Clear();
+                    SubTops.Add(round);
+                }
                 return;
             }
 

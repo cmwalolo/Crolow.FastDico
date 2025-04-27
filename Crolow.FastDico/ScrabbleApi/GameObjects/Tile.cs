@@ -25,7 +25,9 @@ public struct Tile
 
 
     public Square Parent { get; set; }
-    public int Mask { get; set; }
+    public int PivotPoints { get; set; }
+    public int Source { get; set; }
+
     public byte Letter { get; set; }
     public int Points { get; set; }
     public bool IsJoker { get; set; }

@@ -209,7 +209,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
                                 continue;
                             }
 
-                            letter.Mask = square.GetPivotPoints(grid);
+                            letter.PivotPoints = square.GetPivotPoints(grid);
 
                             // We remove the letter from the rack
                             int ndx = letters.FindIndex(p => p.Letter == node.Letter || p.IsJoker);
