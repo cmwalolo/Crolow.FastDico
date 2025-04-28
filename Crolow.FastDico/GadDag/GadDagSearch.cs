@@ -43,7 +43,7 @@ public class GadDagSearch : IDawgSearch
         return false;
     }
 
-    public List<string> SearchByPrefix(string prefix)
+    public List<string> SearchByPrefix(string prefix, int maxLength = int.MaxValue)
     {
         var bytes = TilesUtils.ConvertWordToBytes(prefix.ToUpper());
         var results = new List<string>();
@@ -58,15 +58,20 @@ public class GadDagSearch : IDawgSearch
         }
 
         // Collect all words from the prefix node
-        SearchPrefixesFromNode(currentNode, bytes, results);
+        SearchPrefixesFromNode(currentNode, bytes, results, maxLength == 0 ? int.MaxValue : maxLength);
         return results;
     }
 
-    private void SearchPrefixesFromNode(LetterNode node, List<byte> currentWord, List<string> results)
+    private void SearchPrefixesFromNode(LetterNode node, List<byte> currentWord, List<string> results, int length)
     {
-        if (node.IsEnd)
+        if (node.IsEnd && length >= 0)
         {
             results.Add(TilesUtils.ConvertBytesToWord(currentWord));
+        }
+
+        if (length == 0)
+        {
+            return;
         }
 
         foreach (var child in node.Children)
@@ -74,14 +79,14 @@ public class GadDagSearch : IDawgSearch
             if (child.Letter != TilesUtils.PivotByte)
             {
                 currentWord.Add(child.Letter);
-                SearchPrefixesFromNode(child, currentWord, results);
+                SearchPrefixesFromNode(child, currentWord, results, length - 1);
                 currentWord.RemoveAt(currentWord.Count - 1); // Backtrack
             }
         }
     }
 
 
-    public List<string> SearchBySuffix(string suffix)
+    public List<string> SearchBySuffix(string suffix, int maxLength = int.MaxValue)
     {
         var patternedSuffix = suffix.ToUpper() + "#";
 
@@ -98,13 +103,13 @@ public class GadDagSearch : IDawgSearch
         }
 
         // Collect all words from the prefix node
-        SearchSuffixesFromNode(currentNode, bytes, new List<byte>(), results);
+        SearchSuffixesFromNode(currentNode, bytes, new List<byte>(), results, maxLength);
         return results;
     }
 
-    private void SearchSuffixesFromNode(LetterNode node, List<byte> currentWord, List<byte> result, List<string> results)
+    private void SearchSuffixesFromNode(LetterNode node, List<byte> currentWord, List<byte> result, List<string> results, int length)
     {
-        if (node.Children.Count == 0)
+        if (node.IsEnd && length >= 0)
         {
             var newWord = new List<byte>();
             var word = currentWord.Take(currentWord.Count - 1).ToList();
@@ -116,7 +121,7 @@ public class GadDagSearch : IDawgSearch
         foreach (var child in node.Children)
         {
             result.Insert(0, child.Letter);
-            SearchSuffixesFromNode(child, currentWord, result, results);
+            SearchSuffixesFromNode(child, currentWord, result, results, length - 1);
             result.RemoveAt(0);
         }
     }

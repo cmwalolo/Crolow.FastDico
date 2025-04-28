@@ -33,7 +33,7 @@ public class DawgSearch : IDawgSearch
     }
 
     // Search for all words beginning with a given prefix
-    public List<string> SearchByPrefix(string prefix)
+    public List<string> SearchByPrefix(string prefix, int maxLength = int.MaxValue)
     {
         var currentNode = Root;
         List<byte> bytePrefix = TilesUtils.ConvertWordToBytes(prefix.ToUpper());
@@ -55,7 +55,7 @@ public class DawgSearch : IDawgSearch
         return results;
     }
 
-    public List<string> SearchBySuffix(string prefix)
+    public List<string> SearchBySuffix(string prefix, int maxLength = int.MaxValue)
     {
         return SearchByPattern("*" + prefix.ToUpper());
     }

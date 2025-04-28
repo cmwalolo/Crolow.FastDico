@@ -12,6 +12,9 @@ public class PlayedRound
     public int Bonus { get; set; }
     public int Pivot { get; set; }
 
+    public PlayerRack Rack { get; set; }
+
+
     public void SetTile(Tile tile, Square sq)
     {
         tile.Parent = sq;
@@ -94,14 +97,14 @@ public class PlayedRound
 
     public void DebugRound(string message)
     {
-        string res = GetDebugWord(true);
-        string resRaw = GetDebugWord(false);
+        string res = GetWord(true);
+        string resRaw = GetWord(false);
 
         var txt = $"{message} : {res} {Points} : {GetPosition()} - {resRaw}";
         Console.WriteLine(txt);
     }
 
-    public string GetDebugWord(bool reorder)
+    public string GetWord(bool reorder = true)
     {
         if (reorder)
         {
@@ -122,5 +125,10 @@ public class PlayedRound
             var m = Tiles.Select(p => p.Letter).ToList();
             return TilesUtils.ConvertBytesToWord(m);
         }
+    }
+
+    public string ToString()
+    {
+        return GetWord(true);
     }
 }

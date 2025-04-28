@@ -1,5 +1,4 @@
-﻿using Crolow.FastDico.Search;
-using Crolow.FastDico.Utils;
+﻿using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
@@ -12,6 +11,20 @@ public class PlayerRack
         Tiles = new List<Tile>();
     }
 
+    public PlayerRack(PlayerRack oldRack)
+    {
+        Tiles = new List<Tile>();
+        foreach (var l in oldRack.Tiles)
+        {
+            Tiles.Add(l);
+        }
+    }
+
+    public PlayerRack(List<Tile> tiles)
+    {
+        Tiles = tiles.ToList();
+    }
+
     public void SetTiles(List<Tile> tiles)
     {
         Tiles = new List<Tile>();
@@ -19,7 +32,7 @@ public class PlayerRack
 
     public List<Tile> GetTiles()
     {
-        return Tiles;
+        return Tiles.ToList();
     }
 
     public void RemoveTile(Tile tile)
@@ -37,6 +50,11 @@ public class PlayerRack
     // Example: Convert from human-readable string to byte representation
     public string ToString()
     {
-        return TilesUtils.ConvertBytesToWord(Tiles.Select(p => p.Letter).ToList()); // Reuse existing utility
+        return TilesUtils.ConvertBytesToWord(Tiles.Select(p => p.IsJoker ? TilesUtils.JokerByte : p.Letter).ToList()); // Reuse existing utility
+    }
+
+    internal void Clear()
+    {
+        Tiles = new List<Tile>();
     }
 }

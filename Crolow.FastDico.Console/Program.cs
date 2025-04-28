@@ -6,12 +6,13 @@ using Crolow.FastDico.Utils;
 
 TilesUtils.configuration = Crolow.FastDico.Console.ConfigReader.ReadLetterConfig("FR");
 
-//var tester = new Tester();
+var tester = new Tester();
 //tester.TestDawg(false);
 //tester.TestGadDag(false);
 
 var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
 ScrabbleAI.StartGame();
+Console.ReadLine();
 public class Tester
 {
     public Tester()
@@ -50,7 +51,7 @@ public class Tester
             string.Join("\n", newDawg.SearchByPrefix("batissa")));  // 2 (bat, batman)
 
         Console.WriteLine(
-            string.Join("\n", newDawg.SearchBySuffix("forage")));  // 2 (bat, batman)
+            string.Join("\n", newDawg.SearchBySuffix("forage", 3)));  // 2 (bat, batman)
 
 
         Console.WriteLine("\nAnagrams");
@@ -112,7 +113,7 @@ public class Tester
         Console.WriteLine("\nSuffix Search");
         Console.WriteLine("--------------");
         Console.WriteLine(
-            string.Join("\n", newDawg.SearchBySuffix("forage")));  // 2 (bat, batman)
+            string.Join("\n", newDawg.SearchBySuffix("forage", 3)));  // 2 (bat, batman)
         Console.WriteLine(
             string.Join("\n", newDawg.SearchBySuffix("mplacais")));  // 2 (bat, batman)
         Console.WriteLine(

@@ -10,6 +10,7 @@
         public int Status { get; set; } = -1;
         public uint[] Pivots { get; set; } = new uint[2] { uint.MaxValue, uint.MaxValue };
         public int[] PivotPoints { get; set; } = new int[2];
+        public int[] PivotLetters { get; set; } = new int[2];
 
         public void SetPivot(byte letter, int direction, int points)
         {
@@ -23,6 +24,12 @@
             PivotPoints[direction] = points;
         }
 
+        public void SetPivotLetters(int letters, int direction)
+        {
+            PivotLetters[direction] = letters;
+
+        }
+
         public bool GetPivot(Tile letter, int direction, byte joker)
         {
             var c = letter.IsJoker ? joker : letter.Letter;
@@ -32,6 +39,11 @@
         public uint GetPivot(int direction)
         {
             return Pivots[direction];
+        }
+
+        public int GetPivotLetters(int direction)
+        {
+            return PivotLetters[direction];
         }
 
         public int GetPivotPoints(int direction)
@@ -44,6 +56,7 @@
         {
             Pivots[grid] = maskValue;
             PivotPoints[grid] = points;
+            PivotLetters[grid] = 0;
         }
 
 

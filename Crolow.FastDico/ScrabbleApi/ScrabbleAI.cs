@@ -47,53 +47,71 @@ public partial class ScrabbleAI
     }
     private void NextRound(bool firstMove)
     {
+        var boardSolver = new BoardSolver(currentGame);
+        boardSolver.Initialize();
 
         XRoundValidator validator = new XRoundValidator(currentGame);
-        var playedRounds = new PlayedRounds(currentGame.GameConfig);
+        validator.Initialize();
 
+        PlayedRounds playedRounds = null;
+        PlayerRack originalRack = new PlayerRack(currentGame.Rack);
+        var letters = new List<Tile>();
         while (true)
         {
-            var letters = currentGame.LetterBag.DrawLetters(currentGame.Rack);
-
+            letters = currentGame.LetterBag.DrawLetters(currentGame.Rack);
             // End Test
             if (letters == null)
             {
                 EndGame();
                 return;
             }
-
-            var boardSolver = new BoardSolver(currentGame);
-            boardSolver.Initialize();
-
+            playedRounds = new PlayedRounds(currentGame.GameConfig, letters);
             playedRounds = boardSolver.Solve(letters);
-            playedRounds = validator.ValidateRound(playedRounds);
-
-            if (playedRounds != null)
+            if (playedRounds.Tops.Any())
             {
-                break;
+                var round = validator.ValidateRound(playedRounds, letters);
+
+                currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
+                currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
+
+                if (round != null)
+                {
+                    playedRounds = round;
+                    break;
+                }
             }
+            else
+            {
+                EndGame();
+                return;
+
+            }
+
         }
 
-        var selectedRound = playedRounds.Tops.FirstOrDefault();
+        var selectedRound = playedRounds?.Tops?.FirstOrDefault();
         if (selectedRound == null)
         {
             EndGame(); return;
         }
 
         // We remove letters played from the rack
+        selectedRound.Rack = new PlayerRack(playedRounds.PlayerRack);
+        currentGame.Rack = playedRounds.PlayerRack;
         foreach (var letter in selectedRound.Tiles)
         {
             if (letter.Parent.Status != 1)
             {
                 currentGame.Rack.RemoveTile(letter);
+                currentGame.LetterBag.RemoveTile(letter);
             }
         }
-
         selectedRound.FinalizeRound();
         currentGame.Board.SetRound(selectedRound);
         currentGame.RoundsPlayed.Add(selectedRound);
         selectedRound = new PlayedRound();
         currentGame.Round++;
+        currentGame.LetterBag.DebugBag();
         NextRound(false);
     }
 
@@ -123,8 +141,8 @@ public partial class ScrabbleAI
         {
             sb.AppendLine("<tr>");
             sb.AppendLine($"<td>{ndx++}</td>");
-            sb.AppendLine("<td></td>");
-            sb.AppendLine($"<td>{r.GetDebugWord(true)}</td>");
+            sb.AppendLine($"<td>{r.Rack.ToString()}</td>");
+            sb.AppendLine($"<td>{r.GetWord(true)}</td>");
             sb.AppendLine($"<td>{r.GetPosition()}</td>");
             sb.AppendLine($"<td>{r.Points}</td>");
             sb.AppendLine("</tr>");

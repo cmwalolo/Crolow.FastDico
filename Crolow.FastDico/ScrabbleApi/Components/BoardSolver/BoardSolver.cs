@@ -26,7 +26,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
         public PlayedRounds Solve(List<Tile> letters)
         {
             bool firstMove = currentGame.Round == 0;
-            var playedRounds = new PlayedRounds(currentGame.GameConfig);
+            var playedRounds = new PlayedRounds(currentGame.GameConfig, letters);
 
             // We set the original position to place which is at the board center
             if (firstMove)

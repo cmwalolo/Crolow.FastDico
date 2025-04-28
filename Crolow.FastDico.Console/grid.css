@@ -96,3 +96,7 @@ div#grid {
 table.results {
     font-size: 10pt;
 }
+
+    table.results td {
+        white-space: nowrap;
+    }

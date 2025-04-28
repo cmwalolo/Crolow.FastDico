@@ -151,6 +151,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
             var points = 0;
             var pivot = uint.MaxValue;
             var pivotPosition = 0;
+            var pivotLetters = 0;
             Square pivotSquare = null;
 
             for (int i = start; i <= end; i++)
@@ -166,7 +167,14 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
                 {
                     bytes[i - start] = sq.CurrentLetter.Letter;
                     points += sq.CurrentLetter.Points;
+                    pivotLetters++;
                 }
+            }
+
+            pivotSquare.ResetPivot(targetGrid, 0, 0);
+            if (pivotLetters > 0)
+            {
+                pivotSquare.SetPivotLetters(pivotLetters, targetGrid);
             }
 
             var pattern = TilesUtils.ConvertBytesToWord(bytes.ToList());
@@ -178,9 +186,10 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
             else
             {
                 var results = SearchByPattern(bytes);
-                pivotSquare.ResetPivot(targetGrid, 0, 0);
+
                 if (results.Any())
                 {
+
                     foreach (var result in results)
                     {
                         pivotSquare.SetPivot(result[pivotPosition], targetGrid, points);

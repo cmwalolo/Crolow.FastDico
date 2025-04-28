@@ -1,4 +1,5 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
@@ -41,7 +42,7 @@ public class LetterBag
         {
             if (!ok)
             {
-                ReturnLetters(drawnLetters);
+                ReturnLetters(rack, drawnLetters);
             }
 
             if (GameConfig.SelectedConfig.JokerMode)
@@ -57,8 +58,6 @@ public class LetterBag
                     }
                 }
             }
-
-            //drawnLetters = ForceDrawLetters("ntryegu");
 
             for (int i = drawnLetters.Count; i < count; i++)
             {
@@ -81,11 +80,27 @@ public class LetterBag
 
     }
 
-    // Add letters back to the bag
-    public void ReturnLetters(List<Tile> letters)
+    public void ReturnLetters(PlayerRack rack, List<Tile> letters)
     {
         Letters.AddRange(letters);
         letters.Clear();
+
+        foreach (var l in letters)
+        {
+            RemoveTile(l);
+        }
+        rack.Clear();
+    }
+
+    public void RemoveTile(Tile tile)
+    {
+        var i = Letters.FindIndex(t => (!tile.IsJoker && !t.IsJoker && t.Letter == tile.Letter) || (t.IsJoker && tile.IsJoker));
+        if (i == -1)
+        {
+            Console.WriteLine("missing tile");
+            return;
+        }
+        Letters.RemoveAt(i);
     }
 
     // Get the number of letters remaining in the bag
@@ -141,5 +156,32 @@ public class LetterBag
         }
 
         return tile;
+    }
+
+    internal void Recreate(PlayerRack rack, PlayerRack originalRack)
+    {
+        rack.Clear();
+        foreach (var t in originalRack.Tiles)
+        {
+            rack.Tiles.Add(t);
+            RemoveTile(t);
+        }
+    }
+
+    public void DebugBag()
+    {
+#if DEBUG
+        var g = Letters.GroupBy(p => p.IsJoker ? TilesUtils.JokerByte : p.Letter).OrderBy(p => p.Key);
+        Console.Write("BAG : ");
+        foreach (var l in g)
+        {
+            char c = (l.Key == TilesUtils.JokerByte ? '?' : (char)(l.Key + 65));
+            Console.Write($"{c}: {l.Count()} -");
+        }
+        Console.WriteLine();
+        Console.WriteLine($"Letter count : {Letters.Count}");
+        Console.WriteLine("------------------------");
+
+#endif
     }
 }

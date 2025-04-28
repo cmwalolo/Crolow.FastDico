@@ -14,15 +14,18 @@ public class PlayedRounds
     public List<PlayedRound> Tops { get; set; }
     public List<PlayedRound> SubTops { get; set; }
     public List<PlayedRound> AllRounds { get; set; }
-
     public PlayedRound CurrentRound { get; set; }
-    public PlayedRounds(GameConfigModel config)
+
+    public PlayerRack PlayerRack { get; set; }
+
+    public PlayedRounds(GameConfigModel config, List<Tile> rack)
     {
         Config = config;
         Tops = new List<PlayedRound>();
         SubTops = new List<PlayedRound>();
         AllRounds = new List<PlayedRound>();
         CurrentRound = new PlayedRound();
+        PlayerRack = new PlayerRack(rack);
     }
     public void SetRound(PlayedRound round)
     {

@@ -211,7 +211,7 @@
         "Points": 10
       },
       {
-        "Letter": 255,
+        "Letter": 252,
         "Char": "?",
         "IsVowel": true,
         "IsConsonant": true,
