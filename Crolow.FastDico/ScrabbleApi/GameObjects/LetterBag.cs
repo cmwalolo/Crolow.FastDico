@@ -27,9 +27,9 @@ public class LetterBag
     }
 
     // Draw a specified number of letters from the bag
-    public List<Tile> DrawLetters(PlayerRack rack)
+    public List<Tile> DrawLetters(PlayerRack rack, int totalLetters = 0)
     {
-        int count = GameConfig.SelectedConfig.InRackLetters;
+        int count = totalLetters == 0 ? GameConfig.SelectedConfig.InRackLetters : totalLetters;
         var drawnLetters = rack.GetTiles();
         bool ok = true;
 
@@ -115,13 +115,14 @@ public class LetterBag
 
         int vow = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsVowel ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsVowel ? 1 : 0) ?? 0);
         int con = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsConsonant ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsConsonant ? 1 : 0) ?? 0);
+        int jok = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsJoker ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsJoker ? 1 : 0) ?? 0);
 
         if (CurrentGame.Round >= CurrentGame.Configuration.SelectedConfig.CheckDistributionRound)
         {
             return vow > 0 && con > 0;
         }
 
-        return vow > 1 && con > 1;
+        return vow - jok > 1 && con - jok > 1;
 
     }
 

@@ -18,7 +18,7 @@ public class PlayedRounds
 
     public PlayerRack PlayerRack { get; set; }
 
-    public PlayedRounds(GameConfigModel config, List<Tile> rack)
+    public PlayedRounds(GameConfigModel config, List<Tile> rack, bool pickAll)
     {
         Config = config;
         Tops = new List<PlayedRound>();
@@ -26,6 +26,7 @@ public class PlayedRounds
         AllRounds = new List<PlayedRound>();
         CurrentRound = new PlayedRound();
         PlayerRack = new PlayerRack(rack);
+        PickAll = pickAll;
     }
     public void SetRound(PlayedRound round)
     {

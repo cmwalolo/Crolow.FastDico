@@ -60,7 +60,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         public const float RackRatioMult = 1;           // Multiplier
         public const float ScrabbleRatioDiv = 25;
         public const float RaccordsRatioMul = 1;
-        public const float CollageRatioDiv = (float)5 / 10;
+        public const float CollageRatioDiv = 1;
         public const float CollageMotRatioDiv = 4;
         public const float AppuiRatioDiv = 4;
 
@@ -79,12 +79,17 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             this.currentGame = currentGame;
             Random rnd = new Random();
 
-            ScrabbleFrequence = 30;  //cfg.Config.intScrabbleFrequence;
+            ScrabbleFrequence = 40;  //cfg.Config.intScrabbleFrequence;
             CollagesFrequence = 80;  //cfg.Config.intCollagesFrequence;
             AppuisFrequence = 80;  //cfg.Config.intAppuisFrequence;
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
-            BoostFrequence = 20;
+            BoostFrequence = 30;
+        }
+
+        public bool IsBoosted()
+        {
+            return doBoost;
         }
 
         public void Initialize()
@@ -125,67 +130,77 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             }
 
             c = Random.Shared.Next(100);
-            if (c < BoostFrequence)
+            if (c < BoostFrequence && currentGame.Round > 3)
             {
                 doBoost = true;
             }
         }
 
-        public RatingRound Evaluate(PlayedRounds round)
+        public RatingRound Evaluate(PlayedRounds round, PlayedRound selectedRound = null)
         {
 
             float maxScore = 0;
             int maxItem = 0;
             int item = 0;
 
-            RatingRound rate = new RatingRound();
-            PlayedRound selectedRound = round.Tops.FirstOrDefault();
+            RatingRound rate = new();
+            selectedRound = selectedRound ?? round.Tops.FirstOrDefault();
             if (selectedRound != null)
             {
                 string word = selectedRound.GetWord();
 
                 EvaluateNumberOfSolutions(rate, round);
 
-                if (doCollages)
+                if (doCollages || doBoost)
                 {
                     // EvaluateCollagesMots(rate, selectedRound, word);
                     EvaluateCollages(rate, selectedRound, word);
                 }
 
-                if (doAppuis)
+                if (doAppuis || doBoost)
                 {
                     EvaluateScoreAppui(rate, selectedRound, word);
                 }
 
                 EvaluateScrabble(rate, selectedRound, word);
-                if (doScrabble)
-                {
-                    EvaluateScrabbleSousTop(rate, selectedRound, word, round.SubTops.FirstOrDefault());
-                }
-                else
-                {
-                    EvaluateSousTop(rate, selectedRound, word, round.SubTops.FirstOrDefault());
-                }
 
-                if (doRaccords)
+                if (!doBoost)
                 {
-                    EvaluateRaccords(rate, selectedRound, word);
+                    if (doScrabble)
+                    {
+                        EvaluateScrabbleSousTop(rate, selectedRound, word, round.SubTops.FirstOrDefault());
+                    }
+                    else
+                    {
+                        EvaluateSousTop(rate, selectedRound, word, round.SubTops.FirstOrDefault());
+                    }
                 }
 
                 EvaluateScoreMot(rate, selectedRound, word);
 
-                if (doScrabble && selectedRound.Bonus == 0)
+                if (!doBoost)
                 {
-                    rate.scoreAll = rate.scoreAll - 3;
-                }
-                else
-                {
-                    if (selectedRound.Bonus > 0)
+                    if (doRaccords)
+                    {
+                        EvaluateRaccords(rate, selectedRound, word);
+                    }
+
+
+                    if (doScrabble && selectedRound.Bonus == 0)
                     {
                         rate.scoreAll = rate.scoreAll - 3;
                     }
+                    else
+                    {
+                        if (selectedRound.Bonus > 0)
+                        {
+                            rate.scoreAll = rate.scoreAll - 3;
+                        }
+                    }
                 }
             }
+
+            rate.scoreAll = rate.scoreAll / rate.nbSolutions;
             return rate;
 
         }
@@ -206,10 +221,19 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         {
             //if (round.Bonus == 0)
             {
-                if (word.Length > 4)
+                if (word.Length > 9)
+                {
+                    rate.scoremot = 3;
+                }
+
+                if (word.Length > 7)
+                {
+                    rate.scoremot = 2.5f;
+                }
+
+                if (word.Length <= 7)
                 {
                     rate.scoremot = 2;
-
                 }
 
                 if (word.Length < 4)
@@ -217,7 +241,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                     rate.scoremot = -15;
                 }
 
-                rate.scoreAll += rate.scoremot * scoreMotRatioMul / rate.nbSolutions;
+                rate.scoreAll += rate.scoremot * scoreMotRatioMul;
             }
         }
 
@@ -242,7 +266,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             if (c > 1 && c < word.Length - 1)
             {
                 rate.scoreappui = c;
-                rate.scoreAll += rate.scoreappui * AppuiRatioDiv / rate.nbSolutions;
+                rate.scoreAll += rate.scoreappui * AppuiRatioDiv;
             }
         }
 
@@ -251,19 +275,24 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             int length = word.Length;
 
             int count = 0; // gc.GameBoard.evalRaccords(tround);
+            int letters = 0;
             foreach (var l in round.Tiles)
             {
                 if (l.Parent.Status == -1)
                 {
                     int c = l.Parent.GetPivotLetters(round.Position.Direction);
-                    count += System.Math.Min(3, c);
+                    if (c > 0)
+                    {
+                        count += System.Math.Min(3, c);
+                        letters++;
+                    }
                 }
             }
 
             if (count > 0)
             {
-                rate.scorecollage = count;
-                rate.scoreAll += (float)count / (CollageRatioDiv * rate.nbSolutions);
+                rate.scorecollage = count * letters;
+                rate.scoreAll += ((float)rate.scorecollage * CollageRatioDiv);
             }
         }
 
@@ -287,7 +316,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             {
                 int count = CompteRaccord(word);
                 rate.scoreraccords = count;
-                rate.scoreAll += count * RaccordsRatioMul / rate.nbSolutions;
+                rate.scoreAll += count * RaccordsRatioMul;
             }
         }
 
@@ -296,7 +325,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             if (round.Bonus > 0)
             {
                 rate.scorescrabble = (float)round.Bonus / ScrabbleRatioDiv;
-                rate.scoreAll += (float)rate.scorescrabble / rate.nbSolutions;
+                rate.scoreAll += (float)rate.scorescrabble;
             }
         }
 
@@ -306,7 +335,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             {
                 float diff = 100 - subTop.Points / (float)round.Points * 100;
                 rate.scoresoustop = diff / sousTopRatioDivScrabble;
-                rate.scoreAll += rate.scoresoustop / rate.nbSolutions;
+                rate.scoreAll += rate.scoresoustop;
             }
         }
 
@@ -314,7 +343,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         {
             float diff = 100 - subTop.Points / (float)round.Points * 100;
             rate.scoresoustop = diff / sousTopRatioDiv;
-            rate.scoreAll += rate.scoresoustop / rate.nbSolutions;
+            rate.scoreAll += rate.scoresoustop;
         }
 
 

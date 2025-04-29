@@ -23,10 +23,12 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
             currentGame.PivotBuilder.Build();
         }
 
-        public PlayedRounds Solve(List<Tile> letters)
+        public PlayedRounds Solve(List<Tile> letters, SolverFilters filters = null)
         {
+            filters = filters ?? new SolverFilters();
+
             bool firstMove = currentGame.Round == 0;
-            var playedRounds = new PlayedRounds(currentGame.GameConfig, letters);
+            var playedRounds = new PlayedRounds(currentGame.GameConfig, letters, filters.PickallResults);
 
             // We set the original position to place which is at the board center
             if (firstMove)
@@ -46,97 +48,100 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
                 // be connected 
 
                 // Horizontal Search
-                Search(0, letters, playedRounds);
+                Search(0, letters, playedRounds, filters);
                 // Vertical Search
-                Search(1, letters, playedRounds);
+                Search(1, letters, playedRounds, filters);
             }
 
             return playedRounds;
         }
 
-        private void Search(int grid, List<Tile> letters, PlayedRounds playedRounds)
+        private void Search(int grid, List<Tile> letters, PlayedRounds playedRounds, SolverFilters filters)
         {
             for (var i = 1; i < currentGame.Board.CurrentBoard[grid].SizeV - 1; i++)
             {
-                var rightToLeft = true;
-                int oldj = 1;
-                for (var j = 1; j < currentGame.Board.CurrentBoard[grid].SizeH - 1; j++)
+                if (!filters.Filters[grid].Any() || filters.Filters[grid].Contains(i))
                 {
-                    var currentNode = currentGame.Dico.Root;
-                    playedRounds.CurrentRound = new PlayedRound();
-
-                    var sq = currentGame.Board.GetSquare(grid, j, i);
-                    if (sq.Status == -1)
+                    var rightToLeft = true;
+                    int oldj = 1;
+                    for (var j = 1; j < currentGame.Board.CurrentBoard[grid].SizeH - 1; j++)
                     {
-                        if (CheckConnect(grid, j, i))
+                        var currentNode = currentGame.Dico.Root;
+                        playedRounds.CurrentRound = new PlayedRound();
+
+                        var sq = currentGame.Board.GetSquare(grid, j, i);
+                        if (sq.Status == -1)
                         {
-                            Position start = new Position(j, i, grid);
-                            Position firstPosition = new Position(j, i, grid);
-                            // If we are skipping only one square we do not need
-                            // to search on the left.
-                            rightToLeft = j == 1 || (j == oldj + 1 ? true : false);
-
-                            // If there is a filled squared on the left
-                            // We need to prefill the current solution
-                            var sqLeft = currentGame.Board.GetSquare(grid, j - 1, i);
-                            if (sqLeft.Status == 1)
+                            if (CheckConnect(grid, j, i))
                             {
-                                rightToLeft = false;
-                                var sql = new List<Square>();
-                                sql.Add(sqLeft);
-                                var pos = j - 2;
-                                while (true)
-                                {
-                                    var sqNext = currentGame.Board.GetSquare(grid, pos, i);
-                                    if (sqNext.Status == 1)
-                                    {
-                                        sql.Add(sqNext);
-                                        pos--;
-                                    }
-                                    else
-                                    {
-                                        sql.Reverse();
-                                        playedRounds.CurrentRound = new PlayedRound();
-                                        firstPosition = new Position(pos + 1, firstPosition.Y, grid);
-                                        playedRounds.CurrentRound.Position = firstPosition;
-                                        int x = firstPosition.X;
-                                        int y = firstPosition.Y;
+                                Position start = new Position(j, i, grid);
+                                Position firstPosition = new Position(j, i, grid);
+                                // If we are skipping only one square we do not need
+                                // to search on the left.
+                                rightToLeft = j == 1 || (j == oldj + 1 ? true : false);
 
-                                        foreach (var item in sql)
+                                // If there is a filled squared on the left
+                                // We need to prefill the current solution
+                                var sqLeft = currentGame.Board.GetSquare(grid, j - 1, i);
+                                if (sqLeft.Status == 1)
+                                {
+                                    rightToLeft = false;
+                                    var sql = new List<Square>();
+                                    sql.Add(sqLeft);
+                                    var pos = j - 2;
+                                    while (true)
+                                    {
+                                        var sqNext = currentGame.Board.GetSquare(grid, pos, i);
+                                        if (sqNext.Status == 1)
                                         {
-                                            var parent = currentGame.Board.GetSquare(grid, x++, y);
-                                            playedRounds.CurrentRound.AddTile(item.CurrentLetter, parent);
+                                            sql.Add(sqNext);
+                                            pos--;
                                         }
-                                        break;
+                                        else
+                                        {
+                                            sql.Reverse();
+                                            playedRounds.CurrentRound = new PlayedRound();
+                                            firstPosition = new Position(pos + 1, firstPosition.Y, grid);
+                                            playedRounds.CurrentRound.Position = firstPosition;
+                                            int x = firstPosition.X;
+                                            int y = firstPosition.Y;
+
+                                            foreach (var item in sql)
+                                            {
+                                                var parent = currentGame.Board.GetSquare(grid, x++, y);
+                                                playedRounds.CurrentRound.AddTile(item.CurrentLetter, parent);
+                                            }
+                                            break;
+                                        }
+                                    }
+
+                                    foreach (var letter in sql)
+                                    {
+                                        try
+                                        {
+                                            currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            TilesUtils.ConvertBytesToWord(sql.Select(p => p.CurrentLetter.Letter).ToList());
+                                        }
+                                    }
+
+                                    // Ok we can process that square only if there are children
+                                    if (currentNode.Children.Any())
+                                    {
+                                        SearchNodes(grid, currentNode, 1, start, letters, playedRounds, firstPosition, rightToLeft);
                                     }
                                 }
-
-                                foreach (var letter in sql)
-                                {
-                                    try
-                                    {
-                                        currentNode = currentNode.Children.First(p => p.Letter == letter.CurrentLetter.Letter);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        TilesUtils.ConvertBytesToWord(sql.Select(p => p.CurrentLetter.Letter).ToList());
-                                    }
-                                }
-
-                                // Ok we can process that square only if there are children
-                                if (currentNode.Children.Any())
+                                else
                                 {
                                     SearchNodes(grid, currentNode, 1, start, letters, playedRounds, firstPosition, rightToLeft);
                                 }
                             }
-                            else
-                            {
-                                SearchNodes(grid, currentNode, 1, start, letters, playedRounds, firstPosition, rightToLeft);
-                            }
-                        }
 
+                        }
+                        rightToLeft = false;
                     }
-                    rightToLeft = false;
                 }
             }
         }
@@ -157,6 +162,10 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
             // rent position
             var square = currentGame.Board.GetSquare(grid, x, y);
 
+            if (square.Status == -1 && square.GetPivot(grid) == 0)
+            {
+                return;
+            }
 
             // We load the nodes to be checked
             var nodes = new List<LetterNode>();

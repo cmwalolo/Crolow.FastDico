@@ -58,21 +58,21 @@ public partial class ScrabbleAI
         var letters = new List<Tile>();
         while (true)
         {
-            letters = currentGame.LetterBag.DrawLetters(currentGame.Rack);
+            letters = validator.InitializeLetters();
             // End Test
             if (letters == null)
             {
                 EndGame();
                 return;
             }
-            playedRounds = new PlayedRounds(currentGame.GameConfig, letters);
-            playedRounds = boardSolver.Solve(letters);
+
+            var filters = validator.InitializeFilters();
+            playedRounds = boardSolver.Solve(letters, filters);
+
             if (playedRounds.Tops.Any())
             {
-                var round = validator.ValidateRound(playedRounds, letters);
+                var round = validator.ValidateRound(playedRounds, letters, originalRack);
 
-                currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
-                currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
 
                 if (round != null)
                 {
@@ -89,24 +89,13 @@ public partial class ScrabbleAI
 
         }
 
-        var selectedRound = playedRounds?.Tops?.FirstOrDefault();
+        PlayedRound selectedRound = validator.FinalizeRound(playedRounds);
         if (selectedRound == null)
         {
-            EndGame(); return;
+            EndGame();
+            return;
         }
 
-        // We remove letters played from the rack
-        selectedRound.Rack = new PlayerRack(playedRounds.PlayerRack);
-        currentGame.Rack = playedRounds.PlayerRack;
-        foreach (var letter in selectedRound.Tiles)
-        {
-            if (letter.Parent.Status != 1)
-            {
-                currentGame.Rack.RemoveTile(letter);
-                currentGame.LetterBag.RemoveTile(letter);
-            }
-        }
-        selectedRound.FinalizeRound();
         currentGame.Board.SetRound(selectedRound);
         currentGame.RoundsPlayed.Add(selectedRound);
         selectedRound = new PlayedRound();
