@@ -16,7 +16,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         int currentIteration = 0;
 
         int[] maxIteration = new int[] { 50, 30, 30 };
-        int[] breakPoints = new int[] { 15, 13, 10 };
+        int[] breakPoints = new int[] { 20, 15, 10 };
 
         private int boostNumberOfSolutions = 3000;
         private int boostMatchItems = 100;
@@ -190,7 +190,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 return null;
             }
 
-            var keys = selection.OrderByDescending(p => (p.Key.scoreappui * 2) + p.Key.scorecollage);
+            var keys = selection.OrderByDescending(p => p.Key.scoreAll /* (p.Key.scoreappui * 2) + p.Key.scorecollage*/);
 
             currentGame.LetterBag.ReturnLetters(currentGame.Rack);
 

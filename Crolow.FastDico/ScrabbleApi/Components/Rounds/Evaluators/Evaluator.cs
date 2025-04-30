@@ -87,7 +87,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
             BoostFrequence = 30;
-            SkipFrequence = 0;
+            SkipFrequence = 5;
         }
 
         public bool IsBoosted()
