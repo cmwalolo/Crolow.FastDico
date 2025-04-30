@@ -1,6 +1,8 @@
-﻿using Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators;
+﻿using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
+using Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Utils;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using static Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators.Evaluator;
 
@@ -60,8 +62,13 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             return f;
         }
 
-        public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, PlayerRack originalRack)
+        public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, PlayerRack originalRack, BoardSolver solver)
         {
+            if (solver is null)
+            {
+                throw new ArgumentNullException(nameof(solver));
+            }
+
             if (currentGame.Round == 0)
             {
                 currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
@@ -73,6 +80,13 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             {
                 currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
                 currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
+
+                rounds = ValidateBoosted(rounds, solver);
+                if (rounds == null)
+                {
+                    evaluator.BoostedOff();
+                }
+
                 return rounds;
             }
             else
@@ -121,13 +135,8 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             }
         }
 
-        public override PlayedRound FinalizeRound(PlayedRounds playedRounds)
+        private PlayedRounds ValidateBoosted(PlayedRounds playedRounds, BoardSolver solver)
         {
-            if (!evaluator.IsBoosted())
-            {
-                return base.FinalizeRound(playedRounds);
-            }
-
 #if DEBUG
             Console.WriteLine("--- BOOSTED --- ");
 #endif
@@ -154,33 +163,19 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 solutions = playedRounds.AllRounds.OrderByDescending(p => p.Points).ToList();
             }
 
-            var selectionLong = new Dictionary<RatingRound, PlayedRound>();
-            var selectionShort = new Dictionary<RatingRound, PlayedRound>();
-            var scrabbles = new Dictionary<RatingRound, PlayedRound>();
+            var selection = new Dictionary<RatingRound, PlayedRound>();
             var counter = 0;
             foreach (var solution in solutions)
             {
                 var rate = evaluator.Evaluate(playedRounds, solution);
-                if (solution.Tiles.Count(p => p.Parent.Status == -1) >= 5 && (rate.scoreappui > 2 || rate.scorecollage > 5))
+                if (solution.Tiles.Count(p => p.Parent.Status == -1) > 6 && rate.scoreAll > 15 && (rate.scoreappui > 2 || rate.scorecollage > 5))
                 {
-                    selectionLong.Add(rate, solution);
-                }
-                else
-                {
-                    if (solution.Bonus > 0)
-                    {
-                        scrabbles.Add(rate, solution);
-                    }
-
-                    if (rate.scoreappui > 2 || rate.scorecollage > 5)
-                    {
-                        selectionShort.Add(rate, solution);
-                    }
+                    selection.Add(rate, solution);
                 }
 
                 counter++;
 
-                if (selectionLong.Count > boostMatchItems && counter < boostNumberOfSolutions)
+                if (selection.Count > boostMatchItems && counter < boostNumberOfSolutions)
                 {
                     break;
                 }
@@ -188,21 +183,61 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
 #if DEBUG
             Console.WriteLine($"BOOSTING {solutions.Count} - matches : {selection.Count} ");
-#endif
+#endif 
 
-            var keys = selectionLong.OrderByDescending(p => (p.Key.scoreappui * 2) + p.Key.scorecollage).FirstOrDefault();
-            if (keys.Value == null)
+            if (!selection.Any())
             {
-                keys = selectionShort.OrderByDescending(p => (p.Key.scoreappui * 2) + p.Key.scorecollage).FirstOrDefault();
-
-                if (keys.Value == null && scrabbles.Count > 0)
-                {
-                    int c= Random.Shared.Next(scrabbles.Count);
-                    keys = scrabbles.ElementAt(c);
-                }
+                return null;
             }
 
-            var selectedRound = keys.Value ?? solutions.FirstOrDefault();
+            var keys = selection.OrderByDescending(p => (p.Key.scoreappui * 2) + p.Key.scorecollage);
+
+            foreach (var value in keys)
+            {
+                var selectedSolution = value.Value;
+
+                var rack = new PlayerRack(value.Value.Tiles.Where(p => p.Parent.Status == -1).ToList());
+                currentGame.LetterBag.ForceDrawLetters(rack.Tiles);
+                var letters = currentGame.LetterBag.DrawLetters(rack);
+                var round = solver.Solve(letters);
+                currentGame.LetterBag.ReturnLetters(letters);
+
+                var checkSolution = round.Tops.FirstOrDefault();
+
+
+                if (selectedSolution.ToString() != checkSolution.ToString()
+                    || !checkSolution.Position.Equals(selectedSolution.Position))
+                {
+                    continue;
+                }
+
+#if DEBUG
+                DebugRatingRound(value.Key);
+#endif
+
+                playedRounds.AllRounds.Clear();
+                playedRounds.SubTops.Clear();
+                playedRounds.Tops.Clear();
+                playedRounds.Tops.Add(value.Value);
+                return playedRounds;
+            }
+
+            return null;
+
+        }
+
+        public override PlayedRound FinalizeRound(PlayedRounds playedRounds)
+        {
+            if (!evaluator.IsBoosted())
+            {
+                return base.FinalizeRound(playedRounds);
+            }
+
+            if (playedRounds.Tops.Count == 0)
+            {
+                return null;
+            }
+            var selectedRound = playedRounds.Tops.FirstOrDefault();
 
             // We remove letters played from the rack
             selectedRound.Rack = new PlayerRack(selectedRound.Tiles.Where(p => p.Parent.Status == -1).ToList());
@@ -222,16 +257,19 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         public void DebugRatingRound(RatingRound round)
         {
 #if DEBUG
-            Console.WriteLine("Score rack : " + round.scorerack);
-            Console.WriteLine("Score collage  : " + round.scorecollage);
-            Console.WriteLine("Score collagemots : " + round.scorecollagemots);
-            Console.WriteLine("Score mot : " + round.scoremot);
-            Console.WriteLine("Score raccords : " + round.scoreraccords);
-            Console.WriteLine("Score scrabble : " + round.scorescrabble);
-            Console.WriteLine("Score soustop : " + round.scoresoustop);
-            Console.WriteLine("Score appui : " + round.scoreappui);
-            Console.WriteLine("Overall : " + round.scoreAll);
-            Console.WriteLine("---------------------------------");
+            if (round != null)
+            {
+                Console.WriteLine("Score rack : " + round.scorerack);
+                Console.WriteLine("Score collage  : " + round.scorecollage);
+                Console.WriteLine("Score collagemots : " + round.scorecollagemots);
+                Console.WriteLine("Score mot : " + round.scoremot);
+                Console.WriteLine("Score raccords : " + round.scoreraccords);
+                Console.WriteLine("Score scrabble : " + round.scorescrabble);
+                Console.WriteLine("Score soustop : " + round.scoresoustop);
+                Console.WriteLine("Score appui : " + round.scoreappui);
+                Console.WriteLine("Overall : " + round.scoreAll);
+                Console.WriteLine("---------------------------------");
+            }
 #endif
         }
     }

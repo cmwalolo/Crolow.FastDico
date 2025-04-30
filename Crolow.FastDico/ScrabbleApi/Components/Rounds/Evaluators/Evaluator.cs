@@ -25,6 +25,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         bool doRaccords = false;
         bool doRack = false;
         bool doBoost = false;
+        bool doSkip = false;
 
 
         public class RatingRound
@@ -70,6 +71,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         public int RaccordsFrequence = 80;
         public int RackFrequence = 40;
         public int BoostFrequence = 20;
+        public int SkipFrequence = 15;
 
         private int maxTurn = 30;
 
@@ -85,6 +87,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
             BoostFrequence = 30;
+            SkipFrequence = 15;
         }
 
         public bool IsBoosted()
@@ -92,12 +95,30 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             return doBoost;
         }
 
+        public void BoostedOff()
+        {
+            doBoost = false;
+        }
+
         public void Initialize()
         {
-            int c = Random.Shared.Next(100);
 
             doCollages = doScrabble = doAppuis = false;
-            doRaccords = doRack = doBoost = false;
+            doSkip = doRaccords = doRack = doBoost = false;
+
+            int c = Random.Shared.Next(100);
+            if (c < BoostFrequence && currentGame.Round > 3)
+            {
+                doBoost = true;
+            }
+
+            c = Random.Shared.Next(100);
+
+            if (c < SkipFrequence && !doBoost)
+            {
+                doSkip = true;
+                return;
+            }
 
             if (c < CollagesFrequence)
             {
@@ -129,27 +150,28 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                 doRack = true;
             }
 
-            c = Random.Shared.Next(100);
-            if (c < BoostFrequence && currentGame.Round > 3)
-            {
-                doBoost = true;
-            }
         }
 
         public RatingRound Evaluate(PlayedRounds round, PlayedRound selectedRound = null)
         {
-
             float maxScore = 0;
             int maxItem = 0;
             int item = 0;
 
             RatingRound rate = new();
+
+
             selectedRound = selectedRound ?? round.Tops.FirstOrDefault();
             if (selectedRound != null)
             {
                 string word = selectedRound.GetWord();
 
                 EvaluateNumberOfSolutions(rate, round);
+
+                if (doSkip)
+                {
+                    return rate;
+                }
 
                 if (doCollages || doBoost)
                 {

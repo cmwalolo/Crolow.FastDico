@@ -1,9 +1,8 @@
 ﻿using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
-using Crolow.FastDico.ScrabbleApi.Components.BoardSolver;
+using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Config;
-using static Crolow.FastDico.ScrabbleApi.ScrabbleAI;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 

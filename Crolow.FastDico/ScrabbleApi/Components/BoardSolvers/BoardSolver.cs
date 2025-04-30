@@ -3,7 +3,7 @@ using Crolow.FastDico.ScrabbleApi.Components.Rounds;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Utils;
 
-namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolver
+namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 {
     public class BoardSolver
     {

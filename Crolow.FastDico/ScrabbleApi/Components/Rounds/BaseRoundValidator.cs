@@ -1,4 +1,5 @@
-﻿using Crolow.FastDico.ScrabbleApi.GameObjects;
+﻿using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
+using Crolow.FastDico.ScrabbleApi.GameObjects;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 {
@@ -19,7 +20,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         {
             return currentGame.LetterBag.DrawLetters(currentGame.Rack);
         }
-        public virtual PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, PlayerRack originalRack)
+        public virtual PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, PlayerRack originalRack, BoardSolver solver)
         {
             currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
             currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);

@@ -3,7 +3,7 @@ using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Components;
-using Crolow.FastDico.ScrabbleApi.Components.BoardSolver;
+using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
@@ -71,7 +71,7 @@ public partial class ScrabbleAI
 
             if (playedRounds.Tops.Any())
             {
-                var round = validator.ValidateRound(playedRounds, letters, originalRack);
+                var round = validator.ValidateRound(playedRounds, letters, originalRack, boardSolver);
 
 
                 if (round != null)

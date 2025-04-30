@@ -1,5 +1,6 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.Utils;
+using static Crolow.FastDico.Search.WordResults;
 
 namespace Crolow.FastDico.ScrabbleApi.GameObjects;
 
@@ -92,6 +93,17 @@ public class LetterBag
         rack.Clear();
     }
 
+    public void ReturnLetters(List<Tile> letters)
+    {
+        Letters.AddRange(letters);
+        letters.Clear();
+
+        foreach (var l in letters)
+        {
+            RemoveTile(l);
+        }
+    }
+
     public void RemoveTile(Tile tile)
     {
         var i = Letters.FindIndex(t => (!tile.IsJoker && !t.IsJoker && t.Letter == tile.Letter) || (t.IsJoker && tile.IsJoker));
@@ -126,17 +138,16 @@ public class LetterBag
 
     }
 
-    internal List<Tile> ForceDrawLetters(string v)
+    internal void ForceDrawLetters(List<Tile> tiles)
     {
-        List<Tile> tiles = new List<Tile>();
-        foreach (var c in v)
+        foreach (var tile in tiles)
         {
-            int ndx = Letters.FindIndex(p => c == '?' ? p.Letter == 26 : p.Letter == c - 'a');
-            tiles.Add(Letters[ndx]);
-            Letters.RemoveAt(ndx);
+            var i = Letters.FindIndex(t => (!tile.IsJoker && !t.IsJoker && t.Letter == tile.Letter) || (t.IsJoker && tile.IsJoker));
+            if (i != -1)
+            {
+                Letters.RemoveAt(i);
+            }
         }
-
-        return tiles;
     }
 
     internal Tile ReplaceJoker(Tile tile)
