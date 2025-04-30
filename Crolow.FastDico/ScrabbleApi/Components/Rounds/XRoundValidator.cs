@@ -62,7 +62,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             return f;
         }
 
-        public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, PlayerRack originalRack, BoardSolver solver)
+        public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, BoardSolver solver)
         {
             if (solver is null)
             {
@@ -71,15 +71,15 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             if (currentGame.Round == 0)
             {
-                currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
-                currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
+                //currentGame.LetterBag.ReturnLetters(currentGame.Rack);
+                //currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
                 return rounds;
             }
 
             if (evaluator.IsBoosted())
             {
-                currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
-                currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
+                //currentGame.LetterBag.ReturnLetters(currentGame.Rack);
+                //currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
 
                 rounds = ValidateBoosted(rounds, solver);
                 if (rounds == null)
@@ -91,8 +91,8 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             }
             else
             {
-                currentGame.LetterBag.ReturnLetters(currentGame.Rack, letters);
-                currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
+                //currentGame.LetterBag.ReturnLetters(currentGame.Rack);
+                //currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
 
                 var rate = evaluator.Evaluate(rounds);
 
@@ -192,18 +192,18 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             var keys = selection.OrderByDescending(p => (p.Key.scoreappui * 2) + p.Key.scorecollage);
 
+            currentGame.LetterBag.ReturnLetters(currentGame.Rack);
+
             foreach (var value in keys)
             {
                 var selectedSolution = value.Value;
-
                 var rack = new PlayerRack(value.Value.Tiles.Where(p => p.Parent.Status == -1).ToList());
                 currentGame.LetterBag.ForceDrawLetters(rack.Tiles);
                 var letters = currentGame.LetterBag.DrawLetters(rack);
                 var round = solver.Solve(letters);
-                currentGame.LetterBag.ReturnLetters(letters);
-
+                currentGame.LetterBag.ReturnLetters(rack);
+                selectedSolution.Rack = new PlayerRack(letters);
                 var checkSolution = round.Tops.FirstOrDefault();
-
 
                 if (selectedSolution.ToString() != checkSolution.ToString()
                     || !checkSolution.Position.Equals(selectedSolution.Position))
@@ -212,6 +212,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 }
 
 #if DEBUG
+                Console.WriteLine($"BOOSTED");
                 DebugRatingRound(value.Key);
 #endif
 

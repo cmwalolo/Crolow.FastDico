@@ -32,7 +32,7 @@ public class PlayerRack
 
     public List<Tile> GetTiles()
     {
-        return Tiles.ToList();
+        return Tiles;
     }
 
     public void RemoveTile(Tile tile)

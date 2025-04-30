@@ -15,7 +15,7 @@ public class LetterBag
         CurrentGame = currentGame;
         GameConfig = currentGame.Configuration;
         Letters = new List<Tile>();
-        RandomGen = new Random();
+        RandomGen = Random.Shared;
 
         // Populate the bag according to the distribution
         foreach (var kvp in GameConfig.BagConfig.LettersByByte)
@@ -27,11 +27,21 @@ public class LetterBag
         }
     }
 
+    public LetterBag(LetterBag bag)
+    {
+        Letters = new List<Tile>();
+        RandomGen = Random.Shared;
+        CurrentGame = bag.CurrentGame;
+        GameConfig = bag.GameConfig;
+        Letters.AddRange(bag.Letters);
+    }
+
     // Draw a specified number of letters from the bag
     public List<Tile> DrawLetters(PlayerRack rack, int totalLetters = 0)
     {
         int count = totalLetters == 0 ? GameConfig.SelectedConfig.InRackLetters : totalLetters;
         var drawnLetters = rack.GetTiles();
+
         bool ok = true;
 
         if (!IsValid(Letters, drawnLetters))
@@ -44,6 +54,7 @@ public class LetterBag
             if (!ok)
             {
                 ReturnLetters(rack, drawnLetters);
+                drawnLetters = rack.GetTiles();
             }
 
             if (GameConfig.SelectedConfig.JokerMode)
@@ -81,27 +92,17 @@ public class LetterBag
 
     }
 
-    public void ReturnLetters(PlayerRack rack, List<Tile> letters)
-    {
-        Letters.AddRange(letters);
-        letters.Clear();
 
-        foreach (var l in letters)
-        {
-            RemoveTile(l);
-        }
+    public void ReturnLetters(PlayerRack rack)
+    {
+        Letters.AddRange(rack.GetTiles());
         rack.Clear();
     }
 
-    public void ReturnLetters(List<Tile> letters)
+    public void ReturnLetters(PlayerRack rack, List<Tile> drawnLetters)
     {
-        Letters.AddRange(letters);
-        letters.Clear();
-
-        foreach (var l in letters)
-        {
-            RemoveTile(l);
-        }
+        Letters.AddRange(drawnLetters);
+        rack.Clear();
     }
 
     public void RemoveTile(Tile tile)
@@ -134,8 +135,14 @@ public class LetterBag
             return vow > 0 && con > 0;
         }
 
-        return vow - jok > 1 && con - jok > 1;
-
+        if (CurrentGame.GameConfig.JokerMode && Letters.Count > 7)
+        {
+            return vow - jok > 1 && con - jok > 1;
+        }
+        else
+        {
+            return vow > 1 && con > 1;
+        }
     }
 
     internal void ForceDrawLetters(List<Tile> tiles)
@@ -180,9 +187,10 @@ public class LetterBag
         }
     }
 
-    public void DebugBag()
+    public void DebugBag(PlayerRack rack)
     {
 #if DEBUG
+        Console.WriteLine($"Player rack : {rack.ToString()}");
         var g = Letters.GroupBy(p => p.IsJoker ? TilesUtils.JokerByte : p.Letter).OrderBy(p => p.Key);
         Console.Write("BAG : ");
         foreach (var l in g)

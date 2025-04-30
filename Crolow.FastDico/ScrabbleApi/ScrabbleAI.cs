@@ -50,14 +50,21 @@ public partial class ScrabbleAI
         var boardSolver = new BoardSolver(currentGame);
         boardSolver.Initialize();
 
+        //BaseRoundValidator validator = new BaseRoundValidator(currentGame);
         XRoundValidator validator = new XRoundValidator(currentGame);
         validator.Initialize();
 
         PlayedRounds playedRounds = null;
-        PlayerRack originalRack = new PlayerRack(currentGame.Rack);
         var letters = new List<Tile>();
+
+        // We create a copy of the rack and the back to
+        // Start freshly each iteration
+        var originalRack = new PlayerRack(currentGame.Rack);
+        var originalBag = new LetterBag(currentGame.LetterBag);
+
         while (true)
         {
+
             letters = validator.InitializeLetters();
             // End Test
             if (letters == null)
@@ -71,9 +78,7 @@ public partial class ScrabbleAI
 
             if (playedRounds.Tops.Any())
             {
-                var round = validator.ValidateRound(playedRounds, letters, originalRack, boardSolver);
-
-
+                var round = validator.ValidateRound(playedRounds, letters, boardSolver);
                 if (round != null)
                 {
                     playedRounds = round;
@@ -84,9 +89,10 @@ public partial class ScrabbleAI
             {
                 EndGame();
                 return;
-
             }
 
+            currentGame.Rack = originalRack;
+            currentGame.LetterBag = originalBag;
         }
 
         PlayedRound selectedRound = validator.FinalizeRound(playedRounds);
@@ -100,7 +106,9 @@ public partial class ScrabbleAI
         currentGame.RoundsPlayed.Add(selectedRound);
         selectedRound = new PlayedRound();
         currentGame.Round++;
-        currentGame.LetterBag.DebugBag();
+#if DEBUG
+        currentGame.LetterBag.DebugBag(currentGame.Rack);
+#endif
         NextRound(false);
     }
 

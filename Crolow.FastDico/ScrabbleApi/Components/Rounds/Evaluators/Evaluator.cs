@@ -70,7 +70,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         public int CollagesFrequence = 80;
         public int RaccordsFrequence = 80;
         public int RackFrequence = 40;
-        public int BoostFrequence = 20;
+        public int BoostFrequence = -1;
         public int SkipFrequence = 15;
 
         private int maxTurn = 30;
@@ -87,7 +87,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
             BoostFrequence = 30;
-            SkipFrequence = 15;
+            SkipFrequence = 0;
         }
 
         public bool IsBoosted()
