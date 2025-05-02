@@ -3,7 +3,7 @@ using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
-public class PlayedRound
+public class PlayableSolution
 {
     public List<Tile> Tiles { get; set; }
     public Position Position { get; set; }
@@ -34,13 +34,13 @@ public class PlayedRound
         return t;
     }
 
-    public PlayedRound()
+    public PlayableSolution()
     {
         Tiles = new List<Tile>();
         Position = new Position(0, 0, 0);
     }
 
-    public PlayedRound(PlayedRound copy)
+    public PlayableSolution(PlayableSolution copy)
     {
         Tiles = copy.Tiles.ToList();
         Pivot = copy.Pivot;

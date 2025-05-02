@@ -44,7 +44,7 @@ public class Board
         CurrentBoard[grid].Grid[X, Y].Status = -1;
     }
 
-    public void SetRound(PlayedRound round)
+    public void SetRound(PlayableSolution round)
     {
         int incH = 0;
         int incV = 0;

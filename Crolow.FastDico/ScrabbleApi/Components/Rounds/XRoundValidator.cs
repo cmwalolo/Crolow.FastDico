@@ -146,7 +146,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             }
 
 
-            var solutions = new List<PlayedRound>();
+            var solutions = new List<PlayableSolution>();
 
             if (currentGame.GameConfig.JokerMode)
             {
@@ -163,7 +163,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 solutions = playedRounds.AllRounds.Distinct().OrderByDescending(p => p.Points).ToList();
             }
 
-            var selection = new Dictionary<RatingRound, PlayedRound>();
+            var selection = new Dictionary<RatingRound, PlayableSolution>();
             var counter = 0;
             foreach (var solution in solutions)
             {
@@ -227,7 +227,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
         }
 
-        public override PlayedRound FinalizeRound(PlayedRounds playedRounds)
+        public override PlayableSolution FinalizeRound(PlayedRounds playedRounds)
         {
             if (!evaluator.IsBoosted())
             {

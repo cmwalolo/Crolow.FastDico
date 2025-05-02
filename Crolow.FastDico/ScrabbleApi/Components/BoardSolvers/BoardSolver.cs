@@ -35,7 +35,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             {
                 int grid = 0;
                 Position p = new Position((currentGame.Board.CurrentBoard[0].SizeH - 1) / 2, (currentGame.Board.CurrentBoard[0].SizeV - 1) / 2, grid);
-                playedRounds.CurrentRound = new PlayedRound();
+                playedRounds.CurrentRound = new PlayableSolution();
                 playedRounds.CurrentRound.Position = new Position(p);
                 currentGame.Board.TransposeGrid();
                 SearchNodes(grid, currentGame.Dico.Root, 1, p, letters, playedRounds, p, true);
@@ -67,7 +67,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
                     for (var j = 1; j < currentGame.Board.CurrentBoard[grid].SizeH - 1; j++)
                     {
                         var currentNode = currentGame.Dico.Root;
-                        playedRounds.CurrentRound = new PlayedRound();
+                        playedRounds.CurrentRound = new PlayableSolution();
 
                         var sq = currentGame.Board.GetSquare(grid, j, i);
                         if (sq.Status == -1)
@@ -100,7 +100,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
                                         else
                                         {
                                             sql.Reverse();
-                                            playedRounds.CurrentRound = new PlayedRound();
+                                            playedRounds.CurrentRound = new PlayableSolution();
                                             firstPosition = new Position(pos + 1, firstPosition.Y, grid);
                                             playedRounds.CurrentRound.Position = firstPosition;
                                             int x = firstPosition.X;
@@ -260,7 +260,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
                             // We check the and calculate his score
                             rounds.SetRound(rounds.CurrentRound);
                             // We create a new round
-                            rounds.CurrentRound = new PlayedRound(rounds.CurrentRound);
+                            rounds.CurrentRound = new PlayableSolution(rounds.CurrentRound);
                         }
                     }
 

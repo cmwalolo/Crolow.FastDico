@@ -34,7 +34,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         }
 
 
-        public virtual PlayedRound FinalizeRound(PlayedRounds playedRounds)
+        public virtual PlayableSolution FinalizeRound(PlayedRounds playedRounds)
         {
             if (playedRounds.Tops.Count == 0)
             {

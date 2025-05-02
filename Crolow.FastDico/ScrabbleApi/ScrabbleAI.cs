@@ -95,7 +95,7 @@ public partial class ScrabbleAI
             currentGame.LetterBag = originalBag;
         }
 
-        PlayedRound selectedRound = validator.FinalizeRound(playedRounds);
+        PlayableSolution selectedRound = validator.FinalizeRound(playedRounds);
         if (selectedRound == null)
         {
             EndGame();
@@ -104,7 +104,7 @@ public partial class ScrabbleAI
 
         currentGame.Board.SetRound(selectedRound);
         currentGame.RoundsPlayed.Add(selectedRound);
-        selectedRound = new PlayedRound();
+        selectedRound = new PlayableSolution();
         currentGame.Round++;
 #if DEBUG
         currentGame.LetterBag.DebugBag(currentGame.Rack);

@@ -81,12 +81,12 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             this.currentGame = currentGame;
             Random rnd = new Random();
 
-            ScrabbleFrequence = 40;  //cfg.Config.intScrabbleFrequence;
+            ScrabbleFrequence = 20;  //cfg.Config.intScrabbleFrequence;
             CollagesFrequence = 80;  //cfg.Config.intCollagesFrequence;
             AppuisFrequence = 80;  //cfg.Config.intAppuisFrequence;
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
-            BoostFrequence = 30;
+            BoostFrequence = 40;
             SkipFrequence = 5;
         }
 
@@ -152,7 +152,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
         }
 
-        public RatingRound Evaluate(PlayedRounds round, PlayedRound selectedRound = null)
+        public RatingRound Evaluate(PlayedRounds round, PlayableSolution selectedRound = null)
         {
             float maxScore = 0;
             int maxItem = 0;
@@ -210,13 +210,13 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
                     if (doScrabble && selectedRound.Bonus == 0)
                     {
-                        rate.scoreAll = rate.scoreAll - 3;
+                        //rate.scoreAll = rate.scoreAll - 3;
                     }
                     else
                     {
                         if (selectedRound.Bonus > 0)
                         {
-                            rate.scoreAll = rate.scoreAll - 3;
+                            rate.scoreAll = rate.scoreAll / 2;
                         }
                     }
                 }
@@ -239,7 +239,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             rate.nbSolutions = round.Tops.Count;
         }
 
-        private void EvaluateScoreMot(RatingRound rate, PlayedRound round, string word)
+        private void EvaluateScoreMot(RatingRound rate, PlayableSolution round, string word)
         {
             //if (round.Bonus == 0)
             {
@@ -267,7 +267,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             }
         }
 
-        private void EvaluateScoreAppui(RatingRound rate, PlayedRound round, string word)
+        private void EvaluateScoreAppui(RatingRound rate, PlayableSolution round, string word)
         {
             if (word.Length < 5)
             {
@@ -292,12 +292,12 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             }
         }
 
-        private void EvaluateCollages(RatingRound rate, PlayedRound round, string word)
+        private void EvaluateCollages(RatingRound rate, PlayableSolution round, string word)
         {
             int length = word.Length;
 
             int count = 0; // gc.GameBoard.evalRaccords(tround);
-            int letters = 0;
+            int words = 0;
             foreach (var l in round.Tiles)
             {
                 if (l.Parent.Status == -1)
@@ -306,14 +306,14 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                     if (c > 0)
                     {
                         count += System.Math.Min(3, c);
-                        letters++;
+                        words++;
                     }
                 }
             }
 
-            if (count > 0)
+            if (count > 1)
             {
-                rate.scorecollage = count * letters;
+                rate.scorecollage = count * words;
                 rate.scoreAll += ((float)rate.scorecollage * CollageRatioDiv);
             }
         }
@@ -332,7 +332,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
          }*/
 
-        private void EvaluateRaccords(RatingRound rate, PlayedRound round, string word)
+        private void EvaluateRaccords(RatingRound rate, PlayableSolution round, string word)
         {
             if (word.Length > 4)
             {
@@ -342,7 +342,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             }
         }
 
-        private void EvaluateScrabble(RatingRound rate, PlayedRound round, string word)
+        private void EvaluateScrabble(RatingRound rate, PlayableSolution round, string word)
         {
             if (round.Bonus > 0)
             {
@@ -351,7 +351,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             }
         }
 
-        private void EvaluateScrabbleSousTop(RatingRound rate, PlayedRound round, string word, PlayedRound subTop)
+        private void EvaluateScrabbleSousTop(RatingRound rate, PlayableSolution round, string word, PlayableSolution subTop)
         {
             if (round.Bonus > 0)
             {
@@ -361,7 +361,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             }
         }
 
-        private void EvaluateSousTop(RatingRound rate, PlayedRound round, string word, PlayedRound subTop)
+        private void EvaluateSousTop(RatingRound rate, PlayableSolution round, string word, PlayableSolution subTop)
         {
             float diff = 100 - subTop.Points / (float)round.Points * 100;
             rate.scoresoustop = diff / sousTopRatioDiv;

@@ -10,13 +10,13 @@ public class CurrentGame
 {
     public CurrentGame()
     {
-        RoundsPlayed = new List<PlayedRound>();
+        RoundsPlayed = new List<PlayableSolution>();
     }
 
     public PlayConfiguration Configuration { get; set; }
 
     public int Round;
-    public List<PlayedRound> RoundsPlayed;
+    public List<PlayableSolution> RoundsPlayed;
     public int TotalPoints;
     public int PlayTime;
     public LetterBag LetterBag;

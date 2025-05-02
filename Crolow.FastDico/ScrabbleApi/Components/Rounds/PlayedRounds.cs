@@ -11,24 +11,24 @@ public class PlayedRounds
     public int MaxSubTopPoints { get; set; }
     public bool PickAll { get; set; }
 
-    public List<PlayedRound> Tops { get; set; }
-    public List<PlayedRound> SubTops { get; set; }
-    public List<PlayedRound> AllRounds { get; set; }
-    public PlayedRound CurrentRound { get; set; }
+    public List<PlayableSolution> Tops { get; set; }
+    public List<PlayableSolution> SubTops { get; set; }
+    public List<PlayableSolution> AllRounds { get; set; }
+    public PlayableSolution CurrentRound { get; set; }
 
     public PlayerRack PlayerRack { get; set; }
 
     public PlayedRounds(GameConfigModel config, List<Tile> rack, bool pickAll)
     {
         Config = config;
-        Tops = new List<PlayedRound>();
-        SubTops = new List<PlayedRound>();
-        AllRounds = new List<PlayedRound>();
-        CurrentRound = new PlayedRound();
+        Tops = new List<PlayableSolution>();
+        SubTops = new List<PlayableSolution>();
+        AllRounds = new List<PlayableSolution>();
+        CurrentRound = new PlayableSolution();
         PlayerRack = new PlayerRack(rack);
         PickAll = pickAll;
     }
-    public void SetRound(PlayedRound round)
+    public void SetRound(PlayableSolution round)
     {
         int wm = 1;
         int pivotTotal = 0;
@@ -64,7 +64,7 @@ public class PlayedRounds
         if (round.Points > MaxPoints)
         {
             SubTops = Tops;
-            Tops = new List<PlayedRound>();
+            Tops = new List<PlayableSolution>();
             Tops.Add(round);
             MaxSubTopPoints = SubTops.Any() ? SubTops[0].Points : 0;
             MaxPoints = round.Points;
