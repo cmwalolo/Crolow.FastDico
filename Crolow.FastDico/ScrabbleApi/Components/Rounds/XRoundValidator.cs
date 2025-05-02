@@ -71,16 +71,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             if (currentGame.Round == 0)
             {
-                //currentGame.LetterBag.ReturnLetters(currentGame.Rack);
-                //currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
                 return rounds;
             }
 
             if (evaluator.IsBoosted())
             {
-                //currentGame.LetterBag.ReturnLetters(currentGame.Rack);
-                //currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
-
                 rounds = ValidateBoosted(rounds, solver);
                 if (rounds == null)
                 {
@@ -91,9 +86,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             }
             else
             {
-                //currentGame.LetterBag.ReturnLetters(currentGame.Rack);
-                //currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
-
                 var rate = evaluator.Evaluate(rounds);
 
                 if (rate.scoreAll > breakPoints[currentIteration])
@@ -150,18 +142,17 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             if (currentGame.GameConfig.JokerMode)
             {
-                solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count > 7 && p.Tiles.Any(p => p.IsJoker)).OrderByDescending(p => p.Points).ToList();
+                solutions = playedRounds.AllRounds
+                    .Distinct()
+                    .Where(p => p.Tiles.Count > 4 && p.Tiles.Any(p => p.IsJoker)).ToList();
             }
 
             if (!solutions.Any())
             {
-                solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count > 7).OrderByDescending(p => p.Points).ToList();
+                solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count > 4).OrderByDescending(p => p.Points).ToList();
             }
 
-            if (!solutions.Any())
-            {
-                solutions = playedRounds.AllRounds.Distinct().OrderByDescending(p => p.Points).ToList();
-            }
+            solutions = solutions.OrderByDescending(p => p.Points).ToList();
 
             var selection = new Dictionary<RatingRound, PlayableSolution>();
             var counter = 0;
@@ -194,8 +185,14 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             currentGame.LetterBag.ReturnLetters(currentGame.Rack);
 
+            // For each solution we need to check that the selected solution
+            // with a rack is the top score. We only do one trial. 
+            // If solution is not top score we pass to next . 
+            // If no solution is ok we return a null and 
+            // process will fallback to unboosted validation
             foreach (var value in keys)
             {
+
                 var selectedSolution = value.Value;
                 var rack = new PlayerRack(value.Value.Tiles.Where(p => p.Parent.Status == -1).ToList());
                 currentGame.LetterBag.ForceDrawLetters(rack.Tiles);

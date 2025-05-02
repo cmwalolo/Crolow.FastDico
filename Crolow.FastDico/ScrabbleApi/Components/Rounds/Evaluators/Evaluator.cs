@@ -86,7 +86,15 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             AppuisFrequence = 80;  //cfg.Config.intAppuisFrequence;
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
-            BoostFrequence = 40;
+            if (currentGame.GameConfig.JokerMode)
+            {
+                BoostFrequence = 50;
+            }
+            else
+            {
+                BoostFrequence = 40;
+            }
+
             SkipFrequence = 5;
         }
 
@@ -107,7 +115,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             doSkip = doRaccords = doRack = doBoost = false;
 
             int c = Random.Shared.Next(100);
-            if (c < BoostFrequence && currentGame.Round > 3)
+            if (c < BoostFrequence && currentGame.Round > 1)
             {
                 doBoost = true;
             }
@@ -311,7 +319,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                 }
             }
 
-            if (count > 1)
+            if (count > 1 && words > 1)
             {
                 rate.scorecollage = count * words;
                 rate.scoreAll += ((float)rate.scorecollage * CollageRatioDiv);
