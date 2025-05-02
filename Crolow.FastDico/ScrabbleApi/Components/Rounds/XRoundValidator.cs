@@ -150,17 +150,17 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             if (currentGame.GameConfig.JokerMode)
             {
-                solutions = playedRounds.AllRounds.Where(p => p.Tiles.Count > 7 && p.Tiles.Any(p => p.IsJoker)).OrderByDescending(p => p.Points).ToList();
+                solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count > 7 && p.Tiles.Any(p => p.IsJoker)).OrderByDescending(p => p.Points).ToList();
             }
 
             if (!solutions.Any())
             {
-                solutions = playedRounds.AllRounds.Where(p => p.Tiles.Count > 7).OrderByDescending(p => p.Points).ToList();
+                solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count > 7).OrderByDescending(p => p.Points).ToList();
             }
 
             if (!solutions.Any())
             {
-                solutions = playedRounds.AllRounds.OrderByDescending(p => p.Points).ToList();
+                solutions = playedRounds.AllRounds.Distinct().OrderByDescending(p => p.Points).ToList();
             }
 
             var selection = new Dictionary<RatingRound, PlayedRound>();

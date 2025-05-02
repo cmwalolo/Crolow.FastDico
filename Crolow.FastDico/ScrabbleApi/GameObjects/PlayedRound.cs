@@ -108,8 +108,8 @@ public class PlayedRound
     {
         if (reorder)
         {
-            var l = Tiles.Take(Pivot).Select(p => p.Letter).ToList();
-            var m = Tiles.Skip(Pivot).Select(p => p.Letter).ToList();
+            var l = Tiles.Take(Pivot);
+            var m = Tiles.Skip(Pivot).ToList();
             if (Pivot != 0)
             {
                 m.Reverse();
@@ -122,7 +122,7 @@ public class PlayedRound
         }
         else
         {
-            var m = Tiles.Select(p => p.Letter).ToList();
+            var m = Tiles;
             return TilesUtils.ConvertBytesToWord(m);
         }
     }

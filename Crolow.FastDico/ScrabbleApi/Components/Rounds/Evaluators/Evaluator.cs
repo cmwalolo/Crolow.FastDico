@@ -245,22 +245,22 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             {
                 if (word.Length > 9)
                 {
-                    rate.scoremot = 3;
+                    rate.scoremot = 2;
                 }
 
                 if (word.Length > 7)
                 {
-                    rate.scoremot = 2.5f;
+                    rate.scoremot = 1.5f;
                 }
 
                 if (word.Length <= 7)
                 {
-                    rate.scoremot = 2;
+                    rate.scoremot = 1;
                 }
 
                 if (word.Length < 4)
                 {
-                    rate.scoremot = -15;
+                    rate.scoremot = 0.5f;
                 }
 
                 rate.scoreAll += rate.scoremot * scoreMotRatioMul;
