@@ -52,7 +52,7 @@ public static class TilesUtils
         for (int i = 0; i < byteArray.Count; i++)
         {
             byte b = byteArray[i];
-            wordChars[i] = b == PivotByte ? '#' : (b == TilesUtils.JokerByte ? '?' : configuration.LettersByByte[b].Char);
+            wordChars[i] = b == PivotByte ? '#' : (b == TilesUtils.JokerByte ? '?' : configuration.LettersByByte[b].Char[0]);
         }
         return new string(wordChars);
     }
@@ -63,7 +63,7 @@ public static class TilesUtils
         for (int i = 0; i < m.Count; i++)
         {
             var c = configuration.LettersByByte[m[i].Letter].Char;
-            wordChars[i] = (char)(m[i].Letter == PivotByte ? '#' : (m[i].IsJoker ? (m[i].Letter == JokerByte ? '?' : char.ToLower(c)) : c));
+            wordChars[i] = (char)(m[i].Letter == PivotByte ? '#' : (m[i].IsJoker ? (m[i].Letter == JokerByte ? '?' : char.ToLower(c[0])) : c[0]));
         }
         return new string(wordChars);
     }
@@ -76,7 +76,7 @@ public static class TilesUtils
             for (int i = 0; i < byteArray.Count; i++)
             {
                 byte b = byteArray[i];
-                wordChars[i] = b == JokerByte ? '?' : configuration.LettersByByte[b].Char;
+                wordChars[i] = b == JokerByte ? '?' : configuration.LettersByByte[b].Char[0];
             }
         }
         else
@@ -85,7 +85,7 @@ public static class TilesUtils
             {
                 byte b = byteArray[i];
                 var c = configuration.LettersByByte[b].Char;
-                wordChars[i] = jokers[i] == 1 ? char.ToLower(c) : c;
+                wordChars[i] = jokers[i] == 1 ? char.ToLower(c[0]) : c[0];
             }
         }
         return new string(wordChars);

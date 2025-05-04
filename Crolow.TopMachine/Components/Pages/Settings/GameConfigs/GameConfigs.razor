@@ -1,0 +1,70 @@
+﻿@page "/settings/gameconfigs"
+@using Crolow.FastDico.Models.Models.ScrabbleApi.Entities
+@inherits ComponentControls.Settings.GameConfigs.GameConfigsComponent;
+
+<RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
+    <SettingsSidebar />
+    <RadzenBody>
+        <div class="rz-p-1">
+            <RadzenLayout Style="height:100%">
+                <RadzenHeader style="padding:5px">
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenMenu>
+                            <RadzenMenuItem Text="New dictionary" Icon="dictionary" Click="AddItem">
+                            </RadzenMenuItem>
+                        </RadzenMenu>
+                    </RadzenStack>
+                </RadzenHeader>
+                <RadzenBody style="margin-top:10px;padding:0px;">
+                    <RadzenDataGrid @ref="grid" Data="@results" TItem="GameConfigModel"
+                                    style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;"
+                                    AllowFiltering="true" AllowSorting="true" AllowColumnResize="true">
+                        <EmptyTemplate>
+                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                        </EmptyTemplate>
+                        <Columns>
+                            <RadzenDataGridColumn Property="@nameof(GameConfigModel.Name)" Title="Name" />
+                            <RadzenDataGridColumn Title="Type">
+                                <Template Context="data">
+                                    <RadzenText TextStyle="TextStyle.Body2">@($"{data.PlayableLetters}/{data.InRackLetters}")</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Property="@nameof(GameConfigModel.BoardConfig)" Title="Board">
+                                <Template Context="data">
+                                    <RadzenText TextStyle="TextStyle.Body2">@(boards.FirstOrDefault(p => p.Id == data.BoardConfig)?.Name ?? "")</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Property="@nameof(GameConfigModel.LetterConfig)" Title="Letters">
+                                <Template Context="data">
+                                    <RadzenText TextStyle="TextStyle.Body2">@(letters.FirstOrDefault(p => p.Id == data.LetterConfig)?.Name ?? "")</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Property="@nameof(GameConfigModel.JokerMode)" Title="Joker ?" />
+                            <RadzenDataGridColumn Property="@nameof(GameConfigModel.ToppingMode)" Title="Topping ?" />
+                            <RadzenDataGridColumn Property="@nameof(GameConfigModel.DifficultMode)" Title="Boosted ?" />
+                            <RadzenDataGridColumn TItem="GameConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => EditItem(data)) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="GameConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => DeleteItem(data)) Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="GameConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => CopyItem(data)) Icon="content_copy" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenBody>
+            </RadzenLayout>
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+
+@code {
+    bool sidebar1Expanded = true;
+}

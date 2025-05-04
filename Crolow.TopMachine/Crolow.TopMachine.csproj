@@ -80,6 +80,7 @@
 		<Content Remove="Resources\Raw\GameConfigs_FR.json" />
 		<Content Remove="Resources\Raw\GridConfigs_FR.json" />
 		<Content Remove="Resources\Raw\GridConfigurations.json" />
+		<Content Remove="Resources\Raw\LetterConfigurations.json" />
 		<Content Remove="Resources\Raw\Letters_FR.json" />
 	</ItemGroup>
 

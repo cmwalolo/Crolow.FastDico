@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
 using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
-using Crolow.TopMachine.Components.Pages.Settings.Dictionaries;
+using Crolow.TopMachine.Components.Pages.Settings.Letters;
 using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -15,14 +15,18 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
 
         [Inject]
         ILetterService LetterService { get; set; }
+        [Inject]
+        IDictionaryService DictionaryService { get; set; }
 
 
         public List<LetterConfigModel> results = new List<LetterConfigModel>();
+        public List<DictionaryModel> dicos = new List<DictionaryModel>();
         public RadzenDataGrid<LetterConfigModel> grid;
 
         protected async override void OnInitialized()
         {
             results = LetterService.LoadAll();
+            dicos = DictionaryService.LoadAll();
         }
 
         public void Dispose()
@@ -33,9 +37,9 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
         public async Task EditItem(LetterConfigModel album)
         {
 
-            var result = await DialogService.OpenAsync<DictionaryEditDialog>("Album Details", new Dictionary<string, object>
+            var result = await DialogService.OpenAsync<LettersEditDialog>("Dictionary Details", new Dictionary<string, object>
             {
-                { "Dictionary", album }
+                { "Letter", album }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
             if (result != null && result is LetterConfigModel)
@@ -52,6 +56,22 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
         {
             album.EditState = Data.Interfaces.EditState.ToDelete;
             LetterService.Update(album);
+            results.Remove(album);
+            await grid.RefreshDataAsync();
+            StateHasChanged();
+        }
+
+        public async Task CopyItem(LetterConfigModel album)
+        {
+            var newConfig = new LetterConfigModel
+            {
+                Letters = album.Letters,
+                Name = album.Name + " - copy"
+            };
+            newConfig.EditState = Data.Interfaces.EditState.New;
+
+            LetterService.Update(newConfig);
+            results.Add(newConfig);
 
             await grid.RefreshDataAsync();
             StateHasChanged();
@@ -60,9 +80,9 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
         public async Task AddItem()
         {
 
-            var result = await DialogService.OpenAsync<DictionaryEditDialog>("Album Details", new Dictionary<string, object>
+            var result = await DialogService.OpenAsync<LettersEditDialog>("Dictionary Details", new Dictionary<string, object>
             {
-                { "Dictionary", new DictionaryModel() }
+                { "Letter", new DictionaryModel() }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
             if (result != null && result is LetterConfigModel)

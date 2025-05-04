@@ -1,5 +1,6 @@
 ﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
 using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+using Crolow.TopMachine.Components.Pages.Settings.Boards;
 using Crolow.TopMachine.Components.Pages.Settings.Dictionaries;
 using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -33,9 +34,9 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Boards
         public async Task EditItem(BoardGridModel album)
         {
 
-            var result = await DialogService.OpenAsync<DictionaryEditDialog>("Album Details", new Dictionary<string, object>
+            var result = await DialogService.OpenAsync<BoardsEditDialog>("Album Details", new Dictionary<string, object>
             {
-                { "Dictionary", album }
+                { "Board", album }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
             if (result != null && result is BoardGridModel)
@@ -48,11 +49,30 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Boards
             }
         }
 
+        public async Task CopyItem(BoardGridModel album)
+        {
+            var newConfig = new BoardGridModel
+            {
+                Name = album.Name + " - copy",
+                SizeH = album.SizeH,
+                SizeV = album.SizeV,
+                Configuration = album.Configuration.ToList()
+
+            };
+
+            newConfig.EditState = Data.Interfaces.EditState.New;
+            BoardService.Update(newConfig);
+            results.Add(newConfig);
+
+            await grid.RefreshDataAsync();
+            StateHasChanged();
+        }
+
         public async Task DeleteItem(BoardGridModel album)
         {
             album.EditState = Data.Interfaces.EditState.ToDelete;
             BoardService.Update(album);
-
+            results.Remove(album);
             await grid.RefreshDataAsync();
             StateHasChanged();
         }
@@ -62,7 +82,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Boards
 
             var result = await DialogService.OpenAsync<DictionaryEditDialog>("Album Details", new Dictionary<string, object>
             {
-                { "Dictionary", new DictionaryModel() }
+                { "Board", new DictionaryModel() }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
             if (result != null && result is BoardGridModel)

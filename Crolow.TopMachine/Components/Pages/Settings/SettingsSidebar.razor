@@ -1,10 +1,10 @@
 ﻿@inject NavigationManager Navigation
 <RadzenSidebar Responsive="false" Style="width:200px">
     <RadzenPanelMenu>
-        <RadzenPanelMenuItem Click=@(args => Navigage("Dictionaries")) Text="Dictionaries" Icon="dictionary" />
-        <RadzenPanelMenuItem Text="Boards" Icon="grid_on" />
-        <RadzenPanelMenuItem Text="Games" Icon="crossword" />
-        <RadzenPanelMenuItem Text="Letter distribution" Icon="sort_by_alpha" />
+        <RadzenPanelMenuItem Click=@(args => Navigate("Dictionaries")) Text="Dictionaries" Icon="dictionary" />
+        <RadzenPanelMenuItem Click=@(args => Navigate("Configs")) Text="Games" Icon="crossword" />
+        <RadzenPanelMenuItem Click=@(args => Navigate("Boards")) Text="Boards" Icon="grid_on" />
+        <RadzenPanelMenuItem Click=@(args => Navigate("Letters")) Text="Letter distribution" Icon="sort_by_alpha" />
     </RadzenPanelMenu>
 </RadzenSidebar>
 
@@ -12,13 +12,23 @@
 @code {
     string SelectedApp = "";
 
-    private void Navigage(string menu)
+    private void Navigate(string menu)
     {
         SelectedApp = menu;
         switch (menu)
         {
+            case "Configs":
+                Navigation.NavigateTo("/settings/gameconfigs");
+                break;
+
             case "Dictionaries":
                 Navigation.NavigateTo("/settings/dictionaries");
+                break;
+            case "Letters":
+                Navigation.NavigateTo("/settings/letters");
+                break;
+            case "Boards":
+                Navigation.NavigateTo("/settings/boards");
                 break;
             default:
                 break;

@@ -1,6 +1,7 @@
 ﻿using Crolow.TopMachine.Data.Interfaces;
 using Kalow.Apps.Common.DataTypes;
 using LiteDB;
+using Newtonsoft.Json;
 
 namespace Kalow.Apps.Models.Data
 {
@@ -11,6 +12,7 @@ namespace Kalow.Apps.Models.Data
             Id = KalowId.Empty;
             EditState = EditState.Unchanged;
         }
+        [JsonProperty("_id")]
         public KalowId Id { get; set; }
 
 

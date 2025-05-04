@@ -1,6 +1,7 @@
 ﻿using Crolow.FastDico.Dawg;
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
+using Crolow.FastDico.Models.Models.ScrabbleApi;
 using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Components;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
@@ -20,15 +21,16 @@ public partial class ScrabbleAI
 {
     private CurrentGame currentGame;
 
-    public ScrabbleAI(string configsFile, string configName)
+    public ScrabbleAI(GameConfigurationContainer container)
     {
-        var playConfiguration = new ConfigReader().ReadConfiguration(configsFile, configName);
+        var playConfiguration = new ConfigLoader().ReadConfiguration(container);
         this.currentGame = new CurrentGame();
         this.currentGame.Configuration = playConfiguration;
 
         currentGame.GameConfig = playConfiguration.SelectedConfig;
+
         GadDagCompiler gaddag = new GadDagCompiler();
-        gaddag.ReadFromFile(playConfiguration.SelectedConfig.GaddagFile);
+        gaddag.ReadFromFile(container.Dictionary.DictionaryFile);
 
         currentGame.Board = new Board(this.currentGame);
         currentGame.LetterBag = new LetterBag(this.currentGame);
@@ -132,7 +134,7 @@ public partial class ScrabbleAI
         sb.AppendLine("<body><div id='grid'>");
 
         sb.AppendLine("<table class='results' style='float:right'>");
-        sb.AppendLine("<th><td>#</td><td>Rack</td><td>Word</td><td>pos</td><td>pts</td></th>");
+        sb.AppendLine("<tr><th>#</th><th>Rack</th><th>Word</th><th>pos</th><th>pts</th></tr>");
         int ndx = 1;
         foreach (var r in currentGame.RoundsPlayed)
         {
@@ -147,7 +149,7 @@ public partial class ScrabbleAI
 
         sb.AppendLine("</table>");
 
-        sb.AppendLine("<table>");
+        sb.AppendLine("<table class='board'>");
         sb.AppendLine("<tr><td></td>");
         for (int col = 1; col < currentGame.Board.CurrentBoard[0].SizeH - 1; col++)
         {

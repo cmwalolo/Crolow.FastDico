@@ -4,8 +4,8 @@
 namespace Crolow.TopMachine.Data.Repositories;
 public class GameConfigDataManager<T> : DataManager<T> where T : IDataObject
 {
-    public GameConfigDataManager(DatabaseSettings context) : base(context, "TopMachine", "GameConfigs")
+    public GameConfigDataManager(DatabaseSettings context) : base(context, "TopMachine", "GameConfigurations")
     {
-        // repository.EnsureCollection("GameConfigs");
+        //base.Repository.EnsureCollection("GameConfigs");
     }
 }

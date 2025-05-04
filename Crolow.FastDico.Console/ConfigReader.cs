@@ -1,71 +1,43 @@
-﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
-using Crolow.FastDico.ScrabbleApi.Config;
+﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.Models.ScrabbleApi;
+using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Newtonsoft.Json;
 
 namespace Crolow.FastDico.Console
 {
-    public partial class ConfigReader
+    public class ConfigReader
     {
+        public List<DictionaryModel> Dictionaries { get; set; }
+        public List<LetterConfigModel> Letters { get; set; }
+        public List<BoardGridModel> Boards { get; set; }
+        public List<GameConfigModel> GameConfigs { get; set; }
 
         public class BoardData
         {
             public BoardGridModel Grid { get; set; }
         }
 
-        public static BagConfiguration ReadLetterConfig(string language)
+        public GameConfigurationContainer LoadConfig(string name)
         {
-            var letterConfig = File.ReadAllText($"Letters_{language}.json");
-            var letterData = JsonConvert.DeserializeObject<LetterConfigModel>(letterConfig);
-            var config = new BagConfiguration();
+            var json = File.ReadAllText($"LetterConfigurations.json");
+            Letters = JsonConvert.DeserializeObject<List<LetterConfigModel>>(json);
 
-            config.Name = letterData.Name;
-            foreach (var letter in letterData.Letters)
-            {
-                config.LettersByByte.Add(letter.Letter, letter);
-                config.LettersByChar.Add(letter.Char, letter);
-            }
-            return config;
-        }
+            json = File.ReadAllText($"GameConfigurations.json");
+            GameConfigs = JsonConvert.DeserializeObject<List<GameConfigModel>>(json);
 
-        public PlayConfiguration ReadConfiguration(string configFiles, string configName)
-        {
-            PlayConfiguration g = new PlayConfiguration();
-            var gridConfigs = File.ReadAllText(configFiles);
-            var configs = JsonConvert.DeserializeObject<GameConfigContainer>(gridConfigs);
-            g.SelectedConfig = configs.Configurations.First(p => p.Name == configName);
-            FillGridConfig(g);
-            return g;
-        }
+            json = File.ReadAllText($"BoardConfigurations.json");
+            Boards = JsonConvert.DeserializeObject<List<BoardGridModel>>(json);
 
-        public static PlayConfiguration FillGridConfig(PlayConfiguration g)
-        {
+            json = File.ReadAllText($"Dictionaries.json");
+            Dictionaries = JsonConvert.DeserializeObject<List<DictionaryModel>>(json);
 
-            g.BagConfig = ReadLetterConfig(g.SelectedConfig.LetterConfigFile);
+            var game = GameConfigs.FirstOrDefault(x => x.Name == name);
+            var board = Boards.FirstOrDefault(x => x.Id == game.BoardConfig);
+            var letter = Letters.FirstOrDefault(x => x.Id == game.LetterConfig);
+            var dico = Dictionaries.FirstOrDefault(x => x.Id == letter.DictionaryId);
 
-            var gridConfig = File.ReadAllText($"GridConfig_{g.SelectedConfig.LetterConfigFile}.json");
-            var boardData = JsonConvert.DeserializeObject<BoardData>(gridConfig);
-
-            g.GridConfig = new GridConfigurationContainer(boardData.Grid.SizeH, boardData.Grid.SizeV);
-            int sizeH = g.GridConfig.SizeH;
-            foreach (var multiplierData in boardData.Grid.Configuration)
-            {
-                foreach (var position in multiplierData.Positions)
-                {
-                    int row = position[0]; // Adjusting for zero-based index
-                    int col = position[1]; // Adjusting for zero-based index
-
-                    if (multiplierData.Multiplier > 0)
-                    {
-                        g.GridConfig.Grid[row, col].LetterMultiplier = multiplierData.Multiplier;
-                    }
-                    else
-                    {
-                        g.GridConfig.Grid[row, col].WordMultiplier = Math.Abs(multiplierData.Multiplier);
-                    }
-                }
-            }
-
-            return g;
+            GameConfigurationContainer container = new GameConfigurationContainer(game, board, letter, dico);
+            return container;
         }
     }
 }

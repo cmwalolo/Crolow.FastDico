@@ -1,0 +1,56 @@
+﻿@using Crolow.FastDico.Models.Models.ScrabbleApi.Entities
+@using Crolow.TopMachine.ComponentControls.Settings.GameConfigs
+
+@inherits GameConfigEditDialogComponent
+@{
+    Variant variant = Variant.Outlined;
+}
+
+<RadzenTemplateForm TItem="GameConfigModel" Data="GameConfig">
+    <fieldset>
+        <RadzenStack Gap="1rem" class="rz-p-sm-3">
+            <RadzenFormField Text="Name" Variant="@variant">
+                <RadzenTextBox @bind-Value="@GameConfig.Name" />
+            </RadzenFormField>
+            <RadzenFormField Text="Board" Variant="@variant">
+                <RadzenDropDown @bind-Value=@GameConfig.BoardConfig Data=@boards TextProperty="@nameof(BoardGridModel.Name)" ValueProperty="@nameof(BoardGridModel.Id)" Style="width: 100%; max-width: 400px;" Name="Board" />
+            </RadzenFormField>
+            <RadzenFormField Text="Letter set" Variant="@variant">
+                <RadzenDropDown @bind-Value=@GameConfig.LetterConfig Data=@letters TextProperty="@nameof(BoardGridModel.Name)" ValueProperty="@nameof(BoardGridModel.Id)" Style="width: 100%; max-width: 400px;" Name="Letters set" />
+            </RadzenFormField>
+            <RadzenFormField Text="On Rack" Variant="@variant">
+                <RadzenNumeric ShowUpDown="false" @bind-Value="@GameConfig.InRackLetters" />
+            </RadzenFormField>
+            <RadzenFormField Text="Playable" Variant="@variant">
+                <RadzenNumeric ShowUpDown="false" @bind-Value="@GameConfig.PlayableLetters" />
+            </RadzenFormField>
+            <RadzenFormField Text="Time by turn (in sec)" Variant="@variant">
+                <RadzenNumeric ShowUpDown="false" @bind-Value="@GameConfig.TimeByTurn" />
+            </RadzenFormField>
+            <RadzenFormField Text="is Joker ?" Variant="@variant">
+                <RadzenCheckBox @bind-Value="@GameConfig.JokerMode" />
+            </RadzenFormField>
+            <RadzenFormField Text="is Topping ?" Variant="@variant">
+                <RadzenCheckBox @bind-Value="@GameConfig.ToppingMode" />
+            </RadzenFormField>
+            <RadzenFormField Text="Check rack distribution round" Variant="@variant">
+                <RadzenCheckBox @bind-Value="@GameConfig.CheckDistributionRound" />
+            </RadzenFormField>
+            <RadzenFormField Text="is Boosted ?" Variant="@variant">
+                <RadzenCheckBox @bind-Value="@GameConfig.DifficultMode" />
+            </RadzenFormField>
+            <RadzenFormField Text="Help available ?" Variant="@variant">
+                <RadzenCheckBox @bind-Value="@GameConfig.HelpAvailable" />
+            </RadzenFormField>
+            <RadzenFormField Text="Show dictionary ?" Variant="@variant">
+                <RadzenCheckBox @bind-Value="@GameConfig.ShowDictionary" />
+            </RadzenFormField>
+        </RadzenStack>
+
+    </fieldset>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Warning" Text="Cancel" Style="width: 120px" Click="@CancelDialog" />
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary" Text="Save" Style="width: 120px" Click="@SaveAndClose" />
+    </RadzenStack>
+</RadzenTemplateForm>
+

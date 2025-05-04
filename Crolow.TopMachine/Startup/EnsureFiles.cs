@@ -5,7 +5,7 @@
         public static async Task CopyAssetsToAppDataDirectoryAsync()
         {
             // List of files to copy
-            var files = new[] { "gaddag_fr.gz" };
+            var files = new[] { "gaddag_fr.gz", "LetterConfigurations.json" };
 
             foreach (var file in files)
             {

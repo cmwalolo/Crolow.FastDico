@@ -1,0 +1,33 @@
+﻿@using Crolow.FastDico.Models.Models.ScrabbleApi.Entities
+@using Crolow.FastDico.Models.Models.ScrabbleApi.Entities.Partials
+@using Crolow.TopMachine.ComponentControls.Settings.Boards
+
+@inherits BoardEditDialogComponent
+@{
+    Variant variant = Variant.Outlined;
+}
+
+<RadzenTemplateForm TItem="BoardGridModel" Data="Board">
+    <fieldset>
+        <RadzenStack Gap="1rem" class="rz-p-sm-3">
+            <RadzenFormField Text="Name" Variant="@variant">
+                <RadzenTextBox @bind-Value="@Board.Name" />
+            </RadzenFormField>
+
+            <RadzenFormField Text="Size Horizontal" Variant="@variant">
+                <RadzenNumeric ShowUpDown="false" @bind-Value="Board.SizeH" Name="Horizontal size" aria-label="Horizontal size" />
+            </RadzenFormField>
+            <RadzenFormField Text="Size Vertical" Variant="@variant">
+                <RadzenNumeric ShowUpDown="false" @bind-Value="Board.SizeV" Name="Vertical size" aria-label="Horizontal size" />
+            </RadzenFormField>
+            <RadzenFormField Text="Size Vertical" Variant="@variant">
+                <RadzenTextArea @bind-Value="Configuration" Name="Board configuration" aria-label="Board configuration" />
+            </RadzenFormField>
+        </RadzenStack>
+    </fieldset>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Warning" Text="Cancel" Style="width: 120px" Click="@CancelDialog" />
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary" Text="Save" Style="width: 120px" Click="@SaveAndClose" />
+    </RadzenStack>
+</RadzenTemplateForm>
+

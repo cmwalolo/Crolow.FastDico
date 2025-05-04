@@ -1,12 +1,12 @@
 ﻿namespace Crolow.FastDico.Models.Models.ScrabbleApi.Entities.Partials;
 
-public struct TileConfig
+public class TileConfig
 {
     public TileConfig()
     {
     }
 
-    public char Char { get; set; }
+    public string Char { get; set; }
     public byte Letter { get; set; }
     public bool IsVowel { get; set; }
     public bool IsConsonant { get; set; }

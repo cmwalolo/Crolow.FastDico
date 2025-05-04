@@ -81,14 +81,14 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             this.currentGame = currentGame;
             Random rnd = new Random();
 
-            ScrabbleFrequence = 20;  //cfg.Config.intScrabbleFrequence;
+            ScrabbleFrequence = currentGame.GameConfig.JokerMode ? 0 : 20;  //cfg.Config.intScrabbleFrequence;
             CollagesFrequence = 80;  //cfg.Config.intCollagesFrequence;
             AppuisFrequence = 80;  //cfg.Config.intAppuisFrequence;
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
             if (currentGame.GameConfig.JokerMode)
             {
-                BoostFrequence = 50;
+                BoostFrequence = 30;
             }
             else
             {
@@ -216,17 +216,17 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                     }
 
 
-                    if (doScrabble && selectedRound.Bonus == 0)
+                    /*if (doScrabble && selectedRound.Bonus == 0)
                     {
                         //rate.scoreAll = rate.scoreAll - 3;
                     }
                     else
                     {
-                        if (selectedRound.Bonus > 0)
+                        if (selectedRound.Bonus > 0 && currentGame.GameConfig.JokerMode)
                         {
                             rate.scoreAll = rate.scoreAll / 2;
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -268,7 +268,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
                 if (word.Length < 4)
                 {
-                    rate.scoremot = 0.5f;
+                    rate.scoremot = -15;
                 }
 
                 rate.scoreAll += rate.scoremot * scoreMotRatioMul;
@@ -319,7 +319,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                 }
             }
 
-            if (count > 1 && words > 1)
+            if (count > 1 && words > 2)
             {
                 rate.scorecollage = count * words;
                 rate.scoreAll += ((float)rate.scorecollage * CollageRatioDiv);

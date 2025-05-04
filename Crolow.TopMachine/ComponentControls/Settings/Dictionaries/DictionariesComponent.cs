@@ -32,7 +32,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Dictionaries
         public async Task EditItem(DictionaryModel album)
         {
 
-            var result = await DialogService.OpenAsync<DictionaryEditDialog>("Album Details", new Dictionary<string, object>
+            var result = await DialogService.OpenAsync<DictionaryEditDialog>("Dictionary Details", new Dictionary<string, object>
             {
                 { "Dictionary", album }
             }, new DialogOptions { Width = "80%", Height = "80%" });
@@ -51,7 +51,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Dictionaries
         {
             album.EditState = Data.Interfaces.EditState.ToDelete;
             DictionaryService.Update(album);
-
+            results.Remove(album);
             await grid.RefreshDataAsync();
             StateHasChanged();
         }
@@ -59,7 +59,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Dictionaries
         public async Task AddItem()
         {
 
-            var result = await DialogService.OpenAsync<DictionaryEditDialog>("Album Details", new Dictionary<string, object>
+            var result = await DialogService.OpenAsync<DictionaryEditDialog>("Dictionary Details", new Dictionary<string, object>
             {
                 { "Dictionary", new DictionaryModel() }
             }, new DialogOptions { Width = "80%", Height = "80%" });

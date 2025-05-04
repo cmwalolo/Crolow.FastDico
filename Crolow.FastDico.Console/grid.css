@@ -32,7 +32,7 @@ div#grid {
         background-color: #EEE;
     }
 
-        div#grid table td {
+        div#grid table.board td {
             border: solid 1px gray;
             border-collapse: collapse;
             table-layout: fixed;
@@ -85,7 +85,7 @@ div#grid {
 
     div#grid td.tileJoker {
         background-color: #ffcc66;
-        color: #FF3333;
+        color: #FF3333 !important;
     }
 
     div#grid td.tile {
@@ -99,4 +99,7 @@ table.results {
 
     table.results td {
         white-space: nowrap;
+        font-size: 10px;
+        width: auto;
+        height: auto;
     }

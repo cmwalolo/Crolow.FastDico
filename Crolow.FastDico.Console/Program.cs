@@ -1,16 +1,27 @@
-﻿using Crolow.FastDico.Dawg;
+﻿using Crolow.FastDico.Console;
+using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Interfaces;
 using Crolow.FastDico.ScrabbleApi;
+using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
+using Kalow.Apps.Common.JsonConverters;
+using Newtonsoft.Json;
 
-TilesUtils.configuration = Crolow.FastDico.Console.ConfigReader.ReadLetterConfig("FR");
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+{
+    Converters = { new KalowIdConverter() }
+};
+
+var container = new ConfigReader().LoadConfig("FR 7/7 Difficile");
+// We set the current Language to the selected config
+TilesUtils.configuration = ConfigLoader.ReadLetterConfig(container.LetterConfig);
 
 var tester = new Tester();
 //tester.TestDawg(false);
 //tester.TestGadDag(false);
 
-var ScrabbleAI = new ScrabbleAI("GridConfigs_FR.Json", "FR Normal");
+var ScrabbleAI = new ScrabbleAI(container);
 ScrabbleAI.StartGame();
 Console.ReadLine();
 public class Tester

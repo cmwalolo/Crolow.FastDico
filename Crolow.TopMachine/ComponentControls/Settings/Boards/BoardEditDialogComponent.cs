@@ -1,6 +1,8 @@
 ﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 using Radzen;
+using static Crolow.FastDico.Models.Models.ScrabbleApi.Entities.BoardGridModel;
 
 namespace Crolow.TopMachine.ComponentControls.Settings.Boards
 {
@@ -12,14 +14,25 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Boards
 
         [Parameter]
         public BoardGridModel Board { get; set; }
+        public string Configuration { get; set; }
+
 
         protected async override void OnInitialized()
         {
+            Configuration = JsonConvert.SerializeObject(Board.Configuration, Formatting.Indented);
         }
 
-        public void SaveAndClose()
+        public async void SaveAndClose()
         {
-            DialogService.Close(Board);
+            try
+            {
+                Board.Configuration = JsonConvert.DeserializeObject<List<MultiplierData>>(Configuration);
+                DialogService.Close(Board);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Title", "This is a message.", "OK", "Cancel");
+            }
         }
 
         public void CancelDialog()

@@ -5,7 +5,7 @@ using System;
 
 namespace Kalow.Apps.Common.JsonConverters
 {
-    class KalowIdConverter : JsonConverter
+    public class KalowIdConverter : JsonConverter
     {
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -19,10 +19,16 @@ namespace Kalow.Apps.Common.JsonConverters
                 return null;
 
             var token = JToken.Load(reader);
-            if (!(token is JValue))
-                throw new JsonSerializationException("Token was not a primitive");
-
-            return new KalowId((string)token);
+            //if (!(token is JValue))
+            //    throw new JsonSerializationException("Token was not a primitive");
+            if (token is JObject)
+            {
+                return new KalowId(((JObject)token)["$oid"].ToString());
+            }
+            else
+            {
+                return KalowId.Empty;
+            }
         }
 
         public override bool CanConvert(Type objectType)

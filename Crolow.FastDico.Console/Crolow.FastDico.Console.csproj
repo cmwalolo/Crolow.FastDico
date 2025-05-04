@@ -24,21 +24,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="BoardConfigurations.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Dictionaries.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="gaddag_fr.gz">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		  <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
 		</None>
-		<None Update="GridConfigs_FR.json">
+		<None Update="GameConfigurations.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="GridConfigurationss.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<None Update="GridConfigs_FR.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="GridConfig_FR.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="LetterConfigurations.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Letters_FR.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

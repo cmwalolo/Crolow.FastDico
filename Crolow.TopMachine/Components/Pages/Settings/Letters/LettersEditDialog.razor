@@ -1,0 +1,88 @@
+﻿@using Crolow.FastDico.Models.Models.Dictionary.Entities
+@using Crolow.FastDico.Models.Models.ScrabbleApi.Entities
+@using Crolow.FastDico.Models.Models.ScrabbleApi.Entities.Partials
+@using Crolow.TopMachine.ComponentControls.Settings.Letters
+
+@inherits LettersEditDialogComponent
+@{
+    Variant variant = Variant.Outlined;
+}
+
+<RadzenTemplateForm TItem="LetterConfigModel" Data="Letter">
+    <fieldset>
+        <RadzenStack Gap="1rem" class="rz-p-sm-3">
+            <RadzenFormField Text="Name" Variant="@variant">
+                <RadzenTextBox @bind-Value="@Letter.Name" />
+            </RadzenFormField>
+            <RadzenFormField Text="Dictionary" Variant="@variant">
+                <RadzenDropDown @bind-Value=@Letter.DictionaryId Data=@dicos TextProperty="@nameof(DictionaryModel.Name)" ValueProperty="@nameof(DictionaryModel.Id)" Style="width: 100%; max-width: 400px;" Name="Dictionary" />
+            </RadzenFormField>
+            <RadzenDataGrid style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;"
+                            @ref="grid" Data="@Letter.Letters" TItem="TileConfig">
+                <EmptyTemplate>
+                    <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                </EmptyTemplate>
+                <Columns>
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.Char)" Title="Char" HeaderTooltip="Character">
+                        <EditTemplate Context="tileConfig">
+                            <RadzenTextBox @bind-Value="tileConfig.Char" Name="Character" aria-label="Character used" />
+                            <RadzenRequiredValidator Text="Character is required" Component="Char" Popup="true" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.Letter)" Title="Letter" HeaderTooltip="Letter number">
+                        <EditTemplate Context="tileConfig">
+                            <RadzenNumeric ShowUpDown="false" @bind-Value="tileConfig.Letter" Name="Letter" aria-label="Letter index" />
+                            <RadzenRequiredValidator Text="Is required" Component="Letter" Popup="true" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.IsVowel)" Title="Vow" HeaderTooltip="Is vowel ?">
+                        <EditTemplate Context="tileConfig">
+                            <RadzenCheckBox @bind-Value="tileConfig.IsVowel" Name="IsVowel" aria-label="Is vowel ?" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.IsConsonant)" Title="Con" HeaderTooltip="Is consonannt ?">
+                        <EditTemplate Context="tileConfig">
+                            <RadzenCheckBox @bind-Value="tileConfig.IsConsonant" Name="IsConsonant" aria-label="Is consonant ?" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.TotalLetters)" Title="#" HeaderTooltip="# of letters">
+                        <EditTemplate Context="tileConfig">
+                            <RadzenNumeric ShowUpDown="false" @bind-Value="tileConfig.TotalLetters" Name="TotalLetters" aria-label="# of letters" />
+                            <RadzenRequiredValidator Text="Is required" Component="TotalLetters" Popup="true" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.Points)" Title="Pts" HeaderTooltip="Letter points">
+                        <EditTemplate Context="tileConfig">
+                            <RadzenNumeric ShowUpDown="false" @bind-Value="tileConfig.Points" Name="Points" aria-label="Letter points" />
+                            <RadzenRequiredValidator Text="Is required" Component="Points" Popup="true" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.IsJoker)" Title="Jok" HeaderTooltip="Is Joker ?">
+                        <EditTemplate Context="tileConfig">
+                            <RadzenCheckBox @bind-Value="tileConfig.IsJoker" Name="IsJoker" aria-label="Is joker ?" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Context="tileConfig" Filterable="false" Sortable="false" TextAlign="TextAlign.Right">
+                        <Template Context="tileConfig">
+                            <RadzenButton Icon="add_circle" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.ExtraSmall" Shade="Shade.Lighter" Click="@(() => InsertAfterRow(tileConfig))" title="Add new row after this row" />
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.ExtraSmall" class="rz-my-1 rz-ms-1" Click="@(args => EditRow(tileConfig))" @onclick:stopPropagation="true" />
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Flat" Size="ButtonSize.ExtraSmall" Shade="Shade.Lighter" class="rz-my-1 rz-ms-1" Click="@(args => DeleteRow(tileConfig))" @onclick:stopPropagation="true" />
+                        </Template>
+                        <EditTemplate Context="tileConfig">
+                            <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.ExtraSmall" Click="@((args) => SaveRow(tileConfig))" aria-label="Save" />
+                            <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.ExtraSmall" class="rz-my-1 rz-ms-1" Click="@((args) => CancelEdit(tileConfig))" aria-label="Cancel" />
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Flat" Size="ButtonSize.ExtraSmall" Shade="Shade.Lighter" class="rz-my-1 rz-ms-1" Click="@(args => DeleteRow(tileConfig))" aria-label="Delete" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenStack>
+    </fieldset>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Warning" Text="Cancel" Style="width: 120px" Click="@CancelDialog" />
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary" Text="Save" Style="width: 120px" Click="@SaveAndClose" />
+    </RadzenStack>
+</RadzenTemplateForm>
+
