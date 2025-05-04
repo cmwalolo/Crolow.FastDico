@@ -12,16 +12,18 @@ The implementations includes :
     - Anagram search 
     - Anagram & smaller search.
 
-The code is provided as is and far less complex then other implementations. But feel free to make pull requests.
+- A scrabble engine that can create games 
+    - includes a boosted version which analyses solutions to get a level of difficulty.
+   
+- A console application to generate scrabble games
+    - Included french dictionary
+    - French Configuration files
 
-There is as well an implementation of a board wordgame... Hyper fast. 200ms to 1000 ms to generate a full game
+- A Maui / Blazor application  
+    - A word searcher 
+    - A dictionary browser
+    - Configurations for the upcoming scrabble game GUI
 
-A Maui/Blazor application... To be continued
-
-The current implementation is straight forward. 
-There will be a lot of refactoring to enable a better integration with an app.
-
-Work is still in progress... 
 
 This code is totally written by my own, and it is free for strictly personal use.
 Any commercial usage is prohibited without any mutual agreement 

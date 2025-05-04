@@ -30,6 +30,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuceneWordExtractor", "Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalow.Apps.Common", "Kalow.Apps.Common\Kalow.Apps.Common.csproj", "{8A2E41B8-7E8E-9E6F-56A5-19E08BFAB929}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Screenshots\fr-joker-boosted-2.png = Screenshots\fr-joker-boosted-2.png
+		Screenshots\fr-joker-boosted-3.png = Screenshots\fr-joker-boosted-3.png
+		Screenshots\fr-joker-boosted.png = Screenshots\fr-joker-boosted.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +79,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {79DAC9A0-5951-48EB-8940-CF7B82D52EA8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D22E2F87-D845-47DE-9A40-30442D105CBC}
