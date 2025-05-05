@@ -61,7 +61,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         public const float RackRatioMult = 1;           // Multiplier
         public const float ScrabbleRatioDiv = 25;
         public const float RaccordsRatioMul = 1;
-        public const float CollageRatioDiv = 1;
+        public const float CollageRatioDiv = 0.25f;
         public const float CollageMotRatioDiv = 4;
         public const float AppuiRatioDiv = 4;
 
@@ -293,7 +293,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
             //c = word.Length - c;
 
-            if (c > 1 && c < word.Length - 1)
+            if (c > 1)
             {
                 rate.scoreappui = c;
                 rate.scoreAll += rate.scoreappui * AppuiRatioDiv;
@@ -316,7 +316,18 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                         count += System.Math.Min(3, c);
                         words++;
                     }
+
+                    if (c > 3)
+                    {
+                        //  words++;
+                    }
                 }
+            }
+
+            if (words == 0)
+            {
+                words = 1;
+                count = count * 2;
             }
 
             if (count > 1 && words > 2)

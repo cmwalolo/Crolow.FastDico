@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots"
 		Screenshots\fr-joker-boosted.png = Screenshots\fr-joker-boosted.png
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.Hypergram", "Hypergram\Crolow.Hypergram\Crolow.Hypergram.csproj", "{F5AED44C-5A70-4965-AFCD-E1F899B6B0E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,9 @@ Global
 		{8A2E41B8-7E8E-9E6F-56A5-19E08BFAB929}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A2E41B8-7E8E-9E6F-56A5-19E08BFAB929}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A2E41B8-7E8E-9E6F-56A5-19E08BFAB929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5AED44C-5A70-4965-AFCD-E1F899B6B0E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5AED44C-5A70-4965-AFCD-E1F899B6B0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5AED44C-5A70-4965-AFCD-E1F899B6B0E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

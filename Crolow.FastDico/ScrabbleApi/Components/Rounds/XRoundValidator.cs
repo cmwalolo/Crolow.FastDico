@@ -190,34 +190,49 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             // If solution is not top score we pass to next . 
             // If no solution is ok we return a null and 
             // process will fallback to unboosted validation
+
+            bool found = false;
             foreach (var value in keys)
             {
-
-                var selectedSolution = value.Value;
-                var rack = new PlayerRack(value.Value.Tiles.Where(p => p.Parent.Status == -1).ToList());
-                currentGame.LetterBag.ForceDrawLetters(rack.Tiles);
-                var letters = currentGame.LetterBag.DrawLetters(rack);
-                var round = solver.Solve(letters);
-                currentGame.LetterBag.ReturnLetters(rack);
-                selectedSolution.Rack = new PlayerRack(letters);
-                var checkSolution = round.Tops.FirstOrDefault();
-
-                if (selectedSolution.ToString() != checkSolution.ToString()
-                    || !checkSolution.Position.Equals(selectedSolution.Position))
+                for (int x = 0; x < 10; x++)
                 {
-                    continue;
+                    var selectedSolution = value.Value;
+                    var rack = new PlayerRack(value.Value.Tiles.Where(p => p.Parent.Status == -1).ToList());
+
+                    // No need to try out different racks as it is full
+                    if (rack.Tiles.Count == currentGame.GameConfig.PlayableLetters)
+                    {
+                        x = 10; 
+                    }
+
+                    currentGame.LetterBag.ForceDrawLetters(rack.Tiles);
+                    var letters = currentGame.LetterBag.DrawLetters(rack);
+                    var round = solver.Solve(letters);
+                    currentGame.LetterBag.ReturnLetters(rack);
+                    selectedSolution.Rack = new PlayerRack(letters);
+                    var checkSolution = round.Tops.FirstOrDefault();
+
+                    if (selectedSolution.ToString() == checkSolution.ToString()
+                        && checkSolution.Position.Equals(selectedSolution.Position))
+                    {
+                        found = true;
+                        break;
+                    }
                 }
 
+                if (found)
+                {
 #if DEBUG
-                Console.WriteLine($"BOOSTED");
-                DebugRatingRound(value.Key);
+                    Console.WriteLine($"BOOSTED");
+                    DebugRatingRound(value.Key);
 #endif
 
-                playedRounds.AllRounds.Clear();
-                playedRounds.SubTops.Clear();
-                playedRounds.Tops.Clear();
-                playedRounds.Tops.Add(value.Value);
-                return playedRounds;
+                    playedRounds.AllRounds.Clear();
+                    playedRounds.SubTops.Clear();
+                    playedRounds.Tops.Clear();
+                    playedRounds.Tops.Add(value.Value);
+                    return playedRounds;
+                }
             }
 
             return null;

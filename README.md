@@ -2,7 +2,7 @@
 ## Ultra compact on disk and in memory.
 ## Ultra fast tree navigation. 
 
-The implementations includes : 
+The core implementations includes : 
 - Dawg and GadDag Compiler
 - Dawg and GadDag Word Search : 
     - Word search
@@ -11,18 +11,17 @@ The implementations includes :
     - Wildcard search (seemless multiple ? or *)
     - Anagram search 
     - Anagram & smaller search.
-
 - A scrabble engine that can create games 
     - includes a boosted version which analyses solutions to get a level of difficulty.
-   
 - A console application to generate scrabble games
     - Included french dictionary
     - French Configuration files
 
-- A Maui / Blazor application  
-    - A word searcher 
-    - A dictionary browser
-    - Configurations for the upcoming scrabble game GUI
+A Maui/Blazor application  
+    - a word searcher 
+    - a dictionary browser
+    - configurations for the upcoming scrabble game GUI
+    - Hypergram (to come)
 
 
 This code is totally written by my own, and it is free for strictly personal use.
