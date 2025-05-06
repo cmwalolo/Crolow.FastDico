@@ -1,5 +1,6 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Models.Common.Entities;
+using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Core.Interfaces;
 using Crolow.TopMachine.Data;
 using Crolow.TopMachine.Data.Repositories;
@@ -20,5 +21,6 @@ namespace Crolow.TopMachine.Core
         public DictionaryDataManager<DictionaryModel> Dictionaries => new DictionaryDataManager<DictionaryModel>(settings);
         public DicoWordsDataManager<WordEntryModel> DicoEntries => new DicoWordsDataManager<WordEntryModel>(settings);
         public DicoWordsToDicoDataManager<WordToDicoModel> DicoWords => new DicoWordsToDicoDataManager<WordToDicoModel>(settings);
+        public UserDataManager<User> Users => new UserDataManager<User>(settings);
     }
 }

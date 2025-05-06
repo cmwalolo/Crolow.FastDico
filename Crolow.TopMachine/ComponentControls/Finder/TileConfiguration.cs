@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities.Partials;
+﻿using Crolow.FastDico.Models.ScrabbleApi.Entities.Partials;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.Utils;
 

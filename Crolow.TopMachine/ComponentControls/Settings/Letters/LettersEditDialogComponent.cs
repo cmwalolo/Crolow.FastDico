@@ -1,6 +1,6 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities.Partials;
+﻿using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
+using Crolow.FastDico.Models.ScrabbleApi.Entities.Partials;
 using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;

@@ -21,6 +21,7 @@ namespace Crolow.TopMachine.Core
             services.AddScoped<ILetterService, LetterService>();
             services.AddScoped<IBoardService, BoardService>();
             services.AddScoped<IGameConfigService, GameConfigService>();
+            services.AddScoped<IUserService, UserService>();
 
             LiteDB.BsonMapper.Global.RegisterType<KalowId>
                     (

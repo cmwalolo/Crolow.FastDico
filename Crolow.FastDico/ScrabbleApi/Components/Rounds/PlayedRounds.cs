@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.Utils;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.Rounds;
 

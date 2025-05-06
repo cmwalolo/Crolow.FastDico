@@ -1,8 +1,9 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
 
-namespace Crolow.FastDico.Models.Models.ScrabbleApi
+namespace Crolow.FastDico.Models.ScrabbleApi
 {
+
     public class GameConfigurationContainer
     {
         public GameConfigurationContainer(GameConfigModel game, BoardGridModel board, LetterConfigModel letter, DictionaryModel dico)
@@ -13,6 +14,11 @@ namespace Crolow.FastDico.Models.Models.ScrabbleApi
             Dictionary = dico;
         }
 
+        public GameConfigurationContainer()
+        {
+        }
+
+        public bool IsValid { get; set; }
         public GameConfigModel GameConfig { get; set; }
         public BoardGridModel BoardGrid { get; set; }
         public LetterConfigModel LetterConfig { get; set; }

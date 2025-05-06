@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Core.Interfaces;
 using Crolow.TopMachine.Data.Interfaces;
 

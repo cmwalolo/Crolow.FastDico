@@ -1,16 +1,19 @@
 ﻿@inject NavigationManager Navigation
-<RadzenSidebar Responsive="false" Style="width:200px">
+<RadzenSidebar Responsive="false" Style="overflow:hidden; opacity:1 !important;min-width:45px !important; width:200px" @bind-Expanded="@sidebar1Expanded">
+    <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
     <RadzenPanelMenu>
         <RadzenPanelMenuItem Click=@(args => Navigate("Dictionaries")) Text="Dictionaries" Icon="dictionary" />
         <RadzenPanelMenuItem Click=@(args => Navigate("Configs")) Text="Games" Icon="crossword" />
         <RadzenPanelMenuItem Click=@(args => Navigate("Boards")) Text="Boards" Icon="grid_on" />
         <RadzenPanelMenuItem Click=@(args => Navigate("Letters")) Text="Letter distribution" Icon="sort_by_alpha" />
+        <RadzenPanelMenuItem Click=@(args => Navigate("Users")) Text="Users" Icon="person" />
     </RadzenPanelMenu>
 </RadzenSidebar>
 
 
 @code {
     string SelectedApp = "";
+    bool sidebar1Expanded = true;
 
     private void Navigate(string menu)
     {
@@ -29,6 +32,9 @@
                 break;
             case "Boards":
                 Navigation.NavigateTo("/settings/boards");
+                break;
+            case "Users":
+                Navigation.NavigateTo("/settings/users");
                 break;
             default:
                 break;

@@ -1,5 +1,5 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.Letters;
 using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;

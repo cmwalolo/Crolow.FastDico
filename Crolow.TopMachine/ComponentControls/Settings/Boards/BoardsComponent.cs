@@ -1,5 +1,5 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.Boards;
 using Crolow.TopMachine.Components.Pages.Settings.Dictionaries;
 using Crolow.TopMachine.Core.Interfaces;
@@ -82,7 +82,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Boards
 
             var result = await DialogService.OpenAsync<DictionaryEditDialog>("Album Details", new Dictionary<string, object>
             {
-                { "Board", new DictionaryModel() }
+                { "Dictionary", new DictionaryModel() }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
             if (result != null && result is BoardGridModel)

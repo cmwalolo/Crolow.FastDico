@@ -1,6 +1,6 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.ScrabbleApi;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
 using Newtonsoft.Json;
 
 namespace Crolow.FastDico.Console

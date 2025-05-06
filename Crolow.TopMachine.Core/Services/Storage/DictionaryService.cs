@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
+﻿using Crolow.FastDico.Models.Dictionary.Entities;
 using Crolow.TopMachine.Core.Interfaces;
 using Crolow.TopMachine.Data.Interfaces;
 

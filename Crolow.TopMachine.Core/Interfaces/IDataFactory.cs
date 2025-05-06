@@ -1,5 +1,6 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Models.Common.Entities;
+using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Data.Repositories;
 
 namespace Crolow.TopMachine.Core.Interfaces;
@@ -11,5 +12,7 @@ public interface IDataFactory
     DictionaryDataManager<DictionaryModel> Dictionaries { get; }
     DicoWordsDataManager<WordEntryModel> DicoEntries { get; }
     DicoWordsToDicoDataManager<WordToDicoModel> DicoWords { get; }
+
+    UserDataManager<User> Users { get; }
 
 }

@@ -1,7 +1,7 @@
 ﻿using Kalow.Apps.Common.DataTypes;
 using Kalow.Apps.Models.Data;
 
-namespace Crolow.FastDico.Models.Models.Dictionary.Entities
+namespace Crolow.FastDico.Models.Dictionary.Entities
 {
     public class WordToDicoModel : DataObject
     {

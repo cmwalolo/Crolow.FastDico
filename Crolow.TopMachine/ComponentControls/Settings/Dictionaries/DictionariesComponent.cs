@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Models.Models.Dictionary.Entities;
+﻿using Crolow.FastDico.Models.Dictionary.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.Dictionaries;
 using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -70,6 +70,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Dictionaries
                 newAlbum.EditState = Data.Interfaces.EditState.New;
 
                 DictionaryService.Update(newAlbum);
+                results.Add(newAlbum);
                 await grid.RefreshDataAsync();
                 StateHasChanged(); // Ensure the UI is updated
 

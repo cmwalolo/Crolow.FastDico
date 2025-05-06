@@ -1,0 +1,28 @@
+﻿@using Crolow.FastDico.Models.Common.Entities
+@using Crolow.TopMachine.ComponentControls.Settings.Users
+
+@inherits UserEditDialogComponent
+@{
+    Variant variant = Variant.Outlined;
+}
+
+<RadzenTemplateForm TItem="User" Data="User">
+    <fieldset>
+        <RadzenStack Gap="1rem" class="rz-p-sm-3">
+            <RadzenFormField Text="User name" Variant="@variant">
+                <RadzenTextBox @bind-Value="@User.UserName" />
+            </RadzenFormField>
+            <RadzenFormField Text="Name" Variant="@variant">
+                <RadzenTextBox @bind-Value="@User.Name" />
+            </RadzenFormField>
+            <RadzenFormField Text="Token" Variant="@variant">
+                <RadzenTextBox @bind-Value="@User.Token" />
+            </RadzenFormField>
+        </RadzenStack>
+    </fieldset>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Warning" Text="Cancel" Style="width: 120px" Click="@CancelDialog" />
+        <RadzenButton Variant="Variant.Flat" ButtonStyle="ButtonStyle.Primary" Text="Save" Style="width: 120px" Click="@SaveAndClose" />
+    </RadzenStack>
+</RadzenTemplateForm>
+

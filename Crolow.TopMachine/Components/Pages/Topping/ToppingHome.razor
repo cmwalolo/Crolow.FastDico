@@ -1,0 +1,65 @@
+﻿@page "/topping/home"
+@using Crolow.FastDico.Models.ScrabbleApi
+@using Crolow.FastDico.Models.ScrabbleApi.Entities
+@inherits ComponentControls.Topping.ToppingHomeComponent;
+
+<RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
+    <SettingsSidebar />
+    <RadzenBody>
+        <div class="rz-p-1">
+            <RadzenLayout Style="height:100%">
+                <RadzenHeader style="padding:5px">
+                    <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H4">Topping center</RadzenText>
+                </RadzenHeader>
+                <RadzenBody>
+                    <RadzenDataGrid Data="@results" TItem="GameConfigurationContainer"
+                                    style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;"
+                                    AllowFiltering="true" AllowSorting="true" AllowColumnResize="true">
+                        <EmptyTemplate>
+                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                        </EmptyTemplate>
+                        <Columns>
+                            <RadzenDataGridColumn Filterable=false Sortable="false" Title="Type">
+                                <Template Context="data">
+                                    <RadzenText TextStyle="TextStyle.Body2">@($"{data.GameConfig.Name}")</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Filterable=false Sortable="false" Title="Type">
+                                <Template Context="data">
+                                    <RadzenText TextStyle="TextStyle.Body2">@($"{data.GameConfig.PlayableLetters}/{data.GameConfig.InRackLetters}")</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Filterable=false Sortable="false" Property="@nameof(GameConfigModel.BoardConfig)" Title="Board">
+                                <Template Context="data">
+                                    <RadzenText TextStyle="TextStyle.Body2">@(data.BoardGrid?.Name ?? "")</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Filterable=false Sortable="false" Property="@nameof(GameConfigModel.LetterConfig)" Title="Letters">
+                                <Template Context="data">
+                                    <RadzenText TextStyle="TextStyle.Body2">@(data.LetterConfig?.Name ?? "")</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Filterable=false Sortable="false" Title="">
+                                <Template Context="data">
+                                    <RadzenIcon Icon="question_mark" IconStyle=@(data.GameConfig.JokerMode ? IconStyle.Info : IconStyle.Dark) />
+                                    <RadzenIcon Icon="flash_on" IconStyle=@(data.GameConfig.ToppingMode ? IconStyle.Info : IconStyle.Dark) />
+                                    <RadzenIcon Icon="rocket_launch" IconStyle=@(data.GameConfig.DifficultMode ? IconStyle.Info : IconStyle.Dark) />
+                                    <RadzenIcon Icon="help" IconStyle=@(data.GameConfig.HelpAvailable ? IconStyle.Info : IconStyle.Dark) />
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn MinWidth="30px" Width="35px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Icon="play_circle" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenBody>
+            </RadzenLayout>
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+
+@code {
+    bool sidebar1Expanded = true;
+}

@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.GadDag;
-using Crolow.FastDico.Models.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Models.Finder;
+using Crolow.FastDico.Models.Dictionary.Entities;
+using Crolow.FastDico.Models.Finder;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
 using Crolow.TopMachine.Core.Interfaces;

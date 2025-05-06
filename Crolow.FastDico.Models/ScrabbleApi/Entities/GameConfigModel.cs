@@ -1,7 +1,7 @@
 ﻿using Kalow.Apps.Common.DataTypes;
 using Kalow.Apps.Models.Data;
 
-namespace Crolow.FastDico.Models.Models.ScrabbleApi.Entities
+namespace Crolow.FastDico.Models.ScrabbleApi.Entities
 {
 
 

@@ -1,0 +1,47 @@
+﻿@page "/settings/users"
+@using Crolow.FastDico.Models.Common.Entities
+@inherits ComponentControls.Settings.Users.UsersComponent;
+<RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
+    <SettingsSidebar />
+    <RadzenBody>
+        <div class="rz-p-1">
+            <RadzenLayout Style="height:100%">
+                <RadzenHeader style="padding:5px">
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenMenu>
+                            <RadzenMenuItem Text="New user" Icon="person" Click="AddItem">
+                            </RadzenMenuItem>
+                        </RadzenMenu>
+                    </RadzenStack>
+                </RadzenHeader>
+                <RadzenBody style="margin-top:10px;padding:0px;">
+                    <RadzenDataGrid style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;" AllowFiltering="true" AllowSorting="true" AllowColumnResize="true"
+                                    @ref="grid" Data="@results" TItem="User">
+                        <EmptyTemplate>
+                            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
+                        </EmptyTemplate>
+                        <Columns>
+                            <RadzenDataGridColumn Property="@nameof(User.UserName)" Title="User name" />
+                            <RadzenDataGridColumn Property="@nameof(User.Name)" Title="Name" />
+                            <RadzenDataGridColumn Property="@nameof(User.Token)" Title="Token" />
+                            <RadzenDataGridColumn TItem="User" Width="30px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => EditItem(data)) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="User" Width="30px" Title="" Filterable="false" Sortable="false">
+                                <Template Context="data">
+                                    <RadzenButton Click=@(() => DeleteItem(data)) Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenBody>
+            </RadzenLayout>
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+
+@code {
+    bool sidebar1Expanded = true;
+}
