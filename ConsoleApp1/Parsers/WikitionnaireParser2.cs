@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Models.Dictionary.Entities;
+﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using HtmlAgilityPack;
 using static Kalow.Apps.ApiTester.DictionaryCrawler;
 

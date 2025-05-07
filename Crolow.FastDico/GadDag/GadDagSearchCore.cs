@@ -5,10 +5,10 @@ using Crolow.FastDico.Utils;
 namespace Crolow.FastDico.GadDag;
 public class GadDagSearchCore
 {
-    public LetterNode Root { get; private set; }
+    public ILetterNode Root { get; private set; }
     public int MaxResults { get; private set; }
 
-    public GadDagSearchCore(LetterNode root, int maxResults)
+    public GadDagSearchCore(ILetterNode root, int maxResults)
     {
         Root = root;
         MaxResults = maxResults;
@@ -125,7 +125,7 @@ public class GadDagSearchCore
     }
 
     #region Pattern search 
-    private void SearchByPatternRecursive(LetterNode currentNode, List<WordResults.Tile> bytePattern, int patternIndex, WordResults.Word currentWord, WordResults results)
+    private void SearchByPatternRecursive(ILetterNode currentNode, List<WordResults.Tile> bytePattern, int patternIndex, WordResults.Word currentWord, WordResults results)
     {
         // Base case: Reached the end of the pattern
         if (patternIndex == bytePattern.Count)
@@ -186,7 +186,7 @@ public class GadDagSearchCore
     #region Anagram search
     // Recursive helper for both functions
     private void FindWordsUsingLetters(
-        LetterNode currentNode,
+        ILetterNode currentNode,
         List<WordResults.Tile> availableLetters,
         WordResults.Word currentWord,
         WordResults results,

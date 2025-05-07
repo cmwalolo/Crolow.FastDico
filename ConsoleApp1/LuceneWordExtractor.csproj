@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Crolow.FastDico.Models\Crolow.FastDico.Models.csproj" />
+		<ProjectReference Include="..\Crolow.FastDico.Models\Crolow.FastDico.Common.csproj" />
 		<ProjectReference Include="..\Crolow.TopMachine.Core\Crolow.TopMachine.Core.csproj" />
 		<ProjectReference Include="..\Crolow.TopMachine.Data\Crolow.TopMachine.Data.csproj" />
 	</ItemGroup>

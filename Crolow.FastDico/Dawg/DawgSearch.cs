@@ -6,8 +6,8 @@ namespace Crolow.FastDico.Dawg;
 
 public class DawgSearch : IDawgSearch
 {
-    public LetterNode Root { get; private set; }
-    public DawgSearch(LetterNode root)
+    public ILetterNode Root { get; private set; }
+    public DawgSearch(ILetterNode root)
     {
         Root = root;
     }
@@ -61,7 +61,7 @@ public class DawgSearch : IDawgSearch
     }
 
     // Helper method to find all words from a given node
-    private void FindAllWordsFromNode(LetterNode node, List<byte> prefix, List<string> results)
+    private void FindAllWordsFromNode(ILetterNode node, List<byte> prefix, List<string> results)
     {
         if (node.IsEnd)
         {
@@ -84,7 +84,7 @@ public class DawgSearch : IDawgSearch
         return results;
     }
 
-    private void SearchByPatternRecursive(LetterNode currentNode, List<byte> bytePattern, int patternIndex, List<byte> currentWord, List<string> results)
+    private void SearchByPatternRecursive(ILetterNode currentNode, List<byte> bytePattern, int patternIndex, List<byte> currentWord, List<string> results)
     {
         // Base case: Reached the end of the pattern
         if (patternIndex == bytePattern.Count)
@@ -171,7 +171,7 @@ public class DawgSearch : IDawgSearch
 
     // Recursive helper for both functions
     private void FindWordsUsingLetters(
-        LetterNode currentNode,
+        ILetterNode currentNode,
         List<byte> availableLetters,
         List<byte> currentWord,
         List<byte> currentJokers,

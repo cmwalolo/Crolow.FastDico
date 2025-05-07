@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.Models.Finder
+﻿namespace Crolow.FastDico.Common.Models.Finder
 {
     public class FinderResult
     {

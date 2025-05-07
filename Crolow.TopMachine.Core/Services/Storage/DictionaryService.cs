@@ -1,8 +1,10 @@
-﻿using Crolow.FastDico.Models.Dictionary.Entities;
-using Crolow.TopMachine.Core.Interfaces;
+﻿using Crolow.FastDico.Base;
+using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Models.Dictionary.Entities;
+using Crolow.FastDico.GadDag;
 using Crolow.TopMachine.Data.Interfaces;
 
-namespace Crolow.Pix.Core.Services.Storage
+namespace Crolow.TopMachine.Core.Services.Storage
 {
     public class DictionaryService : IDictionaryService
     {
@@ -36,6 +38,16 @@ namespace Crolow.Pix.Core.Services.Storage
             }
 
             return defs.ToList();
+        }
+
+        public IBaseDictionary LoadDictionary(DictionaryModel model, string path)
+        {
+            // Define the target path in AppDataDirectory
+            string targetPath = Path.Combine(path, model.DictionaryFile);
+            var dico = new GadDagDictionary();
+            using (FileStream fileStream = new FileStream(targetPath, FileMode.Open))
+                dico.ReadFromStream(fileStream);
+            return dico;
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Crolow.FastDico.Models.Common.Entities;
-using Crolow.FastDico.Models.ScrabbleApi;
-using Crolow.FastDico.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Common.Models.Common.Entities;
+using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 
-namespace Crolow.FastDico.Models.Common
+namespace Crolow.FastDico.Common.Models.Common
 {
     public class ApplicationContext
     {

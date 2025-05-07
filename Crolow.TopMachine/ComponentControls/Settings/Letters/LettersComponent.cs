@@ -1,7 +1,7 @@
-﻿using Crolow.FastDico.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Models.Dictionary.Entities;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.Letters;
-using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;

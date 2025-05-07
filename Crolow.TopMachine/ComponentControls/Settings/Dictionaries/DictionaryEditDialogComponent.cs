@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Models.Dictionary.Entities;
+﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 

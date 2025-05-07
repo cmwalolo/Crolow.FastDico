@@ -1,5 +1,5 @@
-﻿using Crolow.FastDico.Models.ScrabbleApi;
-using Crolow.TopMachine.Core.Interfaces;
+﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Models.ScrabbleApi;
 using Microsoft.AspNetCore.Components;
 
 namespace Crolow.TopMachine.ComponentControls.Topping

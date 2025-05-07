@@ -17,10 +17,10 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
         private static Dictionary<string, uint> PivotCache = new Dictionary<string, uint>();
         private Board board;
         private GadDagSearch searcher;
-        private LetterNode letterNode;
+        private ILetterNode letterNode;
         private PlayConfiguration playConfiguration;
 
-        public PivotBuilder(Board board, LetterNode rootNode, PlayConfiguration playConfiguration)
+        public PivotBuilder(Board board, ILetterNode rootNode, PlayConfiguration playConfiguration)
         {
             this.board = board;
             searcher = new GadDagSearch(rootNode);
@@ -217,7 +217,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             return results;
         }
 
-        private void SearchByPatternRecursive(LetterNode currentNode, byte[] bytePattern, int patternIndex, byte[] currentWord, List<byte[]> results)
+        private void SearchByPatternRecursive(ILetterNode currentNode, byte[] bytePattern, int patternIndex, byte[] currentWord, List<byte[]> results)
         {
             // Base case: Reached the end of the pattern
             if (patternIndex == bytePattern.Length)

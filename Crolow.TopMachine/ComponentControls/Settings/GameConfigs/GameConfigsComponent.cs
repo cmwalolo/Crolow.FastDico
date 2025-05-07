@@ -1,6 +1,6 @@
-﻿using Crolow.FastDico.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.GameConfigs;
-using Crolow.TopMachine.Core.Interfaces;
 using Kalow.Apps.Common.DataTypes;
 using Microsoft.AspNetCore.Components;
 using Radzen;

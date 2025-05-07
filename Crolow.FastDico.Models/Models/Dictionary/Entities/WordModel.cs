@@ -1,7 +1,7 @@
 ﻿using Kalow.Apps.Models.Data;
 using Newtonsoft.Json;
 
-namespace Crolow.FastDico.Models.Dictionary.Entities
+namespace Crolow.FastDico.Common.Models.Dictionary.Entities
 {
     public class DefinitionModel
     {

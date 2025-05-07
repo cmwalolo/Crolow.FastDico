@@ -1,9 +1,9 @@
-﻿using Crolow.FastDico.GadDag;
-using Crolow.FastDico.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.Finder;
+﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Models.Dictionary.Entities;
+using Crolow.FastDico.Common.Models.Finder;
+using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
-using Crolow.TopMachine.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -23,7 +23,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
 
 
         public ObservableCollection<FinderResult> Results = new ObservableCollection<FinderResult>();
-        private GadDagCompiler gaddag;
+        private GadDagDictionary gaddag;
         private GadDagSearchCore searcher;
         public RadzenDataGrid<WordResults> grid;
         public bool searchActive = false;
@@ -43,7 +43,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
             if (currentDico != null)
             {
                 string f = FileSystem.AppDataDirectory + "\\" + currentDico.DictionaryFile;
-                gaddag = new GadDagCompiler();
+                gaddag = new GadDagDictionary();
                 gaddag.ReadFromFile(f);
                 searcher = new GadDagSearchCore(gaddag.Root, 250);
             }
@@ -103,11 +103,6 @@ namespace Crolow.TopMachine.ComponentControls.Finder
                     var row = new FinderResult();
                     row.Word = WordTilesUtils.ConvertBytesToWordForDisplay(r).ToUpper();
                     row.Additional = p[r.Status];
-
-                    if (string.IsNullOrEmpty(row.Additional))
-                    {
-                        Console.Write("pp");
-                    }
 
                     var list = GadDagUtils.FindPlusOne(gaddag.Root, row.Word.ToUpper());
 

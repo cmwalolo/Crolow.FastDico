@@ -4,7 +4,7 @@ using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.GadDag
 {
-    public class GadDagCompiler : BaseCompiler
+    public class GadDagDictionary : BaseDictionary
     {
         public override void Insert(string word)
         {
@@ -34,7 +34,7 @@ namespace Crolow.FastDico.GadDag
             var hasTerminated = false;
             foreach (var letter in chars)
             {
-                LetterNode childNode = currentNode.Children.FirstOrDefault(c => c.Letter == letter);
+                ILetterNode childNode = currentNode.Children.FirstOrDefault(c => c.Letter == letter);
 
                 if (childNode == null)
                 {

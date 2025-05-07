@@ -1,7 +1,7 @@
-﻿using Crolow.FastDico.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 
-namespace Crolow.FastDico.Models.ScrabbleApi
+namespace Crolow.FastDico.Common.Models.ScrabbleApi
 {
 
     public class GameConfigurationContainer

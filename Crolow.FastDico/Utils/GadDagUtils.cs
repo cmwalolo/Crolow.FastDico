@@ -4,13 +4,13 @@ namespace Crolow.FastDico.Utils
 {
     public class GadDagUtils
     {
-        public LetterNode SearchWord(LetterNode root, string word)
+        public static LetterNode SearchWord(ILetterNode root, string word)
         {
             var bytes = TilesUtils.ConvertWordToBytes(word);
-            return SearchWordRecursive(root, bytes, 0, false);
+            return null; // SearchWordRecursive(root, bytes, 0, false);
         }
 
-        private static LetterNode SearchWordRecursive(LetterNode currentNode, List<byte> word, int index, bool pastPivot)
+        private static ILetterNode SearchWordRecursive(ILetterNode currentNode, List<byte> word, int index, bool pastPivot)
         {
             if (index == word.Count)
             {
@@ -34,7 +34,7 @@ namespace Crolow.FastDico.Utils
             return null;
         }
 
-        public static List<KeyValuePair<int, string>> FindPlusOne(LetterNode rootNode, string word)
+        public static List<KeyValuePair<int, string>> FindPlusOne(ILetterNode rootNode, string word)
         {
             var bytes = TilesUtils.ConvertWordToBytes(word);
             var node = SearchWordRecursive(rootNode, bytes, 0, false);

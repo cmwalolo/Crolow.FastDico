@@ -146,7 +146,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             }
         }
 
-        private void SearchNodes(int grid, LetterNode parentNode, int increment, Position p, List<Tile> letters, PlayedRounds rounds, Position firstPosition, bool rightToLeft = true)
+        private void SearchNodes(int grid, ILetterNode parentNode, int increment, Position p, List<Tile> letters, PlayedRounds rounds, Position firstPosition, bool rightToLeft = true)
         {
             if (rounds.CurrentRound.Tiles.Count(p => p.Parent.Status == 0) >= currentGame.GameConfig.PlayableLetters)
             {
@@ -168,7 +168,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             }
 
             // We load the nodes to be checked
-            var nodes = new List<LetterNode>();
+            var nodes = new List<ILetterNode>();
 
             if (square.IsBorder)
             {

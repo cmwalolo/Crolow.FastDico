@@ -1,7 +1,7 @@
-﻿using Crolow.FastDico.Dawg;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.Dawg;
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
-using Crolow.FastDico.Models.ScrabbleApi;
 using Crolow.FastDico.ScrabbleApi.Components;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds;
@@ -28,7 +28,7 @@ public partial class ScrabbleAI
 
         currentGame.GameConfig = playConfiguration.SelectedConfig;
 
-        GadDagCompiler gaddag = new GadDagCompiler();
+        GadDagDictionary gaddag = new GadDagDictionary();
         gaddag.ReadFromFile(container.Dictionary.DictionaryFile);
 
         currentGame.Board = new Board(this.currentGame);

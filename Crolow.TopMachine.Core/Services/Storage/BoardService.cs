@@ -1,5 +1,5 @@
-﻿using Crolow.FastDico.Models.ScrabbleApi.Entities;
-using Crolow.TopMachine.Core.Interfaces;
+﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Data.Interfaces;
 
 namespace Crolow.Pix.Core.Services.Storage

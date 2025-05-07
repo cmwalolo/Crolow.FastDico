@@ -1,6 +1,6 @@
 ﻿@page "/topping/home"
-@using Crolow.FastDico.Models.ScrabbleApi
-@using Crolow.FastDico.Models.ScrabbleApi.Entities
+@using Crolow.FastDico.Common.Models.ScrabbleApi
+@using Crolow.FastDico.Common.Models.ScrabbleApi.Entities
 @inherits ComponentControls.Topping.ToppingHomeComponent;
 
 <RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
@@ -9,7 +9,7 @@
         <div class="rz-p-1">
             <RadzenLayout Style="height:100%">
                 <RadzenHeader style="padding:5px">
-                    <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H4">Topping center</RadzenText>
+                    <RadzenText TextStyle="TextStyle.H3" TagName="TagName.H3">Topping center</RadzenText>
                 </RadzenHeader>
                 <RadzenBody>
                     <RadzenDataGrid Data="@results" TItem="GameConfigurationContainer"

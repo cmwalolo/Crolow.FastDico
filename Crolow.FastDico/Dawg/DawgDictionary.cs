@@ -4,7 +4,7 @@ using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.Dawg;
 
-public class DawgCompiler : BaseCompiler
+public class DawgDictionary : BaseDictionary
 {
     public override void Insert(string word)
     {
@@ -13,7 +13,7 @@ public class DawgCompiler : BaseCompiler
 
         foreach (var letter in chars)
         {
-            LetterNode childNode = currentNode.Children.FirstOrDefault(c => c.Letter == letter);
+            ILetterNode childNode = currentNode.Children.FirstOrDefault(c => c.Letter == letter);
 
             if (childNode == null)
             {

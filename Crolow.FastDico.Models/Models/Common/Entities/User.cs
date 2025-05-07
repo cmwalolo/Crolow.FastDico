@@ -1,6 +1,6 @@
 ﻿using Kalow.Apps.Models.Data;
 
-namespace Crolow.FastDico.Models.Common.Entities;
+namespace Crolow.FastDico.Common.Models.Common.Entities;
 
 public class User : DataObject
 {

@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.Models.ScrabbleApi.Entities.Partials;
+﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
 
 public class TileConfig
 {

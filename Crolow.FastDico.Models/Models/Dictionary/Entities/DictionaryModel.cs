@@ -1,6 +1,6 @@
 ﻿using Kalow.Apps.Models.Data;
 
-namespace Crolow.FastDico.Models.Dictionary.Entities;
+namespace Crolow.FastDico.Common.Models.Dictionary.Entities;
 public class DictionaryModel : DataObject
 {
     public bool IsDefault { get; set; }

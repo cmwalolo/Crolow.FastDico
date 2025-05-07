@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.Models
+﻿namespace Crolow.FastDico.Common
 {
     public class Class1
     {

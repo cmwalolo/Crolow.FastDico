@@ -2,20 +2,20 @@
 using System.IO.Compression;
 namespace Crolow.FastDico.Base;
 
-public class BaseCompiler
+public class BaseDictionary : IBaseDictionary
 {
-    public LetterNode Root { get; private set; }
+    public ILetterNode Root { get; private set; }
 
-    public LetterNode RootBuild { get; private set; }
+    public ILetterNode RootBuild { get; private set; }
     public int BuildNodeId { get; set; }
 
 
-    private Dictionary<string, LetterNode> nodeCache;
+    private Dictionary<string, ILetterNode> nodeCache;
 
-    public BaseCompiler()
+    public BaseDictionary()
     {
         Root = new LetterNode();
-        nodeCache = new Dictionary<string, LetterNode>();
+        nodeCache = new Dictionary<string, ILetterNode>();
     }
 
     public virtual void Insert(string word)
@@ -25,7 +25,7 @@ public class BaseCompiler
 
     public void Build(IEnumerable<string> words)
     {
-        nodeCache = new Dictionary<string, LetterNode>();
+        nodeCache = new Dictionary<string, ILetterNode>();
         BuildNodeId = 0;
         RootBuild = new LetterNode();
 
@@ -41,7 +41,7 @@ public class BaseCompiler
     {
         int processedNodes = 0;
 
-        List<LetterNode> nodesToProcess = new List<LetterNode> { RootBuild };
+        List<ILetterNode> nodesToProcess = new List<ILetterNode> { RootBuild };
         while (nodesToProcess.Count > 0)
         {
             processedNodes++;
@@ -68,7 +68,7 @@ public class BaseCompiler
         }
     }
 
-    private string GetNodeSignature(LetterNode node)
+    private string GetNodeSignature(ILetterNode node)
     {
         // Include the letter in the signature to ensure uniqueness
         var childrenSignatures = node.Children
@@ -92,10 +92,10 @@ public class BaseCompiler
         using (GZipStream gzipStream = new GZipStream(fileStream, CompressionMode.Compress))
         using (BinaryWriter writer = new BinaryWriter(gzipStream))
         {
-            Dictionary<LetterNode, int> nodeToId = new Dictionary<LetterNode, int>();
+            Dictionary<ILetterNode, int> nodeToId = new Dictionary<ILetterNode, int>();
             int currentId = 0;
 
-            List<LetterNode> writeOrder = new List<LetterNode>();
+            List<ILetterNode> writeOrder = new List<ILetterNode>();
             CollectNodesWithIds(RootBuild, nodeToId, ref currentId, writeOrder);
 
             writer.Write(writeOrder.Count);
@@ -107,7 +107,7 @@ public class BaseCompiler
         }
     }
 
-    private void CollectNodesWithIds(LetterNode node, Dictionary<LetterNode, int> nodeToId, ref int currentId, List<LetterNode> writeOrder)
+    private void CollectNodesWithIds(ILetterNode node, Dictionary<ILetterNode, int> nodeToId, ref int currentId, List<ILetterNode> writeOrder)
     {
         if (nodeToId.ContainsKey(node))
             return;
@@ -121,7 +121,7 @@ public class BaseCompiler
         }
     }
 
-    private void WriteNodeWithId(LetterNode node, BinaryWriter writer, Dictionary<LetterNode, int> nodeToId)
+    private void WriteNodeWithId(ILetterNode node, BinaryWriter writer, Dictionary<ILetterNode, int> nodeToId)
     {
         writer.Write(node.Control);
         writer.Write((byte)node.Children.Count);
@@ -142,7 +142,7 @@ public class BaseCompiler
         using (BinaryReader reader = new BinaryReader(gzipStream))
         {
             int nodeCount = reader.ReadInt32();
-            List<LetterNode> nodeList = new List<LetterNode>(nodeCount);
+            List<ILetterNode> nodeList = new List<ILetterNode>(nodeCount);
 
             for (int i = 0; i < nodeCount; i++)
             {
@@ -158,7 +158,7 @@ public class BaseCompiler
         }
     }
 
-    private void ReadNodeWithId(LetterNode node, BinaryReader reader, List<LetterNode> nodeList)
+    private void ReadNodeWithId(ILetterNode node, BinaryReader reader, List<ILetterNode> nodeList)
     {
         node.Control = reader.ReadByte();
         int childrenCount = reader.ReadByte();
@@ -168,9 +168,32 @@ public class BaseCompiler
             byte childLetter = reader.ReadByte();
             int childId = reader.ReadInt32();
 
-            LetterNode childNode = nodeList[childId];
+            ILetterNode childNode = nodeList[childId];
             childNode.Letter = childLetter;  // Set the letter for the child node
             node.Children.Add(childNode);
+        }
+    }
+
+    public void ReadFromStream(Stream stream)
+    {
+        Root = new LetterNode();
+
+        using (GZipStream gzipStream = new GZipStream(stream, CompressionMode.Decompress))
+        using (BinaryReader reader = new BinaryReader(gzipStream))
+        {
+            int nodeCount = reader.ReadInt32();
+            List<ILetterNode> nodeList = new List<ILetterNode>(nodeCount);
+
+            for (int i = 0; i < nodeCount; i++)
+            {
+                nodeList.Add(new LetterNode());
+            }
+
+            for (int i = 0; i < nodeCount; i++)
+            {
+                ReadNodeWithId(nodeList[i], reader, nodeList);
+            }
+            Root = nodeList[0];
         }
     }
 }

@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.TopMachine", "Crolow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.TopMachine.Data", "Crolow.TopMachine.Data\Crolow.TopMachine.Data.csproj", "{6C92E89F-1310-7DBA-E792-7D461A12D5DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.FastDico.Models", "Crolow.FastDico.Models\Crolow.FastDico.Models.csproj", "{7EC5BB31-BCA0-482F-8270-24F57FC83C96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.FastDico.Common", "Crolow.FastDico.Models\Crolow.FastDico.Common.csproj", "{7EC5BB31-BCA0-482F-8270-24F57FC83C96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crolow.TopMachine.Core", "Crolow.TopMachine.Core\Crolow.TopMachine.Core.csproj", "{D331F197-0514-470D-BFB0-75AEBBFB5D62}"
 EndProject

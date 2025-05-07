@@ -6,9 +6,9 @@ namespace Crolow.FastDico.GadDag;
 
 public class GadDagSearch : IDawgSearch
 {
-    public LetterNode Root { get; private set; }
+    public ILetterNode Root { get; private set; }
 
-    public GadDagSearch(LetterNode root)
+    public GadDagSearch(ILetterNode root)
     {
         Root = root;
     }
@@ -19,7 +19,7 @@ public class GadDagSearch : IDawgSearch
         return SearchWordRecursive(Root, bytes, 0, false);
     }
 
-    private bool SearchWordRecursive(LetterNode currentNode, List<byte> word, int index, bool pastPivot)
+    private bool SearchWordRecursive(ILetterNode currentNode, List<byte> word, int index, bool pastPivot)
     {
         if (index == word.Count)
         {
@@ -62,7 +62,7 @@ public class GadDagSearch : IDawgSearch
         return results;
     }
 
-    private void SearchPrefixesFromNode(LetterNode node, List<byte> currentWord, List<string> results, int length)
+    private void SearchPrefixesFromNode(ILetterNode node, List<byte> currentWord, List<string> results, int length)
     {
         if (node.IsEnd && length >= 0)
         {
@@ -107,7 +107,7 @@ public class GadDagSearch : IDawgSearch
         return results;
     }
 
-    private void SearchSuffixesFromNode(LetterNode node, List<byte> currentWord, List<byte> result, List<string> results, int length)
+    private void SearchSuffixesFromNode(ILetterNode node, List<byte> currentWord, List<byte> result, List<string> results, int length)
     {
         if (node.IsEnd && length >= 0)
         {
@@ -135,7 +135,7 @@ public class GadDagSearch : IDawgSearch
         return results;
     }
 
-    private void SearchByPatternRecursive(LetterNode currentNode, List<byte> bytePattern, int patternIndex, List<byte> currentWord, List<string> results)
+    private void SearchByPatternRecursive(ILetterNode currentNode, List<byte> bytePattern, int patternIndex, List<byte> currentWord, List<string> results)
     {
         // Base case: Reached the end of the pattern
         if (patternIndex == bytePattern.Count)
@@ -228,7 +228,7 @@ public class GadDagSearch : IDawgSearch
 
     // Recursive helper for both functions
     private void FindWordsUsingLetters(
-        LetterNode currentNode,
+        ILetterNode currentNode,
         List<byte> availableLetters,
         List<byte> currentWord,
         List<byte> currentJokers,

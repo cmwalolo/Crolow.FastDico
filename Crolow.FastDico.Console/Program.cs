@@ -33,7 +33,7 @@ public class Tester
     public void TestDawg(bool compile)
     {
 
-        DawgCompiler dawg = new DawgCompiler();
+        DawgDictionary dawg = new DawgDictionary();
         if (compile)
         {
             List<string> words = System.IO.File.ReadAllLines("C:\\dev\\ODS9-complet.txt").Select(p => p.ToLower()).ToList();
@@ -83,7 +83,7 @@ public class Tester
     {
         // GADDAG 
 
-        GadDagCompiler gaddag = new GadDagCompiler();
+        GadDagDictionary gaddag = new GadDagDictionary();
         if (compile)
         {
             List<string> words = System.IO.File.ReadAllLines("C:\\dev\\ODS9-complet.txt").Select(p => p.ToLower()).ToList();

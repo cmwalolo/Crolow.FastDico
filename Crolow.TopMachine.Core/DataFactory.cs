@@ -1,7 +1,7 @@
-﻿using Crolow.FastDico.Models.Common.Entities;
-using Crolow.FastDico.Models.Dictionary.Entities;
-using Crolow.FastDico.Models.ScrabbleApi.Entities;
-using Crolow.TopMachine.Core.Interfaces;
+﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Models.Common.Entities;
+using Crolow.FastDico.Common.Models.Dictionary.Entities;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Data;
 using Crolow.TopMachine.Data.Repositories;
 

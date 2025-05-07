@@ -1,6 +1,6 @@
-﻿using Crolow.FastDico.Dawg;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
-using Crolow.FastDico.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Config;
 
@@ -22,7 +22,7 @@ public class CurrentGame
     public LetterBag LetterBag;
     public PlayerRack Rack;
 
-    public GadDagCompiler Dico;
+    public GadDagDictionary Dico;
     public PlayConfiguration playConfiguration;
     public Board Board;
     public GameConfigModel GameConfig;

@@ -1,6 +1,6 @@
-﻿using Crolow.FastDico.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 
-namespace Crolow.TopMachine.Core.Interfaces
+namespace Crolow.FastDico.Common.Interfaces
 {
     public interface IGameConfigService
     {

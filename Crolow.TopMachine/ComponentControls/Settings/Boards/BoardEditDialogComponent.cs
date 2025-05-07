@@ -1,8 +1,8 @@
-﻿using Crolow.FastDico.Models.ScrabbleApi.Entities;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using Radzen;
-using static Crolow.FastDico.Models.ScrabbleApi.Entities.BoardGridModel;
+using static Crolow.FastDico.Common.Models.ScrabbleApi.Entities.BoardGridModel;
 
 namespace Crolow.TopMachine.ComponentControls.Settings.Boards
 {

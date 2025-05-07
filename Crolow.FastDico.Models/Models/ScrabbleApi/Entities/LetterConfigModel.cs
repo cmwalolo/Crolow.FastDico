@@ -1,8 +1,8 @@
-﻿using Crolow.FastDico.Models.ScrabbleApi.Entities.Partials;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
 using Kalow.Apps.Common.DataTypes;
 using Kalow.Apps.Models.Data;
 
-namespace Crolow.FastDico.Models.ScrabbleApi.Entities
+namespace Crolow.FastDico.Common.Models.ScrabbleApi.Entities
 {
     public class LetterConfigModel : DataObject
     {
