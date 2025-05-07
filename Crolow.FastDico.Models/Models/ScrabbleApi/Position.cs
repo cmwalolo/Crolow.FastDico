@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.ScrabbleApi;
+﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi;
 
 
 // Moved the position to a struct, so it can be on the heap
@@ -24,13 +24,5 @@ public struct Position : IEquatable<Position>
     public bool Equals(Position other)
     {
         return X == other.X && Y == other.Y && Direction == other.Direction;
-    }
-}
-
-public static class PositionExtensions
-{
-    public static bool ISGreater(this Position p1, Position p2)
-    {
-        return p1.X > p2.X || p1.Y > p2.Y;
     }
 }

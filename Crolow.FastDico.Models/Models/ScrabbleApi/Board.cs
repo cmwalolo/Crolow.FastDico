@@ -1,0 +1,21 @@
+﻿using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.Utils;
+
+namespace Crolow.FastDico.Common.Models.ScrabbleApi;
+
+public class Board
+{
+    // Current State of the board
+    public GridConfigurationContainer[] CurrentBoard = new GridConfigurationContainer[2];
+    public CurrentGame currentGame;
+
+    public Board(CurrentGame currentGame)
+    {
+        CurrentBoard[0] = new GridConfigurationContainer(currentGame.Configuration.GridConfig);
+        CurrentBoard[1] = new GridConfigurationContainer();
+        CurrentBoard[1].SizeV = CurrentBoard[0].SizeH;
+        CurrentBoard[1].SizeH = CurrentBoard[0].SizeV;
+        CurrentBoard[1].Grid = ArrayUtils.Transpose(CurrentBoard[0].Grid);
+        this.currentGame = currentGame;
+    }
+}

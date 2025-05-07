@@ -1,6 +1,7 @@
-﻿using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
+using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.Utils;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
@@ -62,7 +63,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             return f;
         }
 
-        public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, BoardSolver solver)
+        public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver)
         {
             if (solver is null)
             {
@@ -127,7 +128,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             }
         }
 
-        private PlayedRounds ValidateBoosted(PlayedRounds playedRounds, BoardSolver solver)
+        private PlayedRounds ValidateBoosted(PlayedRounds playedRounds, IBoardSolver solver)
         {
 #if DEBUG
             Console.WriteLine("--- BOOSTED --- ");
@@ -202,7 +203,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                     // No need to try out different racks as it is full
                     if (rack.Tiles.Count == currentGame.GameConfig.PlayableLetters)
                     {
-                        x = 10; 
+                        x = 10;
                     }
 
                     currentGame.LetterBag.ForceDrawLetters(rack.Tiles);

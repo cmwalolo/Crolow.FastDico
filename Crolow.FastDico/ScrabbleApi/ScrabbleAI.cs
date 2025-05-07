@@ -6,7 +6,7 @@ using Crolow.FastDico.ScrabbleApi.Components;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds;
 using Crolow.FastDico.ScrabbleApi.Config;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
+using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
@@ -139,7 +139,7 @@ public partial class ScrabbleAI
         {
             sb.AppendLine("<tr>");
             sb.AppendLine($"<td>{ndx++}</td>");
-            sb.AppendLine($"<td>{r.Rack.ToString()}</td>");
+            sb.AppendLine($"<td>{r.Rack.GetString()}</td>");
             sb.AppendLine($"<td>{r.GetWord(true)}</td>");
             sb.AppendLine($"<td>{r.GetPosition()}</td>");
             sb.AppendLine($"<td>{r.Points}</td>");

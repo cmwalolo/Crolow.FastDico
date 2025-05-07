@@ -1,7 +1,7 @@
-﻿using Crolow.FastDico.Console;
+﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Console;
 using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
-using Crolow.FastDico.Interfaces;
 using Crolow.FastDico.ScrabbleApi;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;

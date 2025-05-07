@@ -1,5 +1,4 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Interfaces;
 using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.GadDag;

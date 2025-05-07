@@ -1,9 +1,11 @@
-﻿using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
+﻿using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
+using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
+using Crolow.FastDico.ScrabbleApi.Extensions;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 {
-    public class BaseRoundValidator
+    public class BaseRoundValidator : IBaseRoundValidator
     {
         public CurrentGame currentGame;
         public BaseRoundValidator(CurrentGame currentGame)
@@ -20,11 +22,8 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         {
             return currentGame.LetterBag.DrawLetters(currentGame.Rack);
         }
-        public virtual PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, BoardSolver solver)
+        public virtual PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver)
         {
-            //currentGame.LetterBag.ReturnLetters(currentGame.Rack);
-            //currentGame.LetterBag.Recreate(currentGame.Rack, originalRack);
-
             return rounds;
         }
 
@@ -32,8 +31,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         {
             return new SolverFilters();
         }
-
-
         public virtual PlayableSolution FinalizeRound(PlayedRounds playedRounds)
         {
             if (playedRounds.Tops.Count == 0)
@@ -60,5 +57,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             selectedRound.FinalizeRound();
             return selectedRound;
         }
+
     }
 }

@@ -1,5 +1,6 @@
-﻿using Crolow.FastDico.GadDag;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.GadDag;
+using Crolow.FastDico.ScrabbleApi.Extensions;
 using System.Collections;
 
 

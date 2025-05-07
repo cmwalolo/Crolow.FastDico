@@ -1,11 +1,13 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Common.Models.ScrabbleApi;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds;
+using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 {
-    public class BoardSolver
+    public class BoardSolver : IBoardSolver
     {
         private CurrentGame currentGame;
         public BoardSolver(CurrentGame currentGame)

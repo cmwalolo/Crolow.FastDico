@@ -1,8 +1,10 @@
 ﻿#undef DEBUGPIVOT  
 
 using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Common.Models.ScrabbleApi;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
@@ -12,7 +14,7 @@ using System.Text;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 {
-    public class PivotBuilder
+    public class PivotBuilder : IPivotBuilder
     {
         private static Dictionary<string, uint> PivotCache = new Dictionary<string, uint>();
         private Board board;

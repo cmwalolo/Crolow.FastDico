@@ -1,6 +1,4 @@
-﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
-
-namespace Crolow.FastDico.Interfaces;
+﻿namespace Crolow.FastDico.Common.Interfaces.Dictionaries;
 
 public interface IDawgSearch
 {

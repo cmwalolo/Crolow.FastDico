@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.ScrabbleApi.GameObjects
+﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi
 {
     public class SolverFilters
     {

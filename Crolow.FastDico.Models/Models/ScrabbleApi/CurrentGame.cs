@@ -1,10 +1,9 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
-using Crolow.FastDico.Dawg;
-using Crolow.FastDico.GadDag;
+﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Config;
 
-namespace Crolow.FastDico.ScrabbleApi.GameObjects;
+namespace Crolow.FastDico.Common.Models.ScrabbleApi;
 
 public class CurrentGame
 {
@@ -22,11 +21,11 @@ public class CurrentGame
     public LetterBag LetterBag;
     public PlayerRack Rack;
 
-    public GadDagDictionary Dico;
+    public IBaseDictionary Dico;
     public PlayConfiguration playConfiguration;
     public Board Board;
     public GameConfigModel GameConfig;
-    public DawgSearch Gaddag;
-    public PivotBuilder PivotBuilder;
+    public IDawgSearch Gaddag;
+    public IPivotBuilder PivotBuilder;
 
 }
