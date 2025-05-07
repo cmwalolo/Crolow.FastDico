@@ -1,20 +1,8 @@
 ﻿using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
-using Crolow.FastDico.Common.Models.ScrabbleApi;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
-using Crolow.FastDico.Dawg;
-using Crolow.FastDico.Dicos;
-using Crolow.FastDico.GadDag;
-using Crolow.FastDico.ScrabbleApi.Components;
-using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
-using Crolow.FastDico.ScrabbleApi.Components.Rounds;
-using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.ScrabbleApi.Utils;
-using Crolow.FastDico.Search;
-using Crolow.FastDico.Utils;
-using System.Diagnostics;
 using System.Text;
-using System.Xml.Linq;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
