@@ -1,13 +1,8 @@
 ﻿
+using Crolow.FastDico.Common.Interfaces;
+
 namespace MauiBlazorWeb.Web.Services
 {
-    public interface IStorageContainer
-    {
-        Task<T?> GetValue<T>(string key);
-        void SetValue<T>(string key, T value);
-        Task RemoveValue(string key);
-    }
-
     public class StorageContainer : IStorageContainer
     {
         protected readonly Blazored.LocalStorage.ILocalStorageService storage;

@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Dicos;
+﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Utils;

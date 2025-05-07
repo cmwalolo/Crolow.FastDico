@@ -1,5 +1,5 @@
-﻿using Crolow.FastDico.Base;
-using Crolow.FastDico.Common.Interfaces;
+﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.FastDico.GadDag;
 using Crolow.TopMachine.Data.Interfaces;

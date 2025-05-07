@@ -1,4 +1,5 @@
-﻿using Crolow.FastDico.Utils;
+﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.Dicos;
 

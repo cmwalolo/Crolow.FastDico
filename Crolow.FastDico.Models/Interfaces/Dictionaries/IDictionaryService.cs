@@ -1,7 +1,6 @@
-﻿using Crolow.FastDico.Base;
-using Crolow.FastDico.Common.Models.Dictionary.Entities;
+﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 
-namespace Crolow.FastDico.Common.Interfaces
+namespace Crolow.FastDico.Common.Interfaces.Dictionaries
 {
     public interface IDictionaryService
     {

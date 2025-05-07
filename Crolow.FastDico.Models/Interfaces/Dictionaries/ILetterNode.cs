@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.Dicos
+﻿namespace Crolow.FastDico.Common.Interfaces.Dictionaries
 {
     public interface ILetterNode
     {

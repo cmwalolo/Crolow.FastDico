@@ -1,6 +1,4 @@
-﻿using Crolow.FastDico.Dicos;
-
-namespace Crolow.FastDico.Base
+﻿namespace Crolow.FastDico.Common.Interfaces.Dictionaries
 {
     public interface IBaseDictionary
     {

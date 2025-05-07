@@ -1,4 +1,5 @@
 ﻿using Crolow.FastDico.Base;
+using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.Utils;
 

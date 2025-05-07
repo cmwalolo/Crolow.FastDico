@@ -1,4 +1,6 @@
 ﻿using Crolow.FastDico.Common.Interfaces;
+using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
 using Crolow.Pix.Core.Services.Storage;
 using Crolow.TopMachine.Core.Interfaces;
 using Crolow.TopMachine.Core.Services.Storage;

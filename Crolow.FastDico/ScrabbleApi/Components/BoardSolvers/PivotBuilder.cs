@@ -1,6 +1,6 @@
 ﻿#undef DEBUGPIVOT  
 
-using Crolow.FastDico.Dicos;
+using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.GameObjects;

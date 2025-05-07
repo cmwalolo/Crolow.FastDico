@@ -1,4 +1,5 @@
-﻿using Crolow.FastDico.Dicos;
+﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Dicos;
 using System.IO.Compression;
 namespace Crolow.FastDico.Base;
 

@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Interfaces;
+﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.Dictionaries;
 using Microsoft.AspNetCore.Components;
