@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.Utils;
 
 namespace Crolow.FastDico.ScrabbleApi.Extensions;

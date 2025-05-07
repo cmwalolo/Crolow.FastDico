@@ -23,7 +23,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
 
 
         public ObservableCollection<FinderResult> Results = new ObservableCollection<FinderResult>();
-        private GadDagDictionary gaddag;
+        private IBaseDictionary gaddag;
         private GadDagSearchCore searcher;
         public RadzenDataGrid<WordResults> grid;
         public bool searchActive = false;
@@ -34,6 +34,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
             TileConfigFactory.CreateFrenchTileSet();
 
             var results = DictionaryService.LoadAll();
+
             var currentDico = results.FirstOrDefault(p => p.IsDefault);
             if (currentDico == null)
             {
@@ -42,13 +43,9 @@ namespace Crolow.TopMachine.ComponentControls.Finder
 
             if (currentDico != null)
             {
-                string f = FileSystem.AppDataDirectory + "\\" + currentDico.DictionaryFile;
-                gaddag = new GadDagDictionary();
-                gaddag.ReadFromFile(f);
+                gaddag = DictionaryService.LoadDictionary(currentDico, FileSystem.AppDataDirectory);
                 searcher = new GadDagSearchCore(gaddag.Root, 250);
             }
-
-
         }
 
         public void Dispose()

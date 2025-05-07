@@ -1,7 +1,7 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.Utils;
 
-namespace Crolow.FastDico.Common.Models.ScrabbleApi;
+namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
 public class Board
 {

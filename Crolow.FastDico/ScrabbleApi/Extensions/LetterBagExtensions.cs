@@ -1,7 +1,7 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
-using Crolow.FastDico.Utils;
+﻿using Crolow.FastDico.Utils;
 using Crolow.FastDico.ScrabbleApi.Extensions;
-using Tile = Crolow.FastDico.Common.Models.ScrabbleApi.Tile;
+using Tile = Crolow.FastDico.Common.Models.ScrabbleApi.Game.Tile;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
 namespace Crolow.FastDico.ScrabbleApi.Extensions;
 

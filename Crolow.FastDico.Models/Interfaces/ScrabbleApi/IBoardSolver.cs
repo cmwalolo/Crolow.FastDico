@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 {

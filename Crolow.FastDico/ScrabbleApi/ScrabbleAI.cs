@@ -1,4 +1,6 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+﻿using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
+using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.Dawg;
 using Crolow.FastDico.Dicos;
 using Crolow.FastDico.GadDag;
@@ -16,27 +18,13 @@ using System.Xml.Linq;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
-public partial class ScrabbleAI
+public partial class ScrabbleAI : IScrabbleAI
 {
-    private CurrentGame currentGame;
+    private CurrentGame CurrentGame;
 
-    public ScrabbleAI(GameConfigurationContainer container)
+    public ScrabbleAI(CurrentGame currentGame)
     {
-        var playConfiguration = new ConfigLoader().ReadConfiguration(container);
-        this.currentGame = new CurrentGame();
-        this.currentGame.Configuration = playConfiguration;
-
-        currentGame.GameConfig = playConfiguration.SelectedConfig;
-
-        GadDagDictionary gaddag = new GadDagDictionary();
-        gaddag.ReadFromFile(container.Dictionary.DictionaryFile);
-
-        currentGame.Board = new Board(this.currentGame);
-        currentGame.LetterBag = new LetterBag(this.currentGame);
-        currentGame.Rack = new PlayerRack();
-        currentGame.Dico = gaddag;
-        currentGame.GameConfig = playConfiguration.SelectedConfig;
-        currentGame.PivotBuilder = new PivotBuilder(currentGame.Board, gaddag.Root, playConfiguration);
+        this.CurrentGame = currentGame;
     }
 
     public void StartGame()
@@ -46,27 +34,23 @@ public partial class ScrabbleAI
             NextRound(true);
         }
     }
-    private void NextRound(bool firstMove)
+    public void NextRound(bool firstMove)
     {
-        var boardSolver = new BoardSolver(currentGame);
-        boardSolver.Initialize();
-
-        //BaseRoundValidator validator = new BaseRoundValidator(currentGame);
-        XRoundValidator validator = new XRoundValidator(currentGame);
-        validator.Initialize();
+        CurrentGame.BoardSolver.Initialize();
+        CurrentGame.Validator.Initialize();
 
         PlayedRounds playedRounds = null;
         var letters = new List<Tile>();
 
         // We create a copy of the rack and the back to
         // Start freshly each iteration
-        var originalRack = new PlayerRack(currentGame.Rack);
-        var originalBag = new LetterBag(currentGame.LetterBag);
+        var originalRack = new PlayerRack(CurrentGame.Rack);
+        var originalBag = new LetterBag(CurrentGame.LetterBag);
 
         while (true)
         {
-
-            letters = validator.InitializeLetters();
+            CurrentGame.Validator.InitializeRound();
+            letters = CurrentGame.Validator.InitializeLetters();
             // End Test
             if (letters == null)
             {
@@ -74,12 +58,12 @@ public partial class ScrabbleAI
                 return;
             }
 
-            var filters = validator.InitializeFilters();
-            playedRounds = boardSolver.Solve(letters, filters);
+            var filters = CurrentGame.Validator.InitializeFilters();
+            playedRounds = CurrentGame.BoardSolver.Solve(letters, filters);
 
             if (playedRounds.Tops.Any())
             {
-                var round = validator.ValidateRound(playedRounds, letters, boardSolver);
+                var round = CurrentGame.Validator.ValidateRound(playedRounds, letters, CurrentGame.BoardSolver);
                 if (round != null)
                 {
                     playedRounds = round;
@@ -92,29 +76,28 @@ public partial class ScrabbleAI
                 return;
             }
 
-            currentGame.Rack = originalRack;
-            currentGame.LetterBag = originalBag;
+            CurrentGame.Rack = originalRack;
+            CurrentGame.LetterBag = originalBag;
         }
 
-        PlayableSolution selectedRound = validator.FinalizeRound(playedRounds);
+        PlayableSolution selectedRound = CurrentGame.Validator.FinalizeRound(playedRounds);
         if (selectedRound == null)
         {
             EndGame();
             return;
         }
 
-        currentGame.Board.SetRound(selectedRound);
-        currentGame.RoundsPlayed.Add(selectedRound);
+        CurrentGame.Board.SetRound(selectedRound);
+        CurrentGame.RoundsPlayed.Add(selectedRound);
         selectedRound = new PlayableSolution();
-        currentGame.Round++;
+        CurrentGame.Round++;
 #if DEBUG
-        currentGame.LetterBag.DebugBag(currentGame.Rack);
+        CurrentGame.LetterBag.DebugBag(CurrentGame.Rack);
 #endif
         NextRound(false);
     }
 
-
-    private void EndGame()
+    public void EndGame()
     {
 #if DEBUG
         PrintGrid();
@@ -135,7 +118,7 @@ public partial class ScrabbleAI
         sb.AppendLine("<table class='results' style='float:right'>");
         sb.AppendLine("<tr><th>#</th><th>Rack</th><th>Word</th><th>pos</th><th>pts</th></tr>");
         int ndx = 1;
-        foreach (var r in currentGame.RoundsPlayed)
+        foreach (var r in CurrentGame.RoundsPlayed)
         {
             sb.AppendLine("<tr>");
             sb.AppendLine($"<td>{ndx++}</td>");
@@ -150,19 +133,19 @@ public partial class ScrabbleAI
 
         sb.AppendLine("<table class='board'>");
         sb.AppendLine("<tr><td></td>");
-        for (int col = 1; col < currentGame.Board.CurrentBoard[0].SizeH - 1; col++)
+        for (int col = 1; col < CurrentGame.Board.CurrentBoard[0].SizeH - 1; col++)
         {
             sb.AppendLine($"<td class='border'>{col}</td>");
         }
         sb.AppendLine("</tr>");
 
-        for (int x = 1; x < currentGame.Board.CurrentBoard[0].SizeH - 1; x++)
+        for (int x = 1; x < CurrentGame.Board.CurrentBoard[0].SizeH - 1; x++)
         {
             var cc = ((char)(x + 64));
             sb.AppendLine($"<tr><td class='border'>{cc}</td>");
-            for (int y = 1; y < currentGame.Board.CurrentBoard[0].SizeH - 1; y++)
+            for (int y = 1; y < CurrentGame.Board.CurrentBoard[0].SizeH - 1; y++)
             {
-                var sq = currentGame.Board.GetSquare(0, y, x);
+                var sq = CurrentGame.Board.GetSquare(0, y, x);
                 var cclass = $"cell cell-{sq.LetterMultiplier} cell{sq.WordMultiplier}";
 
                 if (sq.Status == 1)

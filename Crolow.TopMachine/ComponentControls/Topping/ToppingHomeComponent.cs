@@ -17,7 +17,7 @@ namespace Crolow.TopMachine.ComponentControls.Topping
         [Inject]
         IDictionaryService DictionaryService { get; set; }
 
-        public List<GameConfigurationContainer> results = new List<GameConfigurationContainer>();
+        public List<ToppingConfigurationContainer> results = new List<ToppingConfigurationContainer>();
 
         protected async override void OnInitialized()
         {
@@ -28,7 +28,7 @@ namespace Crolow.TopMachine.ComponentControls.Topping
 
             foreach (var config in list)
             {
-                var item = new GameConfigurationContainer();
+                var item = new ToppingConfigurationContainer();
                 item.GameConfig = config;
                 item.LetterConfig = letters.FirstOrDefault(p => config.LetterConfig == p.Id);
                 item.BoardGrid = boards.FirstOrDefault(p => config.BoardConfig == p.Id);
@@ -44,6 +44,9 @@ namespace Crolow.TopMachine.ComponentControls.Topping
 
                 results.Add(item);
             }
+        }
+        protected async void StartGame(ToppingConfigurationContainer container)
+        {
         }
 
         public void Dispose()

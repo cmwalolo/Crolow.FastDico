@@ -1,7 +1,7 @@
 ﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 
-namespace Crolow.FastDico.Common.Models.ScrabbleApi;
+namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
 // *******************************
 // Do never Move this to a class ! 

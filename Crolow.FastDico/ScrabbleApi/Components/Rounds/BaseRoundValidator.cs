@@ -1,5 +1,5 @@
 ﻿using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
-using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Extensions;
 
@@ -16,6 +16,9 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         public virtual void Initialize()
         {
 
+        }
+        public virtual void InitializeRound()
+        {
         }
 
         public virtual List<Tile> InitializeLetters()

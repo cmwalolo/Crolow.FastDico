@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 
 namespace Crolow.FastDico.Common.Interfaces.ScrabbleApi
@@ -9,6 +9,7 @@ namespace Crolow.FastDico.Common.Interfaces.ScrabbleApi
         void Initialize();
         SolverFilters InitializeFilters();
         List<Tile> InitializeLetters();
+        void InitializeRound();
         PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver);
     }
 }

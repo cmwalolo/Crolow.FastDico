@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Extensions;
 using System.Collections;
@@ -95,7 +95,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             {
                 BoostFrequence = 40;
             }
-
             SkipFrequence = 5;
         }
 

@@ -2,7 +2,7 @@
 using Crolow.FastDico.Console;
 using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
-using Crolow.FastDico.ScrabbleApi;
+using Crolow.FastDico.ScrabbleApi.Factories;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
 using Kalow.Apps.Common.JsonConverters;
@@ -21,8 +21,9 @@ var tester = new Tester();
 //tester.TestDawg(false);
 //tester.TestGadDag(false);
 
-var ScrabbleAI = new ScrabbleAI(container);
-ScrabbleAI.StartGame();
+var factory = new ToppingFactory();
+var game = factory.CreateGame(container);
+game.ScrabbleEngine.StartGame();
 Console.ReadLine();
 public class Tester
 {

@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Common.Models.ScrabbleApi;
-using Crolow.FastDico.ScrabbleApi.Components.Rounds;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Utils;
@@ -10,6 +10,12 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
     public class BoardSolver : IBoardSolver
     {
         private CurrentGame currentGame;
+
+        private Board board;
+
+        private GameConfigModel gameConfig;
+        private ILetterNode rootNode;
+
         public BoardSolver(CurrentGame currentGame)
         {
             this.currentGame = currentGame;
@@ -20,8 +26,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             // Once we get the rack 
             // We create a transposed grid for vertical search
             // We create a grid with all possibilities at each pivot place
+            board = currentGame.Board;
+            gameConfig = currentGame.GameConfig;
+            rootNode = currentGame.Dico.Root;
 
-            currentGame.Board.TransposeGrid();
+            board.TransposeGrid();
             currentGame.PivotBuilder.Build();
         }
 
@@ -30,17 +39,17 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             filters = filters ?? new SolverFilters();
 
             bool firstMove = currentGame.Round == 0;
-            var playedRounds = new PlayedRounds(currentGame.GameConfig, letters, filters.PickallResults);
+            var playedRounds = new PlayedRounds(gameConfig, letters, filters.PickallResults);
 
             // We set the original position to place which is at the board center
             if (firstMove)
             {
                 int grid = 0;
-                Position p = new Position((currentGame.Board.CurrentBoard[0].SizeH - 1) / 2, (currentGame.Board.CurrentBoard[0].SizeV - 1) / 2, grid);
+                Position p = new Position((board.CurrentBoard[0].SizeH - 1) / 2, (board.CurrentBoard[0].SizeV - 1) / 2, grid);
                 playedRounds.CurrentRound = new PlayableSolution();
                 playedRounds.CurrentRound.Position = new Position(p);
-                currentGame.Board.TransposeGrid();
-                SearchNodes(grid, currentGame.Dico.Root, 1, p, letters, playedRounds, p, true);
+                board.TransposeGrid();
+                SearchNodes(grid, rootNode, 1, p, letters, playedRounds, p, true);
             }
             else
             {
@@ -60,18 +69,18 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 
         private void Search(int grid, List<Tile> letters, PlayedRounds playedRounds, SolverFilters filters)
         {
-            for (var i = 1; i < currentGame.Board.CurrentBoard[grid].SizeV - 1; i++)
+            for (var i = 1; i < board.CurrentBoard[grid].SizeV - 1; i++)
             {
                 if (!filters.Filters[grid].Any() || filters.Filters[grid].Contains(i))
                 {
                     var rightToLeft = true;
                     int oldj = 1;
-                    for (var j = 1; j < currentGame.Board.CurrentBoard[grid].SizeH - 1; j++)
+                    for (var j = 1; j < board.CurrentBoard[grid].SizeH - 1; j++)
                     {
-                        var currentNode = currentGame.Dico.Root;
+                        var currentNode = rootNode;
                         playedRounds.CurrentRound = new PlayableSolution();
 
-                        var sq = currentGame.Board.GetSquare(grid, j, i);
+                        var sq = board.GetSquare(grid, j, i);
                         if (sq.Status == -1)
                         {
                             if (CheckConnect(grid, j, i))
@@ -84,7 +93,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 
                                 // If there is a filled squared on the left
                                 // We need to prefill the current solution
-                                var sqLeft = currentGame.Board.GetSquare(grid, j - 1, i);
+                                var sqLeft = board.GetSquare(grid, j - 1, i);
                                 if (sqLeft.Status == 1)
                                 {
                                     rightToLeft = false;
@@ -93,7 +102,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
                                     var pos = j - 2;
                                     while (true)
                                     {
-                                        var sqNext = currentGame.Board.GetSquare(grid, pos, i);
+                                        var sqNext = board.GetSquare(grid, pos, i);
                                         if (sqNext.Status == 1)
                                         {
                                             sql.Add(sqNext);
@@ -110,7 +119,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 
                                             foreach (var item in sql)
                                             {
-                                                var parent = currentGame.Board.GetSquare(grid, x++, y);
+                                                var parent = board.GetSquare(grid, x++, y);
                                                 playedRounds.CurrentRound.AddTile(item.CurrentLetter, parent);
                                             }
                                             break;
@@ -150,7 +159,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 
         private void SearchNodes(int grid, ILetterNode parentNode, int increment, Position p, List<Tile> letters, PlayedRounds rounds, Position firstPosition, bool rightToLeft = true)
         {
-            if (rounds.CurrentRound.Tiles.Count(p => p.Parent.Status == 0) >= currentGame.GameConfig.PlayableLetters)
+            if (rounds.CurrentRound.Tiles.Count(p => p.Parent.Status == 0) >= gameConfig.PlayableLetters)
             {
                 return;
             }
@@ -162,7 +171,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             //
             //
             // rent position
-            var square = currentGame.Board.GetSquare(grid, x, y);
+            var square = board.GetSquare(grid, x, y);
 
             if (square.Status == -1 && square.GetPivot(grid) == 0)
             {
@@ -245,7 +254,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
                     if (node.IsEnd)
                     {
                         // For a round to be valid the next tile needs to be empty 
-                        var nextTile = currentGame.Board.GetSquare(grid, x + increment, y);
+                        var nextTile = board.GetSquare(grid, x + increment, y);
                         if (nextTile.Status == -1)
                         {
                             // We update the position of the current word
@@ -300,10 +309,10 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 
         private bool CheckConnect(int grid, int j, int i)
         {
-            if (currentGame.Board.GetSquare(grid, j - 1, i).Status == 1
-               || currentGame.Board.GetSquare(grid, j + 1, i).Status == 1
-               || currentGame.Board.GetSquare(grid, j, i + 1).Status == 1
-               || currentGame.Board.GetSquare(grid, j, i - 1).Status == 1)
+            if (board.GetSquare(grid, j - 1, i).Status == 1
+               || board.GetSquare(grid, j + 1, i).Status == 1
+               || board.GetSquare(grid, j, i + 1).Status == 1
+               || board.GetSquare(grid, j, i - 1).Status == 1)
             {
                 return true;
             }

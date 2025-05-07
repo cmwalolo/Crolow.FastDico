@@ -1,4 +1,4 @@
-﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi;
+﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
 
 // Moved the position to a struct, so it can be on the heap

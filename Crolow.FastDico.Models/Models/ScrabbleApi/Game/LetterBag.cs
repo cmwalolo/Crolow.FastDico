@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.ScrabbleApi.Config;
 
-namespace Crolow.FastDico.Common.Models.ScrabbleApi;
+namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
 public class LetterBag
 {

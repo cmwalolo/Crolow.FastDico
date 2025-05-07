@@ -11,7 +11,7 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
             public BoardGridModel Grid { get; set; }
         }
 
-        public PlayConfiguration ReadConfiguration(GameConfigurationContainer config)
+        public PlayConfiguration ReadConfiguration(ToppingConfigurationContainer config)
         {
             PlayConfiguration pc = new PlayConfiguration();
             pc.SelectedConfig = config.GameConfig;
@@ -32,7 +32,7 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
             return config;
         }
 
-        public static PlayConfiguration FillGridConfig(GameConfigurationContainer config, PlayConfiguration pc)
+        public static PlayConfiguration FillGridConfig(ToppingConfigurationContainer config, PlayConfiguration pc)
         {
             pc.BagConfig = ReadLetterConfig(config.LetterConfig);
             pc.GridConfig = new GridConfigurationContainer(config.BoardGrid.SizeH, config.BoardGrid.SizeV);

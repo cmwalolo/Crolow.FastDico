@@ -1,7 +1,7 @@
 ﻿#undef DEBUGPIVOT  
 
 using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.Extensions;
@@ -18,16 +18,16 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
     {
         private static Dictionary<string, uint> PivotCache = new Dictionary<string, uint>();
         private Board board;
-        private GadDagSearch searcher;
+        private IDawgSearch searcher;
         private ILetterNode letterNode;
         private PlayConfiguration playConfiguration;
 
-        public PivotBuilder(Board board, ILetterNode rootNode, PlayConfiguration playConfiguration)
+        public PivotBuilder(CurrentGame currentGame)
         {
-            this.board = board;
-            searcher = new GadDagSearch(rootNode);
-            letterNode = rootNode;
-            this.playConfiguration = playConfiguration;
+            this.board = currentGame.Board;
+            this.searcher = currentGame.Searcher;
+            letterNode = currentGame.Dico.Root;
+            this.playConfiguration = currentGame.Configuration;
         }
 
         public uint[] GetMask(int x, int y, int direction)

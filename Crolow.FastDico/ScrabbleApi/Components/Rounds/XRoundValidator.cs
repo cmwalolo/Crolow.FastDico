@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
+﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators;
 using Crolow.FastDico.ScrabbleApi.Extensions;
@@ -34,14 +34,18 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         public override void Initialize()
         {
             currentIteration = 0;
-            int[] maxIteration = new int[] { 100, 50, 50 };
-            int[] breakPoints = new int[] { 13, 11, 8 };
-
+            maxIteration = new int[] { 100, 50, 50 };
+            breakPoints = new int[] { 13, 11, 8 };
 
             evaluator.Initialize();
             bestRate = null;
             bestRounds = null;
         }
+
+        public virtual void InitializeRound()
+        {
+        }
+
 
         public override List<Tile> InitializeLetters()
         {
@@ -98,7 +102,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 {
                     maxIteration[currentIteration]--;
 
-                    if (maxIteration[currentIteration] == 0)
+                    if (maxIteration[currentIteration] <= 0)
                     {
                         currentIteration++;
                         if (currentIteration == maxIteration.Length)
@@ -108,7 +112,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                         }
                         else
                         {
-                            if (bestRate.scoreAll > breakPoints[currentIteration])
+                            if (bestRate == null)
+                            {
+                                Console.WriteLine("WTF");
+                            }
+                            if (bestRate != null && (bestRate.scoreAll > breakPoints[currentIteration]))
                             {
                                 DebugRatingRound(bestRate);
                                 return bestRounds;

@@ -17,7 +17,7 @@ namespace Crolow.FastDico.Console
             public BoardGridModel Grid { get; set; }
         }
 
-        public GameConfigurationContainer LoadConfig(string name)
+        public ToppingConfigurationContainer LoadConfig(string name)
         {
             var json = File.ReadAllText($"LetterConfigurations.json");
             Letters = JsonConvert.DeserializeObject<List<LetterConfigModel>>(json);
@@ -36,7 +36,7 @@ namespace Crolow.FastDico.Console
             var letter = Letters.FirstOrDefault(x => x.Id == game.LetterConfig);
             var dico = Dictionaries.FirstOrDefault(x => x.Id == letter.DictionaryId);
 
-            GameConfigurationContainer container = new GameConfigurationContainer(game, board, letter, dico);
+            ToppingConfigurationContainer container = new ToppingConfigurationContainer(game, board, letter, dico);
             return container;
         }
     }

@@ -7,7 +7,7 @@ namespace Crolow.FastDico.Common.Models.Common
     public class ApplicationContext
     {
         public static LetterConfigModel DefaultLetterConfig { get; set; }
-        public static GameConfigurationContainer CurrentConfiguration { get; set; }
+        public static ToppingConfigurationContainer CurrentConfiguration { get; set; }
         public static User User { get; set; }
     }
 }
