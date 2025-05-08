@@ -1,8 +1,8 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
-using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
@@ -25,7 +25,7 @@ public class CurrentGame
     public IBaseDictionary Dico;
     public PlayConfiguration playConfiguration;
     public Board Board;
-    public GameConfigModel GameConfig;
+    public IGameConfigModel GameConfig;
     public IDawgSearch Searcher;
     public IPivotBuilder PivotBuilder;
     public IBoardSolver BoardSolver;

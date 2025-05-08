@@ -1,9 +1,8 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.ScrabbleApi.Extensions;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Utils;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 {
@@ -13,7 +12,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 
         private Board board;
 
-        private GameConfigModel gameConfig;
+        private IGameConfigModel gameConfig;
         private ILetterNode rootNode;
 
         public BoardSolver(CurrentGame currentGame)

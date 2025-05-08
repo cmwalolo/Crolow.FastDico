@@ -1,9 +1,10 @@
-﻿using Kalow.Apps.Models.Data;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
+using Kalow.Apps.Models.Data;
 
 namespace Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
-public class BoardGridModel : DataObject
+public class BoardGridModel : DataObject, IBoardGridModel
 {
-    public class MultiplierData
+    public class MultiplierData : IMultiplierData
     {
         public int Multiplier { get; set; }
         public List<int[]> Positions { get; set; }
@@ -12,5 +13,5 @@ public class BoardGridModel : DataObject
     public string Name { get; set; }
     public int SizeH { get; set; }
     public int SizeV { get; set; }
-    public List<MultiplierData> Configuration { get; set; }
+    public List<IMultiplierData> Configuration { get; set; }
 }

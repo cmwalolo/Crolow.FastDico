@@ -1,8 +1,8 @@
-﻿using Crolow.FastDico.Common.Interfaces;
-using Crolow.FastDico.Common.Models.Common.Entities;
-using Crolow.FastDico.Common.Models.Dictionary.Entities;
-using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
-using Crolow.TopMachine.Data;
+﻿using Crolow.TopMachine.Data;
+using Crolow.TopMachine.Data.Bridge;
+using Crolow.TopMachine.Data.Bridge.Entities;
+using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 using Crolow.TopMachine.Data.Repositories;
 
 namespace Crolow.TopMachine.Core
@@ -15,12 +15,12 @@ namespace Crolow.TopMachine.Core
             this.settings = settings;
         }
 
-        public LetterConfigDataManager<LetterConfigModel> LetterConfigs => new LetterConfigDataManager<LetterConfigModel>(settings);
-        public BoardConfigDataManager<BoardGridModel> Boards => new BoardConfigDataManager<BoardGridModel>(settings);
-        public GameConfigDataManager<GameConfigModel> Games => new GameConfigDataManager<GameConfigModel>(settings);
-        public DictionaryDataManager<DictionaryModel> Dictionaries => new DictionaryDataManager<DictionaryModel>(settings);
-        public DicoWordsDataManager<WordEntryModel> DicoEntries => new DicoWordsDataManager<WordEntryModel>(settings);
-        public DicoWordsToDicoDataManager<WordToDicoModel> DicoWords => new DicoWordsToDicoDataManager<WordToDicoModel>(settings);
-        public UserDataManager<User> Users => new UserDataManager<User>(settings);
+        public IDataManager<ILetterConfigModel> LetterConfigs => new LetterConfigDataManager<ILetterConfigModel>(settings);
+        public IDataManager<IBoardGridModel> Boards => new BoardConfigDataManager<IBoardGridModel>(settings);
+        public IDataManager<IGameConfigModel> Games => new GameConfigDataManager<IGameConfigModel>(settings);
+        public IDataManager<IDictionaryModel> Dictionaries => new DictionaryDataManager<IDictionaryModel>(settings);
+        public IDataManager<IWordEntryModel> DicoEntries => new DicoWordsDataManager<IWordEntryModel>(settings);
+        public IDataManager<IWordToDicoModel> DicoWords => new DicoWordsToDicoDataManager<IWordToDicoModel>(settings);
+        public IDataManager<IUser> Users => new UserDataManager<IUser>(settings);
     }
 }

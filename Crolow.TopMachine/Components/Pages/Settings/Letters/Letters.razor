@@ -1,5 +1,6 @@
 ﻿@page "/settings/letters"
 @using Crolow.FastDico.Common.Models.ScrabbleApi.Entities
+@using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi
 @inherits ComponentControls.Settings.Letters.LettersComponent;
 <RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
     <SettingsSidebar />
@@ -16,29 +17,29 @@
                 </RadzenHeader>
                 <RadzenBody style="margin-top:10px;padding:0px;">
                     <RadzenDataGrid style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;" AllowFiltering="true" AllowSorting="true" AllowColumnResize="true"
-                                    @ref="grid" Data="@results" TItem="LetterConfigModel">
+                                    @ref="grid" Data="@results" TItem="ILetterConfigModel">
                         <EmptyTemplate>
                             <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
                         </EmptyTemplate>
                         <Columns>
-                            <RadzenDataGridColumn Property="@nameof(LetterConfigModel.Name)" Title="Name" />
-                            <RadzenDataGridColumn Property="@nameof(LetterConfigModel.DictionaryId)" Title="Dictionary">
+                            <RadzenDataGridColumn Property="@nameof(ILetterConfigModel.Name)" Title="Name" />
+                            <RadzenDataGridColumn Property="@nameof(ILetterConfigModel.DictionaryId)" Title="Dictionary">
                                 <Template Context="data">
                                     <RadzenText TextStyle="TextStyle.Body2">@(dicos.FirstOrDefault(p => p.Id == data.DictionaryId)?.Name)</RadzenText>
                                 </Template>
                             </RadzenDataGridColumn>
 
-                            <RadzenDataGridColumn TItem="LetterConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                            <RadzenDataGridColumn TItem="ILetterConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
                                 <Template Context="data">
                                     <RadzenButton Click=@(() => EditItem(data)) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" />
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="LetterConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                            <RadzenDataGridColumn TItem="ILetterConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
                                 <Template Context="data">
                                     <RadzenButton Click=@(() => DeleteItem(data)) Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="LetterConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                            <RadzenDataGridColumn TItem="ILetterConfigModel" Width="30px" Title="" Filterable="false" Sortable="false">
                                 <Template Context="data">
                                     <RadzenButton Click=@(() => CopyItem(data)) Icon="content_copy" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
                                 </Template>

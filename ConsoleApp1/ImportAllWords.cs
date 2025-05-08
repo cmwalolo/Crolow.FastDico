@@ -1,5 +1,6 @@
 ﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.TopMachine.Data;
+using Crolow.TopMachine.Data.Bridge;
 using Crolow.TopMachine.Data.Repositories;
 using Kalow.Apps.Common.DataTypes;
 
@@ -31,7 +32,7 @@ namespace LuceneWordExtractor
 
                 var word = new WordToDicoModel();
                 word.Id = KalowId.NewObjectId();
-                word.EditState = Crolow.TopMachine.Data.Interfaces.EditState.New;
+                word.EditState = EditState.New;
                 word.Word = file.ToLower();
                 words.Add(word);
                 if (c++ == 1000)

@@ -1,10 +1,10 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.Common.Interfaces
 {
     public interface IGameConfigService
     {
-        List<GameConfigModel> LoadAll();
-        void Update(GameConfigModel gameConfig);
+        List<IGameConfigModel> LoadAll();
+        void Update(IGameConfigModel gameConfig);
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
-public class TileConfig
+namespace Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
+
+public class TileConfig : ITileConfig
 {
     public TileConfig()
     {

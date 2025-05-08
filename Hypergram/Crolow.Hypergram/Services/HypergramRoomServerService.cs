@@ -1,4 +1,4 @@
-﻿using Crolow.TopMachine.Data.Interfaces;
+﻿using Crolow.TopMachine.Data.Bridge;
 using Kalow.Apps.Common.DataTypes;
 using Kalow.Hypergram.Logic.Models.GamePlay;
 using Kalow.Hypergram.Logic.Models.GameSetup;

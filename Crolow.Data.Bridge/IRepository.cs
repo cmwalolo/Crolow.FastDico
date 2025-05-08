@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Crolow.TopMachine.Data.Interfaces
+namespace Crolow.TopMachine.Data.Bridge
 {
     public interface IRepository : IDisposable
     {

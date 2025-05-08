@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Crolow.Data.Bridge\Crolow.TopMachine.Data.Bridge.csproj" />
 		<ProjectReference Include="..\Crolow.FastDico.Models\Crolow.FastDico.Common.csproj" />
 		<ProjectReference Include="..\Crolow.FastDico\Crolow.FastDico.csproj" />
 		<ProjectReference Include="..\Crolow.TopMachine.Data\Crolow.TopMachine.Data.csproj" />

@@ -1,6 +1,8 @@
 ﻿using Crolow.FastDico.Common.Models.Common.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.Users;
 using Crolow.TopMachine.Core.Interfaces;
+using Crolow.TopMachine.Data.Bridge;
+using Crolow.TopMachine.Data.Bridge.Entities;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -16,8 +18,8 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Users
         IUserService UserService { get; set; }
 
 
-        public List<User> results = new List<User>();
-        public RadzenDataGrid<User> grid;
+        public List<IUser> results = new List<IUser>();
+        public RadzenDataGrid<IUser> grid;
 
         protected async override void OnInitialized()
         {
@@ -29,7 +31,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Users
 
         }
 
-        public async Task EditItem(User user)
+        public async Task EditItem(IUser user)
         {
 
             var result = await DialogService.OpenAsync<UserEditDialog>("User Details", new Dictionary<string, object>
@@ -37,18 +39,18 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Users
                 { "User", user }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
-            if (result != null && result is User)
+            if (result != null && result is IUser)
             {
-                user = result as User;
-                user.EditState = Data.Interfaces.EditState.Update;
+                user = result as IUser;
+                user.EditState = EditState.Update;
                 UserService.Update(user);
                 StateHasChanged(); // Ensure the UI is updated
             }
         }
 
-        public async Task DeleteItem(User user)
+        public async Task DeleteItem(IUser user)
         {
-            user.EditState = Data.Interfaces.EditState.ToDelete;
+            user.EditState = EditState.ToDelete;
             UserService.Update(user);
             results.Remove(user);
             await grid.RefreshDataAsync();
@@ -63,10 +65,10 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Users
                 { "User", new User() }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
-            if (result != null && result is User)
+            if (result != null && result is IUser)
             {
-                var newUser = result as User;
-                newUser.EditState = Data.Interfaces.EditState.New;
+                var newUser = result as IUser;
+                newUser.EditState = EditState.New;
                 UserService.Update(newUser);
                 results.Add(newUser);
                 await grid.RefreshDataAsync();

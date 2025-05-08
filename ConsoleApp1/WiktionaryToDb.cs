@@ -1,5 +1,6 @@
 ﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.TopMachine.Data;
+using Crolow.TopMachine.Data.Bridge;
 using Crolow.TopMachine.Data.Repositories;
 using Kalow.Apps.Common.DataTypes;
 using Newtonsoft.Json;
@@ -33,7 +34,7 @@ namespace LuceneWordExtractor
                 if (word.Definitions != null && word.Definitions.Any())
                 {
                     word.Id = KalowId.NewObjectId();
-                    word.EditState = Crolow.TopMachine.Data.Interfaces.EditState.New;
+                    word.EditState = EditState.New;
                     words.Add(word);
                     if (c++ == 100)
                     {

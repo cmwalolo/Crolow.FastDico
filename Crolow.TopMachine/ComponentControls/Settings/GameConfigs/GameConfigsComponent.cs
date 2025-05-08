@@ -3,6 +3,8 @@ using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.GameConfigs;
+using Crolow.TopMachine.Data.Bridge;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 using Kalow.Apps.Common.DataTypes;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -23,10 +25,10 @@ namespace Crolow.TopMachine.ComponentControls.Settings.GameConfigs
         ILetterService LetterService { get; set; }
 
 
-        public List<GameConfigModel> results = new List<GameConfigModel>();
-        public List<BoardGridModel> boards = new List<BoardGridModel>();
-        public List<LetterConfigModel> letters = new List<LetterConfigModel>();
-        public RadzenDataGrid<GameConfigModel> grid;
+        public List<IGameConfigModel> results = new List<IGameConfigModel>();
+        public List<IBoardGridModel> boards = new List<IBoardGridModel>();
+        public List<ILetterConfigModel> letters = new List<ILetterConfigModel>();
+        public RadzenDataGrid<IGameConfigModel> grid;
 
         protected async override void OnInitialized()
         {
@@ -40,7 +42,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.GameConfigs
 
         }
 
-        public async Task EditItem(GameConfigModel album)
+        public async Task EditItem(IGameConfigModel album)
         {
 
             var result = await DialogService.OpenAsync<GameConfigEditDialog>("Game Details", new Dictionary<string, object>
@@ -48,19 +50,19 @@ namespace Crolow.TopMachine.ComponentControls.Settings.GameConfigs
                 { "GameConfig", album }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
-            if (result != null && result is GameConfigModel)
+            if (result != null && result is IGameConfigModel)
             {
-                album = result as GameConfigModel;
-                album.EditState = Data.Interfaces.EditState.Update;
+                album = result as IGameConfigModel;
+                album.EditState = EditState.Update;
 
                 GameConfigService.Update(album);
                 StateHasChanged(); // Ensure the UI is updated
             }
         }
 
-        public async Task DeleteItem(GameConfigModel album)
+        public async Task DeleteItem(IGameConfigModel album)
         {
-            album.EditState = Data.Interfaces.EditState.ToDelete;
+            album.EditState = EditState.ToDelete;
             GameConfigService.Update(album);
             results.Remove(album);
             await grid.RefreshDataAsync();
@@ -75,10 +77,10 @@ namespace Crolow.TopMachine.ComponentControls.Settings.GameConfigs
                 { "GameConfig", new GameConfigModel() }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
-            if (result != null && result is GameConfigModel)
+            if (result != null && result is IGameConfigModel)
             {
-                var newAlbum = result as GameConfigModel;
-                newAlbum.EditState = Data.Interfaces.EditState.New;
+                var newAlbum = result as IGameConfigModel;
+                newAlbum.EditState = EditState.New;
 
                 GameConfigService.Update(newAlbum);
                 await grid.RefreshDataAsync();
@@ -86,11 +88,11 @@ namespace Crolow.TopMachine.ComponentControls.Settings.GameConfigs
             }
         }
 
-        public async Task CopyItem(GameConfigModel album)
+        public async Task CopyItem(IGameConfigModel album)
         {
-            var newConfig = album as GameConfigModel;
+            var newConfig = album as IGameConfigModel;
             newConfig.Id = KalowId.NewObjectId();
-            newConfig.EditState = Data.Interfaces.EditState.New;
+            newConfig.EditState = EditState.New;
             GameConfigService.Update(newConfig);
             results = GameConfigService.LoadAll();
             await grid.RefreshDataAsync();

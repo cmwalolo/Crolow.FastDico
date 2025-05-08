@@ -1,4 +1,4 @@
-﻿using Crolow.TopMachine.Data.Interfaces;
+﻿using Crolow.TopMachine.Data.Bridge;
 using LiteDB;
 using System.Linq.Expressions;
 
@@ -12,6 +12,8 @@ namespace Crolow.TopMachine.Data
 
     public class Repository : IRepository
     {
+        public static BsonMapper BsonMapper { get; set; }
+
         protected readonly DatabaseSetting databaseSetting;
         private readonly string tableName = null;
         protected LiteDatabase client;
@@ -48,7 +50,7 @@ namespace Crolow.TopMachine.Data
 
         public LiteDatabase GetClient(string connectionString)
         {
-            return new LiteDatabase(connectionString);
+            return new LiteDatabase(connectionString, BsonMapper);
         }
 
 
@@ -95,7 +97,7 @@ namespace Crolow.TopMachine.Data
         {
             try
             {
-                Collection<T>().Insert(item);
+                GetDynamicCollection(item).Insert(item);
             }
             catch (Exception ex)
             {
@@ -108,7 +110,10 @@ namespace Crolow.TopMachine.Data
         {
             try
             {
-                Collection<T>().InsertBulk(items);
+                if (items.Any())
+                {
+                    GetDynamicCollection(items.First()).InsertBulk(items.Select(p => p as object));
+                }
             }
             catch (Exception ex)
             {
@@ -134,7 +139,7 @@ namespace Crolow.TopMachine.Data
             try
             {
 
-                return Collection<T>().Update(item);
+                return GetDynamicCollection(item).Update(item);
             }
             catch (Exception ex)
             {
@@ -146,6 +151,20 @@ namespace Crolow.TopMachine.Data
         public ILiteCollection<T> Collection<T>()
         {
             return client.GetCollection<T>(tableName);
+        }
+
+        /// <summary>
+        /// This one is used due to a bug in LiteDB
+        /// The Mappers are running in a stack overflow 
+        /// on serialization.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public ILiteCollection<object> GetDynamicCollection(object target)
+        {
+            var type = target.GetType();
+            var method = typeof(LiteDatabase).GetMethod("GetCollection").MakeGenericMethod(type);
+            return (ILiteCollection<object>)method.Invoke(client, new object[] { tableName, BsonAutoId.ObjectId });
         }
 
         public void Dispose()

@@ -1,7 +1,8 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
+using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -18,8 +19,8 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
         [Parameter]
         public LetterConfigModel Letter { get; set; }
 
-        public RadzenDataGrid<TileConfig> grid;
-        public List<DictionaryModel> dicos;
+        public RadzenDataGrid<ITileConfig> grid;
+        public List<IDictionaryModel> dicos;
 
         protected async override void OnInitialized()
         {
@@ -42,28 +43,28 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
         }
 
         DataGridEditMode editMode = DataGridEditMode.Single;
-        public async Task EditRow(TileConfig tileConfig)
+        public async Task EditRow(ITileConfig tileConfig)
         {
             if (!grid.IsValid) return;
             await grid.EditRow(tileConfig);
         }
 
-        public void OnUpdateRow(TileConfig tileConfig)
+        public void OnUpdateRow(ITileConfig tileConfig)
         {
         }
 
-        public async Task SaveRow(TileConfig tileConfig)
+        public async Task SaveRow(ITileConfig tileConfig)
         {
             grid.UpdateRow(tileConfig);
             grid.CancelEditRow(tileConfig);
         }
 
-        public void CancelEdit(TileConfig tileConfig)
+        public void CancelEdit(ITileConfig tileConfig)
         {
             grid.CancelEditRow(tileConfig);
         }
 
-        public async Task DeleteRow(TileConfig tileConfig)
+        public async Task DeleteRow(ITileConfig tileConfig)
         {
 
             if (Letter.Letters.Contains(tileConfig))
@@ -85,7 +86,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
             await grid.InsertRow(TileConfig);
         }
 
-        public async Task InsertAfterRow(TileConfig row)
+        public async Task InsertAfterRow(ITileConfig row)
         {
             if (!grid.IsValid) return;
             var TileConfig = new TileConfig();
@@ -93,7 +94,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
             await grid.InsertAfterRow(TileConfig, row);
         }
 
-        public void OnCreateRow(TileConfig tileConfig)
+        public void OnCreateRow(ITileConfig tileConfig)
         {
         }
     }

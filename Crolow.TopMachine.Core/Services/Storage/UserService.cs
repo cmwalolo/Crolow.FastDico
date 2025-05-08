@@ -1,7 +1,6 @@
-﻿using Crolow.FastDico.Common.Interfaces;
-using Crolow.FastDico.Common.Models.Common.Entities;
-using Crolow.TopMachine.Core.Interfaces;
-using Crolow.TopMachine.Data.Interfaces;
+﻿using Crolow.TopMachine.Core.Interfaces;
+using Crolow.TopMachine.Data.Bridge;
+using Crolow.TopMachine.Data.Bridge.Entities;
 
 namespace Crolow.Pix.Core.Services.Storage
 {
@@ -14,12 +13,12 @@ namespace Crolow.Pix.Core.Services.Storage
             this.dataFactory = dataFactory;
         }
 
-        public List<User> LoadAll()
+        public List<IUser> LoadAll()
         {
             return dataFactory.Users.GetAllNodes().Result.ToList();
         }
 
-        public void Update(User user)
+        public void Update(IUser user)
         {
             dataFactory.Users.Update(user);
             user.EditState = EditState.Unchanged;

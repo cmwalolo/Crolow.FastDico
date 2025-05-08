@@ -1,7 +1,7 @@
 ﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.TopMachine.Data;
-using Crolow.TopMachine.Data.Interfaces;
+using Crolow.TopMachine.Data.Bridge;
 using Crolow.TopMachine.Data.Repositories;
 using Kalow.Apps.Common.DataTypes;
 using Newtonsoft.Json;
@@ -89,7 +89,7 @@ namespace LuceneWordExtractor
                         {
                             var dico = new WordEntryModel();
                             dico.Id = KalowId.NewObjectId();
-                            dico.EditState = Crolow.TopMachine.Data.Interfaces.EditState.New;
+                            dico.EditState = EditState.New;
                             dico.NormalizedWord = def.NormalizeString();
                             dico.Word = def;
                             dico.Source = "external";
@@ -109,7 +109,7 @@ namespace LuceneWordExtractor
                                     {
                                         Id = KalowId.NewObjectId(),
                                         Word = search.ToLower(),
-                                        EditState = Crolow.TopMachine.Data.Interfaces.EditState.New,
+                                        EditState = EditState.New,
                                         Parent = dico.Id
                                     };
 

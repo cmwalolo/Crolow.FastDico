@@ -35,7 +35,7 @@ namespace Crolow.TopMachine
             builder.Logging.AddDebug();
 #endif
 
-            CrolowPixConfiguration.ConfigureServices(builder.Services);
+            CrolowConfiguration.ConfigureServices(builder.Services);
             CreateConfiguration(builder);
             return builder.Build();
         }

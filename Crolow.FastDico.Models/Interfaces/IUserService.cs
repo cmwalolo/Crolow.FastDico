@@ -1,10 +1,10 @@
-﻿using Crolow.FastDico.Common.Models.Common.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities;
 
 namespace Crolow.TopMachine.Core.Interfaces
 {
     public interface IUserService
     {
-        List<User> LoadAll();
-        void Update(User user);
+        List<IUser> LoadAll();
+        void Update(IUser user);
     }
 }

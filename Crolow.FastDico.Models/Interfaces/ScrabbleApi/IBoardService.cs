@@ -1,10 +1,10 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.Common.Interfaces.ScrabbleApi
 {
     public interface IBoardService
     {
-        List<BoardGridModel> LoadAll();
-        void Update(BoardGridModel boardGrid);
+        List<IBoardGridModel> LoadAll();
+        void Update(IBoardGridModel boardGrid);
     }
 }

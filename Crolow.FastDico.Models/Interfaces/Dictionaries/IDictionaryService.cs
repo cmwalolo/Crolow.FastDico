@@ -1,12 +1,12 @@
-﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
 
 namespace Crolow.FastDico.Common.Interfaces.Dictionaries
 {
     public interface IDictionaryService
     {
-        IBaseDictionary LoadDictionary(DictionaryModel model, string path);
-        List<DictionaryModel> LoadAll();
-        void Update(DictionaryModel album);
-        public List<WordEntryModel> GetDefinitions(string word);
+        IBaseDictionary LoadDictionary(IDictionaryModel model, string path);
+        List<IDictionaryModel> LoadAll();
+        void Update(IDictionaryModel album);
+        public List<IWordEntryModel> GetDefinitions(string word);
     }
 }

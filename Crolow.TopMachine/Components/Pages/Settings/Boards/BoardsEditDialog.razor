@@ -1,12 +1,13 @@
 ﻿@using Crolow.FastDico.Common.Models.ScrabbleApi.Entities
 @using Crolow.TopMachine.ComponentControls.Settings.Boards
+@using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi
 
 @inherits BoardEditDialogComponent
 @{
     Variant variant = Variant.Outlined;
 }
 
-<RadzenTemplateForm TItem="BoardGridModel" Data="Board">
+<RadzenTemplateForm TItem="IBoardGridModel" Data="Board">
     <fieldset>
         <RadzenStack Gap="1rem" class="rz-p-sm-3">
             <RadzenFormField Text="Name" Variant="@variant">

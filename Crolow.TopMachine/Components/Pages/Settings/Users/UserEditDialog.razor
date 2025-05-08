@@ -1,12 +1,13 @@
 ﻿@using Crolow.FastDico.Common.Models.Common.Entities
 @using Crolow.TopMachine.ComponentControls.Settings.Users
+@using Crolow.TopMachine.Data.Bridge.Entities
 
 @inherits UserEditDialogComponent
 @{
     Variant variant = Variant.Outlined;
 }
 
-<RadzenTemplateForm TItem="User" Data="User">
+<RadzenTemplateForm TItem="IUser" Data="User">
     <fieldset>
         <RadzenStack Gap="1rem" class="rz-p-sm-3">
             <RadzenFormField Text="User name" Variant="@variant">

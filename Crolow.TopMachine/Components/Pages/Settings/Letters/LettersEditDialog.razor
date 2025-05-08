@@ -2,13 +2,14 @@
 @using Crolow.FastDico.Common.Models.ScrabbleApi.Entities
 @using Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials
 @using Crolow.TopMachine.ComponentControls.Settings.Letters
+@using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi
 
 @inherits LettersEditDialogComponent
 @{
     Variant variant = Variant.Outlined;
 }
 
-<RadzenTemplateForm TItem="LetterConfigModel" Data="Letter">
+<RadzenTemplateForm TItem="ILetterConfigModel" Data="Letter">
     <fieldset>
         <RadzenStack Gap="1rem" class="rz-p-sm-3">
             <RadzenFormField Text="Name" Variant="@variant">
@@ -18,48 +19,48 @@
                 <RadzenDropDown @bind-Value=@Letter.DictionaryId Data=@dicos TextProperty="@nameof(DictionaryModel.Name)" ValueProperty="@nameof(DictionaryModel.Id)" Style="width: 100%; max-width: 400px;" Name="Dictionary" />
             </RadzenFormField>
             <RadzenDataGrid style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;"
-                            @ref="grid" Data="@Letter.Letters" TItem="TileConfig">
+                            @ref="grid" Data="@Letter.Letters" TItem="ITileConfig">
                 <EmptyTemplate>
                     <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
                 </EmptyTemplate>
                 <Columns>
-                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.Char)" Title="Char" HeaderTooltip="Character">
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(ITileConfig.Char)" Title="Char" HeaderTooltip="Character">
                         <EditTemplate Context="tileConfig">
                             <RadzenTextBox @bind-Value="tileConfig.Char" Name="Character" aria-label="Character used" />
                             <RadzenRequiredValidator Text="Character is required" Component="Char" Popup="true" />
                         </EditTemplate>
                     </RadzenDataGridColumn>
 
-                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.Letter)" Title="Letter" HeaderTooltip="Letter number">
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(ITileConfig.Letter)" Title="Letter" HeaderTooltip="Letter number">
                         <EditTemplate Context="tileConfig">
                             <RadzenNumeric ShowUpDown="false" @bind-Value="tileConfig.Letter" Name="Letter" aria-label="Letter index" />
                             <RadzenRequiredValidator Text="Is required" Component="Letter" Popup="true" />
                         </EditTemplate>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.IsVowel)" Title="Vow" HeaderTooltip="Is vowel ?">
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(ITileConfig.IsVowel)" Title="Vow" HeaderTooltip="Is vowel ?">
                         <EditTemplate Context="tileConfig">
                             <RadzenCheckBox @bind-Value="tileConfig.IsVowel" Name="IsVowel" aria-label="Is vowel ?" />
                         </EditTemplate>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.IsConsonant)" Title="Con" HeaderTooltip="Is consonannt ?">
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(ITileConfig.IsConsonant)" Title="Con" HeaderTooltip="Is consonannt ?">
                         <EditTemplate Context="tileConfig">
                             <RadzenCheckBox @bind-Value="tileConfig.IsConsonant" Name="IsConsonant" aria-label="Is consonant ?" />
                         </EditTemplate>
                     </RadzenDataGridColumn>
 
-                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.TotalLetters)" Title="#" HeaderTooltip="# of letters">
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(ITileConfig.TotalLetters)" Title="#" HeaderTooltip="# of letters">
                         <EditTemplate Context="tileConfig">
                             <RadzenNumeric ShowUpDown="false" @bind-Value="tileConfig.TotalLetters" Name="TotalLetters" aria-label="# of letters" />
                             <RadzenRequiredValidator Text="Is required" Component="TotalLetters" Popup="true" />
                         </EditTemplate>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.Points)" Title="Pts" HeaderTooltip="Letter points">
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(ITileConfig.Points)" Title="Pts" HeaderTooltip="Letter points">
                         <EditTemplate Context="tileConfig">
                             <RadzenNumeric ShowUpDown="false" @bind-Value="tileConfig.Points" Name="Points" aria-label="Letter points" />
                             <RadzenRequiredValidator Text="Is required" Component="Points" Popup="true" />
                         </EditTemplate>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn Width="60px" Property="@nameof(TileConfig.IsJoker)" Title="Jok" HeaderTooltip="Is Joker ?">
+                    <RadzenDataGridColumn Width="60px" Property="@nameof(ITileConfig.IsJoker)" Title="Jok" HeaderTooltip="Is Joker ?">
                         <EditTemplate Context="tileConfig">
                             <RadzenCheckBox @bind-Value="tileConfig.IsJoker" Name="IsJoker" aria-label="Is joker ?" />
                         </EditTemplate>

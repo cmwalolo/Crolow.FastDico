@@ -5,6 +5,8 @@ namespace Crolow.Pix.Data
 {
     public class ApplicationLiteDbContext
     {
+        public static BsonMapper BsonMapper { get; set; }
+
         // Clients (One by Dtaabase) are Opened and remains open during LifeTime. 
         private static Dictionary<string, LiteDatabase> clients = new Dictionary<string, LiteDatabase>();
         private static object _lock = new object();
@@ -21,7 +23,7 @@ namespace Crolow.Pix.Data
                 {
                     if (!clients.ContainsKey(setting))
                     {
-                        bool ok = clients.TryAdd(setting, new LiteDatabase(setting));
+                        bool ok = clients.TryAdd(setting, new LiteDatabase(setting, BsonMapper));
                     }
                 }
             }

@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.Common.Models.ScrabbleApi;
-using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.FastDico.ScrabbleApi.Config;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.ScrabbleApi.Utils
 {
@@ -8,7 +8,7 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
     {
         public class BoardData
         {
-            public BoardGridModel Grid { get; set; }
+            public IBoardGridModel Grid { get; set; }
         }
 
         public PlayConfiguration ReadConfiguration(ToppingConfigurationContainer config)
@@ -19,7 +19,7 @@ namespace Crolow.FastDico.ScrabbleApi.Utils
             return pc;
         }
 
-        public static BagConfiguration ReadLetterConfig(LetterConfigModel letterData)
+        public static BagConfiguration ReadLetterConfig(ILetterConfigModel letterData)
         {
             var config = new BagConfiguration();
 

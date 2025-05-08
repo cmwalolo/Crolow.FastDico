@@ -5,7 +5,6 @@ using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Config;
 using Crolow.FastDico.ScrabbleApi.Extensions;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
 using System.Security.Authentication.ExtendedProtection;

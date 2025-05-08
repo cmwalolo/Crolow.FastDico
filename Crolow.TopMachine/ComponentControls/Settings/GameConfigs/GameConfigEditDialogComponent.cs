@@ -1,7 +1,8 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
-using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
@@ -20,11 +21,11 @@ namespace Crolow.TopMachine.ComponentControls.Settings.GameConfigs
         [Parameter]
         public GameConfigModel GameConfig { get; set; }
 
-        public List<BoardGridModel> boards = new List<BoardGridModel>();
-        public List<LetterConfigModel> letters = new List<LetterConfigModel>();
+        public List<IBoardGridModel> boards = new List<IBoardGridModel>();
+        public List<ILetterConfigModel> letters = new List<ILetterConfigModel>();
 
 
-        public List<DictionaryModel> Dicos { get; set; }
+        public List<IDictionaryModel> Dicos { get; set; }
 
         protected async override void OnInitialized()
         {

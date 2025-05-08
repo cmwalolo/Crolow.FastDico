@@ -1,5 +1,6 @@
 ﻿@page "/settings/boards"
 @using Crolow.FastDico.Common.Models.ScrabbleApi.Entities
+@using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi
 @inherits ComponentControls.Settings.Boards.BoardsComponent
 <RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
     <SettingsSidebar />
@@ -16,25 +17,25 @@
                 </RadzenHeader>
                 <RadzenBody style="margin-top:10px;padding:0px;">
                     <RadzenDataGrid style="overflow-y: auto; flex-grow: 1;display: flex; flex-wrap: wrap;" AllowFiltering="true" AllowSorting="true" AllowColumnResize="true"
-                                    @ref="grid" Data="@results" TItem="BoardGridModel">
+                                    @ref="grid" Data="@results" TItem="IBoardGridModel">
                         <EmptyTemplate>
                             <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No results</p>
                         </EmptyTemplate>
                         <Columns>
-                            <RadzenDataGridColumn Property="@nameof(BoardGridModel.Name)" Title="Name" />
-                            <RadzenDataGridColumn Width="50px" Property="@nameof(BoardGridModel.SizeH)" Title="H" HeaderTooltip="Horizontal Size" />
-                            <RadzenDataGridColumn Width="50px" Property="@nameof(BoardGridModel.SizeV)" Title="V" HeaderTooltip="Vertical Size" />
+                            <RadzenDataGridColumn Property="@nameof(IBoardGridModel.Name)" Title="Name" />
+                            <RadzenDataGridColumn Width="50px" Property="@nameof(IBoardGridModel.SizeH)" Title="H" HeaderTooltip="Horizontal Size" />
+                            <RadzenDataGridColumn Width="50px" Property="@nameof(IBoardGridModel.SizeV)" Title="V" HeaderTooltip="Vertical Size" />
                             <RadzenDataGridColumn TItem="BoardGridModel" Width="30px" Title="" Filterable="false" Sortable="false">
                                 <Template Context="data">
                                     <RadzenButton Click=@(() => EditItem(data)) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.ExtraSmall" />
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="BoardGridModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                            <RadzenDataGridColumn TItem="IBoardGridModel" Width="30px" Title="" Filterable="false" Sortable="false">
                                 <Template Context="data">
                                     <RadzenButton Click=@(() => DeleteItem(data)) Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="BoardGridModel" Width="30px" Title="" Filterable="false" Sortable="false">
+                            <RadzenDataGridColumn TItem="IBoardGridModel" Width="30px" Title="" Filterable="false" Sortable="false">
                                 <Template Context="data">
                                     <RadzenButton Click=@(() => CopyItem(data)) Icon="content_copy" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.ExtraSmall" />
                                 </Template>

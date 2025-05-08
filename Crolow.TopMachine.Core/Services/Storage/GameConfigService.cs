@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.Common.Interfaces;
-using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
-using Crolow.TopMachine.Data.Interfaces;
+using Crolow.TopMachine.Data.Bridge;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.Pix.Core.Services.Storage
 {
@@ -13,12 +13,12 @@ namespace Crolow.Pix.Core.Services.Storage
             this.dataFactory = dataFactory;
         }
 
-        public List<GameConfigModel> LoadAll()
+        public List<IGameConfigModel> LoadAll()
         {
             return dataFactory.Games.GetAllNodes().Result.ToList();
         }
 
-        public void Update(GameConfigModel gameConfig)
+        public void Update(IGameConfigModel gameConfig)
         {
             dataFactory.Games.Update(gameConfig);
             gameConfig.EditState = EditState.Unchanged;

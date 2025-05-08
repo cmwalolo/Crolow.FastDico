@@ -1,35 +1,42 @@
 ﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.FastDico.Common.Models.ScrabbleApi;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 using Newtonsoft.Json;
 
 namespace Crolow.FastDico.Console
 {
     public class ConfigReader
     {
-        public List<DictionaryModel> Dictionaries { get; set; }
-        public List<LetterConfigModel> Letters { get; set; }
-        public List<BoardGridModel> Boards { get; set; }
-        public List<GameConfigModel> GameConfigs { get; set; }
+        public List<IDictionaryModel> Dictionaries { get; set; }
+        public List<ILetterConfigModel> Letters { get; set; }
+        public List<IBoardGridModel> Boards { get; set; }
+        public List<IGameConfigModel> GameConfigs { get; set; }
 
         public class BoardData
         {
-            public BoardGridModel Grid { get; set; }
+            public IBoardGridModel Grid { get; set; }
         }
 
         public ToppingConfigurationContainer LoadConfig(string name)
         {
             var json = File.ReadAllText($"LetterConfigurations.json");
-            Letters = JsonConvert.DeserializeObject<List<LetterConfigModel>>(json);
+
+            var l = JsonConvert.DeserializeObject<List<LetterConfigModel>>(json);
+            Letters = l.Select(p => p as ILetterConfigModel).ToList();
 
             json = File.ReadAllText($"GameConfigurations.json");
-            GameConfigs = JsonConvert.DeserializeObject<List<GameConfigModel>>(json);
+            var g = JsonConvert.DeserializeObject<List<GameConfigModel>>(json);
+            GameConfigs = g.Select(p => p as IGameConfigModel).ToList();
 
             json = File.ReadAllText($"BoardConfigurations.json");
-            Boards = JsonConvert.DeserializeObject<List<BoardGridModel>>(json);
+            var b = JsonConvert.DeserializeObject<List<BoardGridModel>>(json);
+            Boards = b.Select(p => p as IBoardGridModel).ToList();
 
             json = File.ReadAllText($"Dictionaries.json");
-            Dictionaries = JsonConvert.DeserializeObject<List<DictionaryModel>>(json);
+            var d = JsonConvert.DeserializeObject<List<DictionaryModel>>(json);
+            Dictionaries = d.Select(p => p as IDictionaryModel).ToList();
 
             var game = GameConfigs.FirstOrDefault(x => x.Name == name);
             var board = Boards.FirstOrDefault(x => x.Id == game.BoardConfig);

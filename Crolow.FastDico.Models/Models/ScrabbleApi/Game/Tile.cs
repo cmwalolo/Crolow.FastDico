@@ -1,5 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
-using Crolow.FastDico.ScrabbleApi.GameObjects;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
@@ -13,7 +12,7 @@ public struct Tile
     {
     }
 
-    public Tile(TileConfig tile, Square parent)
+    public Tile(ITileConfig tile, Square parent)
     {
         Letter = tile.Letter;
         Points = tile.Points;

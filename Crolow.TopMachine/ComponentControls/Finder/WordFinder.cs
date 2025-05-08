@@ -1,9 +1,9 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.FastDico.Common.Models.Finder;
 using Crolow.FastDico.GadDag;
 using Crolow.FastDico.Search;
 using Crolow.FastDico.Utils;
+using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -27,7 +27,7 @@ namespace Crolow.TopMachine.ComponentControls.Finder
         private GadDagSearchCore searcher;
         public RadzenDataGrid<WordResults> grid;
         public bool searchActive = false;
-        public ObservableCollection<WordEntryModel> definitions = new ObservableCollection<WordEntryModel>();
+        public ObservableCollection<IWordEntryModel> definitions = new ObservableCollection<IWordEntryModel>();
 
         protected async override void OnInitialized()
         {

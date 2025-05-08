@@ -1,7 +1,9 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
 using Crolow.TopMachine.Components.Pages.Settings.Letters;
+using Crolow.TopMachine.Data.Bridge;
+using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
+using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -19,9 +21,9 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
         IDictionaryService DictionaryService { get; set; }
 
 
-        public List<LetterConfigModel> results = new List<LetterConfigModel>();
-        public List<DictionaryModel> dicos = new List<DictionaryModel>();
-        public RadzenDataGrid<LetterConfigModel> grid;
+        public List<ILetterConfigModel> results = new List<ILetterConfigModel>();
+        public List<IDictionaryModel> dicos = new List<IDictionaryModel>();
+        public RadzenDataGrid<ILetterConfigModel> grid;
 
         protected async override void OnInitialized()
         {
@@ -34,7 +36,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
 
         }
 
-        public async Task EditItem(LetterConfigModel album)
+        public async Task EditItem(ILetterConfigModel album)
         {
 
             var result = await DialogService.OpenAsync<LettersEditDialog>("Dictionary Details", new Dictionary<string, object>
@@ -42,33 +44,33 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
                 { "Letter", album }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
-            if (result != null && result is LetterConfigModel)
+            if (result != null && result is ILetterConfigModel)
             {
-                album = result as LetterConfigModel;
-                album.EditState = Data.Interfaces.EditState.Update;
+                album = result as ILetterConfigModel;
+                album.EditState = EditState.Update;
 
                 LetterService.Update(album);
                 StateHasChanged(); // Ensure the UI is updated
             }
         }
 
-        public async Task DeleteItem(LetterConfigModel album)
+        public async Task DeleteItem(ILetterConfigModel album)
         {
-            album.EditState = Data.Interfaces.EditState.ToDelete;
+            album.EditState = EditState.ToDelete;
             LetterService.Update(album);
             results.Remove(album);
             await grid.RefreshDataAsync();
             StateHasChanged();
         }
 
-        public async Task CopyItem(LetterConfigModel album)
+        public async Task CopyItem(ILetterConfigModel album)
         {
             var newConfig = new LetterConfigModel
             {
                 Letters = album.Letters,
                 Name = album.Name + " - copy"
             };
-            newConfig.EditState = Data.Interfaces.EditState.New;
+            newConfig.EditState = EditState.New;
 
             LetterService.Update(newConfig);
             results.Add(newConfig);
@@ -82,13 +84,13 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Letters
 
             var result = await DialogService.OpenAsync<LettersEditDialog>("Dictionary Details", new Dictionary<string, object>
             {
-                { "Letter", new DictionaryModel() }
+                { "Letter", new LetterConfigModel() }
             }, new DialogOptions { Width = "80%", Height = "80%" });
 
-            if (result != null && result is LetterConfigModel)
+            if (result != null && result is ILetterConfigModel)
             {
-                var newAlbum = result as LetterConfigModel;
-                newAlbum.EditState = Data.Interfaces.EditState.New;
+                var newAlbum = result as ILetterConfigModel;
+                newAlbum.EditState = EditState.New;
 
                 LetterService.Update(newAlbum);
                 await grid.RefreshDataAsync();

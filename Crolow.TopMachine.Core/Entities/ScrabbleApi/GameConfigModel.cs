@@ -1,11 +1,12 @@
-﻿using Kalow.Apps.Common.DataTypes;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
+using Kalow.Apps.Common.DataTypes;
 using Kalow.Apps.Models.Data;
 
 namespace Crolow.FastDico.Common.Models.ScrabbleApi.Entities
 {
 
 
-    public class GameConfigModel : DataObject
+    public class GameConfigModel : DataObject, IGameConfigModel
     {
         public GameConfigModel()
         {

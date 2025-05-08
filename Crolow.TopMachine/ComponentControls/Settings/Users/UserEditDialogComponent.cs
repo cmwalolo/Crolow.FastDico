@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.Common.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
@@ -11,7 +11,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Users
 
 
         [Parameter]
-        public User User { get; set; }
+        public IUser User { get; set; }
 
         protected async override void OnInitialized()
         {

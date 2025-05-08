@@ -21,6 +21,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Crolow.FastDico\Crolow.FastDico.csproj" />
+		<ProjectReference Include="..\Crolow.TopMachine.Core\Crolow.TopMachine.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

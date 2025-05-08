@@ -5,12 +5,14 @@ using Crolow.FastDico.GadDag;
 using Crolow.FastDico.ScrabbleApi.Factories;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
+using Crolow.TopMachine.Core.Json;
 using Kalow.Apps.Common.JsonConverters;
 using Newtonsoft.Json;
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 {
-    Converters = { new KalowIdConverter() }
+    Converters = { new KalowIdConverter() },
+    ContractResolver = new CustomContractResolver()
 };
 
 var container = new ConfigReader().LoadConfig("FR 7/7 Difficile");

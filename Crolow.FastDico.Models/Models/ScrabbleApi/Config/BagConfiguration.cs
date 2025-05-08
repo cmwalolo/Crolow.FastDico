@@ -1,12 +1,12 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities.Partials;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.ScrabbleApi.Config
 {
     public class BagConfiguration
     {
         public string Name { get; set; }
-        public Dictionary<byte, TileConfig> LettersByByte { get; set; } = new Dictionary<byte, TileConfig>();
-        public Dictionary<char, TileConfig> LettersByChar { get; set; } = new Dictionary<char, TileConfig>();
+        public Dictionary<byte, ITileConfig> LettersByByte { get; set; } = new Dictionary<byte, ITileConfig>();
+        public Dictionary<char, ITileConfig> LettersByChar { get; set; } = new Dictionary<char, ITileConfig>();
     }
 
 }

@@ -6,17 +6,21 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Crolow.TopMachine.Data\Crolow.TopMachine.Data.csproj" />
-	</ItemGroup>
-
 
 	<ItemGroup>
 		<PackageReference Include="LiteDB" Version="5.0.21" />
 	</ItemGroup>
 
+
 	<ItemGroup>
-		<ProjectReference Include="..\Crolow.TopMachine.Data\Crolow.TopMachine.Data.csproj" />
+	  <ProjectReference Include="..\Crolow.Data.Bridge\Crolow.TopMachine.Data.Bridge.csproj" />
+	  <ProjectReference Include="..\Crolow.TopMachine.Data\Crolow.TopMachine.Data.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="Models\Common\Entities\" />
+	  <Folder Include="Models\Dictionary\Entities\" />
 	</ItemGroup>
 
 </Project>

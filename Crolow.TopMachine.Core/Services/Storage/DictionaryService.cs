@@ -1,8 +1,7 @@
-﻿using Crolow.FastDico.Common.Interfaces;
-using Crolow.FastDico.Common.Interfaces.Dictionaries;
-using Crolow.FastDico.Common.Models.Dictionary.Entities;
+﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.GadDag;
-using Crolow.TopMachine.Data.Interfaces;
+using Crolow.TopMachine.Data.Bridge;
+using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
 
 namespace Crolow.TopMachine.Core.Services.Storage
 {
@@ -15,23 +14,23 @@ namespace Crolow.TopMachine.Core.Services.Storage
             this.dataFactory = dataFactory;
         }
 
-        public List<DictionaryModel> LoadAll()
+        public List<IDictionaryModel> LoadAll()
         {
             return dataFactory.Dictionaries.GetAllNodes().Result.ToList();
         }
 
 
 
-        public void Update(DictionaryModel album)
+        public void Update(IDictionaryModel album)
         {
             dataFactory.Dictionaries.Update(album);
             album.EditState = EditState.Unchanged;
         }
 
-        public List<WordEntryModel> GetDefinitions(string word)
+        public List<IWordEntryModel> GetDefinitions(string word)
         {
             var words = dataFactory.DicoWords.GetAllNodes(p => p.Word == word.ToLower());
-            var defs = new List<WordEntryModel>();
+            var defs = new List<IWordEntryModel>();
             foreach (var wordEntry in words)
             {
                 defs.AddRange(dataFactory.DicoEntries.GetAllNodes(p => p.Id == wordEntry.Parent));
@@ -40,7 +39,7 @@ namespace Crolow.TopMachine.Core.Services.Storage
             return defs.ToList();
         }
 
-        public IBaseDictionary LoadDictionary(DictionaryModel model, string path)
+        public IBaseDictionary LoadDictionary(IDictionaryModel model, string path)
         {
             // Define the target path in AppDataDirectory
             string targetPath = Path.Combine(path, model.DictionaryFile);

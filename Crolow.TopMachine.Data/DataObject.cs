@@ -1,4 +1,4 @@
-﻿using Crolow.TopMachine.Data.Interfaces;
+﻿using Crolow.TopMachine.Data.Bridge;
 using Kalow.Apps.Common.DataTypes;
 using LiteDB;
 using Newtonsoft.Json;

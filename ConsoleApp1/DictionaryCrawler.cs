@@ -1,6 +1,6 @@
 ﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
 using Crolow.TopMachine.Data;
-using Crolow.TopMachine.Data.Interfaces;
+using Crolow.TopMachine.Data.Bridge;
 using Crolow.TopMachine.Data.Repositories;
 using Kalow.Apps.ApiTester.Parsers;
 using System.ComponentModel;

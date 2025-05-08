@@ -1,10 +1,10 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.Common.Interfaces.Dictionaries
 {
     public interface ILetterService
     {
-        List<LetterConfigModel> LoadAll();
-        void Update(LetterConfigModel gameConfig);
+        List<ILetterConfigModel> LoadAll();
+        void Update(ILetterConfigModel gameConfig);
     }
 }

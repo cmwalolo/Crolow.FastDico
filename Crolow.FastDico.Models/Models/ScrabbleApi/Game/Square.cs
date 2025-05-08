@@ -1,6 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
-
-namespace Crolow.FastDico.ScrabbleApi.GameObjects
+﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game
 {
 
     public class Square

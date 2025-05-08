@@ -1,9 +1,9 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
 
 namespace Crolow.FastDico.ScrabbleApi.Config
 {
     public class GameConfigContainer
     {
-        public List<GameConfigModel> Configurations { get; set; }
+        public List<IGameConfigModel> Configurations { get; set; }
     }
 }

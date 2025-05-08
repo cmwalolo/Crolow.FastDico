@@ -1,4 +1,4 @@
-﻿using Crolow.FastDico.Common.Models.Dictionary.Entities;
+﻿using Crolow.TopMachine.Data.Bridge.Entities.Definitions;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
@@ -11,7 +11,7 @@ namespace Crolow.TopMachine.ComponentControls.Settings.Dictionaries
 
 
         [Parameter]
-        public DictionaryModel Dictionary { get; set; }
+        public IDictionaryModel Dictionary { get; set; }
 
         protected async override void OnInitialized()
         {
