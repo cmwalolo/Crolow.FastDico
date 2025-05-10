@@ -23,7 +23,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
         public virtual List<Tile> InitializeLetters()
         {
-            return currentGame.LetterBag.DrawLetters(currentGame.Rack);
+            return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack);
         }
         public virtual PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver)
         {
@@ -45,16 +45,16 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             var selectedRound = playedRounds.Tops[rnd];
 
             // We remove letters played from the rack
-            currentGame.LetterBag.ReturnLetters(currentGame.Rack);
+            currentGame.GameObjects.LetterBag.ReturnLetters(currentGame.GameObjects.Rack);
             selectedRound.Rack = new PlayerRack(playedRounds.PlayerRack);
-            currentGame.Rack = playedRounds.PlayerRack;
-            currentGame.LetterBag.ForceDrawLetters(currentGame.Rack.Tiles);
+            currentGame.GameObjects.Rack = playedRounds.PlayerRack;
+            currentGame.GameObjects.LetterBag.ForceDrawLetters(currentGame.GameObjects.Rack.Tiles);
 
             foreach (var letter in selectedRound.Tiles)
             {
                 if (letter.Parent.Status != 1)
                 {
-                    currentGame.Rack.RemoveTile(letter);
+                    currentGame.GameObjects.Rack.RemoveTile(letter);
                 }
             }
             selectedRound.FinalizeRound();

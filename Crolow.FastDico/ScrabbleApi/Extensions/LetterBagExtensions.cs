@@ -2,6 +2,7 @@
 using Crolow.FastDico.ScrabbleApi.Extensions;
 using Tile = Crolow.FastDico.Common.Models.ScrabbleApi.Game.Tile;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
+using Crolow.FastDico.Common.Models.Common;
 
 namespace Crolow.FastDico.ScrabbleApi.Extensions;
 
@@ -12,7 +13,7 @@ public static class LetterBagExtensions
     // Draw a specified number of letters from the bag
     public static List<Tile> DrawLetters(this LetterBag b, PlayerRack rack, int totalLetters = 0)
     {
-        int count = totalLetters == 0 ? b.GameConfig.SelectedConfig.InRackLetters : totalLetters;
+        int count = totalLetters == 0 ? ApplicationContext.CurrentGame.GameObjects.GameConfig.InRackLetters : totalLetters;
         var drawnLetters = rack.GetTiles();
 
         bool ok = true;
@@ -30,7 +31,7 @@ public static class LetterBagExtensions
                 drawnLetters = rack.GetTiles();
             }
 
-            if (b.GameConfig.SelectedConfig.JokerMode)
+            if (ApplicationContext.CurrentGame.GameObjects.GameConfig.JokerMode)
             {
                 if (!drawnLetters.Any(p => p.IsJoker == true))
                 {
@@ -49,7 +50,8 @@ public static class LetterBagExtensions
                 {
                     int index = RandomGen.Next(b.RemainingLetters);
                     var l = b.Letters[index];
-                    if (!b.GameConfig.SelectedConfig.JokerMode || b.GameConfig.SelectedConfig.JokerMode && !l.IsJoker)
+                    if (!ApplicationContext.CurrentGame.GameObjects.GameConfig.JokerMode
+                        || ApplicationContext.CurrentGame.GameObjects.GameConfig.JokerMode && !l.IsJoker)
                     {
                         drawnLetters.Add(b.Letters[index]);
                         b.Letters.RemoveAt(index);
@@ -91,18 +93,18 @@ public static class LetterBagExtensions
 
     public static bool IsValid(this LetterBag b, List<Tile> letters, List<Tile> rack)
     {
-        var tileConfig = b.GameConfig.BagConfig;
+        var tileConfig = ApplicationContext.CurrentGame.GameObjects.Configuration.BagConfig;
 
         int vow = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsVowel ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsVowel ? 1 : 0) ?? 0);
         int con = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsConsonant ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsConsonant ? 1 : 0) ?? 0);
         int jok = letters.Sum(p => tileConfig.LettersByByte[p.Letter].IsJoker ? 1 : 0) + (rack?.Sum(p => tileConfig.LettersByByte[p.Letter].IsJoker ? 1 : 0) ?? 0);
 
-        if (b.CurrentGame.Round >= b.CurrentGame.Configuration.SelectedConfig.CheckDistributionRound)
+        if (ApplicationContext.CurrentGame.GameObjects.Round >= ApplicationContext.CurrentGame.GameObjects.GameConfig.CheckDistributionRound)
         {
             return vow > 0 && con > 0;
         }
 
-        if (b.CurrentGame.GameConfig.JokerMode && b.Letters.Count > 7)
+        if (ApplicationContext.CurrentGame.GameObjects.GameConfig.JokerMode && b.Letters.Count > 7)
         {
             return vow - jok > 1 && con - jok > 1;
         }

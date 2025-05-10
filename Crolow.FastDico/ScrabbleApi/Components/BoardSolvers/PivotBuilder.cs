@@ -23,10 +23,10 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
 
         public PivotBuilder(CurrentGame currentGame)
         {
-            this.board = currentGame.Board;
-            this.searcher = currentGame.Searcher;
-            letterNode = currentGame.Dico.Root;
-            this.playConfiguration = currentGame.Configuration;
+            this.board = currentGame.GameObjects.Board;
+            this.searcher = currentGame.ControllersSetup.Searcher;
+            letterNode = currentGame.ControllersSetup.Dico.Root;
+            this.playConfiguration = currentGame.GameObjects.Configuration;
         }
 
         public uint[] GetMask(int x, int y, int direction)

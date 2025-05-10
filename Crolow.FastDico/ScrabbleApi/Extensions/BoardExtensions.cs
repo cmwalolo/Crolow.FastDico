@@ -1,4 +1,5 @@
-﻿using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
+﻿using Crolow.FastDico.Common.Models.Common;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.Utils;
 namespace Crolow.FastDico.ScrabbleApi.Extensions;
 
@@ -49,9 +50,9 @@ public static class BoardExtensions
         foreach (var tile in round.Tiles)
         {
             var newTile = tile;
-            if (b.currentGame.Configuration.SelectedConfig.JokerMode && tile.IsJoker)
+            if (ApplicationContext.CurrentGame.GameObjects.Configuration.SelectedConfig.JokerMode && tile.IsJoker)
             {
-                newTile = b.currentGame.LetterBag.ReplaceJoker(tile);
+                newTile = ApplicationContext.CurrentGame.GameObjects.LetterBag.ReplaceJoker(tile);
             }
             b.SetTile(0, x, y, newTile, 1);
             x += incH;

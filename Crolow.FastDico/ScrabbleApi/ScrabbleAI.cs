@@ -2,12 +2,19 @@
 using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.ScrabbleApi.Utils;
+using Newtonsoft.Json.Bson;
+using System.Diagnostics.Metrics;
 using System.Text;
+using static Crolow.FastDico.Common.Interfaces.ScrabbleApi.IScrabbleAI;
 
 namespace Crolow.FastDico.ScrabbleApi;
 
-public partial class ScrabbleAI : IScrabbleAI
+public class ScrabbleAI : IScrabbleAI
 {
+    //public delegate void RoundIsReadyEvent();
+
+    public event RoundIsReadyEvent RoundIsReady;
+
     private CurrentGame CurrentGame;
 
     public ScrabbleAI(CurrentGame currentGame)
@@ -17,147 +24,95 @@ public partial class ScrabbleAI : IScrabbleAI
 
     public void StartGame()
     {
-        using (StopWatcher stopwatch = new StopWatcher("Game started"))
-        {
-            NextRound(true);
-        }
+        NextRound(true);
     }
     public void NextRound(bool firstMove)
     {
-        CurrentGame.BoardSolver.Initialize();
-        CurrentGame.Validator.Initialize();
-
-        PlayedRounds playedRounds = null;
-        var letters = new List<Tile>();
-
-        // We create a copy of the rack and the back to
-        // Start freshly each iteration
-        var originalRack = new PlayerRack(CurrentGame.Rack);
-        var originalBag = new LetterBag(CurrentGame.LetterBag);
-
-        while (true)
+        using (StopWatcher stopwatch = new StopWatcher("New round"))
         {
-            CurrentGame.Validator.InitializeRound();
-            letters = CurrentGame.Validator.InitializeLetters();
-            // End Test
-            if (letters == null)
-            {
-                EndGame();
-                return;
-            }
+            CurrentGame.ControllersSetup.BoardSolver.Initialize();
+            CurrentGame.ControllersSetup.Validator.Initialize();
 
-            var filters = CurrentGame.Validator.InitializeFilters();
-            playedRounds = CurrentGame.BoardSolver.Solve(letters, filters);
+            PlayedRounds playedRounds = null;
+            var letters = new List<Tile>();
 
-            if (playedRounds.Tops.Any())
+            // We create a copy of the rack and the back to
+            // Start freshly each iteration
+            var originalRack = new PlayerRack(CurrentGame.GameObjects.Rack);
+            var originalBag = new LetterBag(CurrentGame.GameObjects.LetterBag);
+
+            while (true)
             {
-                var round = CurrentGame.Validator.ValidateRound(playedRounds, letters, CurrentGame.BoardSolver);
-                if (round != null)
+                CurrentGame.ControllersSetup.Validator.InitializeRound();
+                letters = CurrentGame.ControllersSetup.Validator.InitializeLetters();
+                // End Test
+                if (letters == null)
                 {
-                    playedRounds = round;
-                    break;
+                    EndGame();
+                    return;
                 }
+
+                var filters = CurrentGame.ControllersSetup.Validator.InitializeFilters();
+                playedRounds = CurrentGame.ControllersSetup.BoardSolver.Solve(letters, filters);
+
+                if (playedRounds.Tops.Any())
+                {
+                    var round = CurrentGame.ControllersSetup.Validator.ValidateRound(playedRounds, letters, CurrentGame.ControllersSetup.BoardSolver);
+                    if (round != null)
+                    {
+                        playedRounds = round;
+                        break;
+                    }
+                }
+                else
+                {
+                    EndGame();
+                    return;
+                }
+
+                CurrentGame.GameObjects.Rack = originalRack;
+                CurrentGame.GameObjects.LetterBag = originalBag;
             }
-            else
+
+            PlayableSolution selectedRound = CurrentGame.ControllersSetup.Validator.FinalizeRound(playedRounds);
+            if (selectedRound == null)
             {
                 EndGame();
                 return;
             }
 
-            CurrentGame.Rack = originalRack;
-            CurrentGame.LetterBag = originalBag;
+            CurrentGame.GameObjects.SelectedRound = selectedRound;
+            CurrentGame.GameObjects.GameStatus = GameStatus.WaitingForNextRound;
         }
 
-        PlayableSolution selectedRound = CurrentGame.Validator.FinalizeRound(playedRounds);
-        if (selectedRound == null)
+        if (RoundIsReady != null)
         {
-            EndGame();
-            return;
+            RoundIsReady.Invoke();
         }
+        else
+        {
+            WaitForNextRound();
+        }
+    }
 
-        CurrentGame.Board.SetRound(selectedRound);
-        CurrentGame.RoundsPlayed.Add(selectedRound);
-        selectedRound = new PlayableSolution();
-        CurrentGame.Round++;
+    public void WaitForNextRound()
+    {
+        var selectedRound = CurrentGame.GameObjects.SelectedRound;
+
+        CurrentGame.GameObjects.Board.SetRound(selectedRound);
+        CurrentGame.GameObjects.RoundsPlayed.Add(selectedRound);
+
+        CurrentGame.GameObjects.Round++;
 #if DEBUG
-        CurrentGame.LetterBag.DebugBag(CurrentGame.Rack);
+        CurrentGame.GameObjects.LetterBag.DebugBag(CurrentGame.GameObjects.Rack);
 #endif
+
         NextRound(false);
     }
 
     public void EndGame()
     {
-#if DEBUG
-        PrintGrid();
-#endif
+        CurrentGame.GameObjects.GameStatus = GameStatus.GameEnded;
     }
-
-    public void PrintGrid()
-    {
-#if DEBUG
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine("<html>");
-        sb.AppendLine("<head>");
-        sb.AppendLine("<link rel=\"stylesheet\" href=\"grid.css\" />");
-        sb.AppendLine("</head>");
-
-        sb.AppendLine("<body><div id='grid'>");
-
-        sb.AppendLine("<table class='results' style='float:right'>");
-        sb.AppendLine("<tr><th>#</th><th>Rack</th><th>Word</th><th>pos</th><th>pts</th></tr>");
-        int ndx = 1;
-        foreach (var r in CurrentGame.RoundsPlayed)
-        {
-            sb.AppendLine("<tr>");
-            sb.AppendLine($"<td>{ndx++}</td>");
-            sb.AppendLine($"<td>{r.Rack.GetString()}</td>");
-            sb.AppendLine($"<td>{r.GetWord(true)}</td>");
-            sb.AppendLine($"<td>{r.GetPosition()}</td>");
-            sb.AppendLine($"<td>{r.Points}</td>");
-            sb.AppendLine("</tr>");
-        }
-
-        sb.AppendLine("</table>");
-
-        sb.AppendLine("<table class='board'>");
-        sb.AppendLine("<tr><td></td>");
-        for (int col = 1; col < CurrentGame.Board.CurrentBoard[0].SizeH - 1; col++)
-        {
-            sb.AppendLine($"<td class='border'>{col}</td>");
-        }
-        sb.AppendLine("</tr>");
-
-        for (int x = 1; x < CurrentGame.Board.CurrentBoard[0].SizeH - 1; x++)
-        {
-            var cc = ((char)(x + 64));
-            sb.AppendLine($"<tr><td class='border'>{cc}</td>");
-            for (int y = 1; y < CurrentGame.Board.CurrentBoard[0].SizeH - 1; y++)
-            {
-                var sq = CurrentGame.Board.GetSquare(0, y, x);
-                var cclass = $"cell cell-{sq.LetterMultiplier} cell{sq.WordMultiplier}";
-
-                if (sq.Status == 1)
-                {
-                    cclass += sq.CurrentLetter.IsJoker ? " tileJoker" : " tile";
-                }
-
-                sb.AppendLine($"<td class='{cclass}'>");
-                if (sq.Status == 1)
-                {
-                    var c = (char)(sq.CurrentLetter.Letter + 97);
-                    sb.AppendLine(char.ToUpper(c).ToString());
-                }
-                sb.AppendLine("</td>");
-            }
-            sb.AppendLine("</tr>");
-        }
-        sb.AppendLine("</table>");
-
-        sb.AppendLine("</grid></body></html>");
-        System.IO.File.WriteAllText("output.html", sb.ToString());
-#endif
-        // We are done 
-    }
-
 
 }

@@ -1,24 +1,18 @@
-﻿using Crolow.FastDico.ScrabbleApi.Config;
-
-namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
+﻿namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
 public class LetterBag
 {
     public List<Tile> Letters { get; set; }
-    public PlayConfiguration GameConfig { get; set; }
-    public CurrentGame CurrentGame { get; set; }
 
     public int RemainingLetters => Letters.Count;
     public bool IsEmpty => Letters.Count == 0;
 
-    public LetterBag(CurrentGame currentGame)
+    public LetterBag(GameObjects currentGame)
     {
-        CurrentGame = currentGame;
-        GameConfig = currentGame.Configuration;
         Letters = new List<Tile>();
 
         // Populate the bag according to the distribution
-        foreach (var kvp in GameConfig.BagConfig.LettersByByte)
+        foreach (var kvp in currentGame.Configuration.BagConfig.LettersByByte)
         {
             for (var i = 0; i < kvp.Value.TotalLetters; i++)
             {
@@ -30,8 +24,6 @@ public class LetterBag
     public LetterBag(LetterBag bag)
     {
         Letters = new List<Tile>();
-        CurrentGame = bag.CurrentGame;
-        GameConfig = bag.GameConfig;
         Letters.AddRange(bag.Letters);
     }
 }

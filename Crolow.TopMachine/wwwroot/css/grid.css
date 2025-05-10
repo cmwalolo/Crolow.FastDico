@@ -8,6 +8,10 @@
 }
 /* Rack Styling */
 div#rack {
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+
     padding: 0px;
     text-align: center;
     width: 100%;
@@ -20,8 +24,10 @@ div#rack {
 
     div#rack TD {
         padding: 0px;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
         border: solid 1px gray;
         border-collapse: collapse;
         text-align: center;
@@ -29,12 +35,14 @@ div#rack {
         font-weight: bold;
         background-color: #ffcc66;
         position: relative;
+        color: #333;
     }
 
 
 div#grid {
     padding: 5px;
-    height: 500px;
+    height: 100%;
+    width: 100%;
 }
 
     /* Grid styling */
@@ -56,11 +64,13 @@ div#grid {
             overflow: hidden;
             height: 50px;
             width: 50px;
+            min-height: 50px;
+            min-width: 50px;
         }
 
 
     div#grid td.border {
-        font-size: 9px !important;
+        font-size: 20px !important;
         overflow: hidden;
         color: White !important;
     }
@@ -70,6 +80,7 @@ div#grid {
         border-collapse: collapse;
         font-weight: bold;
         color: Black;
+        font-size: 20px;
     }
 
     div#grid td.cell0 {

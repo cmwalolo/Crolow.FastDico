@@ -1,7 +1,9 @@
 ﻿using Crolow.FastDico.Common.Interfaces;
 using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Common.Interfaces.ScrabbleApi;
+using Crolow.FastDico.Common.Models.Common;
 using Crolow.FastDico.Common.Models.ScrabbleApi;
+using Crolow.FastDico.ScrabbleApi.Factories;
 using Microsoft.AspNetCore.Components;
 
 namespace Crolow.TopMachine.ComponentControls.Topping
@@ -17,6 +19,8 @@ namespace Crolow.TopMachine.ComponentControls.Topping
         [Inject]
         IDictionaryService DictionaryService { get; set; }
 
+        [Inject]
+        NavigationManager Navigation { get; set; }
         public List<ToppingConfigurationContainer> results = new List<ToppingConfigurationContainer>();
 
         protected async override void OnInitialized()
@@ -47,6 +51,10 @@ namespace Crolow.TopMachine.ComponentControls.Topping
         }
         protected async void StartGame(ToppingConfigurationContainer container)
         {
+            var factory = new ToppingFactory();
+            var game = factory.CreateGame(container, DictionaryService, FileSystem.AppDataDirectory);
+            ApplicationContext.CurrentGame = game;
+            Navigation.NavigateTo("/topping/playground");
         }
 
         public void Dispose()

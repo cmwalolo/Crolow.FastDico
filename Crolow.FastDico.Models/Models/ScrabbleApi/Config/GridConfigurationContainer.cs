@@ -4,9 +4,9 @@ namespace Crolow.FastDico.ScrabbleApi.Config
 {
     public class GridConfigurationContainer
     {
-        public int SizeH;
-        public int SizeV;
-        public Square[,] Grid;
+        public int SizeH { get; set; }
+        public int SizeV { get; set; }
+        public Square[,] Grid { get; set; }
 
         public GridConfigurationContainer()
         {

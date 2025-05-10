@@ -51,11 +51,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         {
             if (!evaluator.IsBoosted())
             {
-                return currentGame.LetterBag.DrawLetters(currentGame.Rack);
+                return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack);
             }
             else
             {
-                return currentGame.LetterBag.DrawLetters(currentGame.Rack, maxLettersInRack);
+                return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, maxLettersInRack);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 throw new ArgumentNullException(nameof(solver));
             }
 
-            if (currentGame.Round == 0)
+            if (currentGame.GameObjects.Round == 0)
             {
                 return rounds;
             }
@@ -149,7 +149,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             var solutions = new List<PlayableSolution>();
 
-            if (currentGame.GameConfig.JokerMode)
+            if (currentGame.GameObjects.GameConfig.JokerMode)
             {
                 solutions = playedRounds.AllRounds
                     .Distinct()
@@ -192,7 +192,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             var keys = selection.OrderByDescending(p => p.Key.scoreAll /* (p.Key.scoreappui * 2) + p.Key.scorecollage*/);
 
-            currentGame.LetterBag.ReturnLetters(currentGame.Rack);
+            currentGame.GameObjects.LetterBag.ReturnLetters(currentGame.GameObjects.Rack);
 
             // For each solution we need to check that the selected solution
             // with a rack is the top score. We only do one trial. 
@@ -209,15 +209,15 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                     var rack = new PlayerRack(value.Value.Tiles.Where(p => p.Parent.Status == -1).ToList());
 
                     // No need to try out different racks as it is full
-                    if (rack.Tiles.Count == currentGame.GameConfig.PlayableLetters)
+                    if (rack.Tiles.Count == currentGame.GameObjects.GameConfig.PlayableLetters)
                     {
                         x = 10;
                     }
 
-                    currentGame.LetterBag.ForceDrawLetters(rack.Tiles);
-                    var letters = currentGame.LetterBag.DrawLetters(rack);
+                    currentGame.GameObjects.LetterBag.ForceDrawLetters(rack.Tiles);
+                    var letters = currentGame.GameObjects.LetterBag.DrawLetters(rack);
                     var round = solver.Solve(letters);
-                    currentGame.LetterBag.ReturnLetters(rack);
+                    currentGame.GameObjects.LetterBag.ReturnLetters(rack);
                     selectedSolution.Rack = new PlayerRack(letters);
                     var checkSolution = round.Tops.FirstOrDefault();
 
@@ -263,12 +263,12 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             // We remove letters played from the rack
             selectedRound.Rack = new PlayerRack(selectedRound.Tiles.Where(p => p.Parent.Status == -1).ToList());
-            currentGame.Rack = new PlayerRack();
+            currentGame.GameObjects.Rack = new PlayerRack();
             //currentGame.LetterBag.ReturnLetters(currentGame.Rack, playedRounds.PlayerRack.Tiles);
 
             foreach (var letter in selectedRound.Rack.Tiles)
             {
-                currentGame.LetterBag.RemoveTile(letter);
+                currentGame.GameObjects.LetterBag.RemoveTile(letter);
             }
             selectedRound.FinalizeRound();
             return selectedRound;

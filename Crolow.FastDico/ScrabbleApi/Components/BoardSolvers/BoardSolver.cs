@@ -25,19 +25,19 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             // Once we get the rack 
             // We create a transposed grid for vertical search
             // We create a grid with all possibilities at each pivot place
-            board = currentGame.Board;
-            gameConfig = currentGame.GameConfig;
-            rootNode = currentGame.Dico.Root;
+            board = currentGame.GameObjects.Board;
+            gameConfig = currentGame.GameObjects.GameConfig;
+            rootNode = currentGame.ControllersSetup.Dico.Root;
 
             board.TransposeGrid();
-            currentGame.PivotBuilder.Build();
+            currentGame.ControllersSetup.PivotBuilder.Build();
         }
 
         public PlayedRounds Solve(List<Tile> letters, SolverFilters filters = null)
         {
             filters = filters ?? new SolverFilters();
 
-            bool firstMove = currentGame.Round == 0;
+            bool firstMove = currentGame.GameObjects.Round == 0;
             var playedRounds = new PlayedRounds(gameConfig, letters, filters.PickallResults);
 
             // We set the original position to place which is at the board center
@@ -52,7 +52,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             }
             else
             {
-
                 // Here begins the story... 
                 // Related to the DAWG search we are only starting on squares that can
                 // be connected 

@@ -1,4 +1,5 @@
 ﻿using Crolow.TopMachine.Data.Bridge.Entities.ScrabbleApi;
+using Newtonsoft.Json;
 
 namespace Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 
@@ -28,6 +29,7 @@ public struct Tile
     }
 
 
+    [JsonIgnore]
     public Square Parent { get; set; }
     public int PivotPoints { get; set; }
     public int Source { get; set; }

@@ -1,0 +1,32 @@
+﻿@page "/topping/playground"
+@using Crolow.FastDico.Common.Models.ScrabbleApi
+@using Crolow.FastDico.Common.Models.ScrabbleApi.Entities
+@inherits ComponentControls.Topping.ToppingPlayGroundComponent;
+
+<RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
+    <RadzenSidebar Style="width:400px" @bind-Expanded="@sidebar1Expanded">
+        <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenMenu>
+                <RadzenMenuItem @bind-disabled="isStartGameButtonDisabled" @ref="startGameButton" Text="Start game" Icon="grid_on" Click="StartGame">
+                </RadzenMenuItem>
+            </RadzenMenu>
+        </RadzenStack>
+    </RadzenSidebar>
+    <RadzenBody Style="grid-area: rz-body; display: flex; flex-direction: column;">
+        <div class="rz-p-1" style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+            <RadzenLayout Style="height:100%; display: flex; flex-direction: column;">
+                <RadzenHeader style="padding:5px; flex-shrink: 0;">
+                    <div id="rack">
+                        <table><tr></tr></table>
+                    </div>
+                </RadzenHeader>
+                <RadzenBody Style="flex: 1; overflow: auto;">
+                    <div id="grid" style="height: 100%;"></div>
+                </RadzenBody>
+            </RadzenLayout>
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+@code {
+    bool sidebar1Expanded = true;
+}

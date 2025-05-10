@@ -82,12 +82,12 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             this.currentGame = currentGame;
             Random rnd = new Random();
 
-            ScrabbleFrequence = currentGame.GameConfig.JokerMode ? 0 : 20;  //cfg.Config.intScrabbleFrequence;
+            ScrabbleFrequence = currentGame.GameObjects.GameConfig.JokerMode ? 0 : 20;  //cfg.Config.intScrabbleFrequence;
             CollagesFrequence = 80;  //cfg.Config.intCollagesFrequence;
             AppuisFrequence = 80;  //cfg.Config.intAppuisFrequence;
             RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
-            if (currentGame.GameConfig.JokerMode)
+            if (currentGame.GameObjects.GameConfig.JokerMode)
             {
                 BoostFrequence = 30;
             }
@@ -115,7 +115,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             doSkip = doRaccords = doRack = doBoost = false;
 
             int c = Random.Shared.Next(100);
-            if (c < BoostFrequence && currentGame.Round > 1)
+            if (c < BoostFrequence && currentGame.GameObjects.Round > 1)
             {
                 doBoost = true;
             }
@@ -390,7 +390,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
         private int CompteRaccord(string word)
         {
-            GadDagSearch search = new GadDagSearch(currentGame.Dico.Root);
+            GadDagSearch search = new GadDagSearch(currentGame.ControllersSetup.Dico.Root);
             var res = search.SearchByPrefix(word, 1);
             res.AddRange(search.SearchBySuffix(word, 1));
             return res.Count;
