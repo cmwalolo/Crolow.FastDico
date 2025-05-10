@@ -10,5 +10,6 @@
         void EndGame();
         void NextRound(bool firstMove);
         void StartGame();
+        void SetRound();
     }
 }

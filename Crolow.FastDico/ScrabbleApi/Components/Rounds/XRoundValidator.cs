@@ -55,7 +55,8 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             }
             else
             {
-                return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, maxLettersInRack);
+                var letters = currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, maxLettersInRack, true);
+                return letters;
             }
         }
 
@@ -85,6 +86,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 if (rounds == null)
                 {
                     evaluator.BoostedOff();
+                    maxIteration = new int[] { 40, 10, 10 };
                 }
 
                 return rounds;
@@ -161,7 +163,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count > 4).OrderByDescending(p => p.Points).ToList();
             }
 
-            solutions = solutions.OrderByDescending(p => p.Points).ToList();
+            solutions = solutions.OrderByDescending(p => p.Points)/*.Take(100000)*/.ToList();
 
             var selection = new Dictionary<RatingRound, PlayableSolution>();
             var counter = 0;
@@ -182,7 +184,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             }
 
 #if DEBUG
-            Console.WriteLine($"BOOSTING {solutions.Count} - matches : {selection.Count} ");
+            Console.WriteLine($"BOOSTING {playedRounds.AllRounds.Count} - {solutions.Count} - matches : {selection.Count} ");
 #endif 
 
             if (!selection.Any())

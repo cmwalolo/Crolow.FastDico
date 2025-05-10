@@ -89,11 +89,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
             if (currentGame.GameObjects.GameConfig.JokerMode)
             {
-                BoostFrequence = 30;
+                BoostFrequence = 25;
             }
             else
             {
-                BoostFrequence = 40;
+                BoostFrequence = 35;
             }
             SkipFrequence = 5;
         }

@@ -11,9 +11,10 @@ public static class LetterBagExtensions
     static Random RandomGen = Random.Shared;
 
     // Draw a specified number of letters from the bag
-    public static List<Tile> DrawLetters(this LetterBag b, PlayerRack rack, int totalLetters = 0)
+    public static List<Tile> DrawLetters(this LetterBag b, PlayerRack rack, int totalLetters = 0, bool skipJokers = false)
     {
-        int count = totalLetters == 0 ? ApplicationContext.CurrentGame.GameObjects.GameConfig.InRackLetters : totalLetters;
+        int inRackLetters = ApplicationContext.CurrentGame.GameObjects.GameConfig.InRackLetters;
+        int count = totalLetters == 0 ? inRackLetters : totalLetters;
         var drawnLetters = rack.GetTiles();
 
         bool ok = true;
@@ -44,7 +45,19 @@ public static class LetterBagExtensions
                 }
             }
 
-            for (int i = drawnLetters.Count; i < count; i++)
+            var jokers = new List<Tile>();
+            while (skipJokers && true)
+            {
+                var ndx = b.Letters.FindIndex(p => p.IsJoker);
+                if (ndx > 0)
+                {
+                    jokers.Add(b.Letters[ndx]);
+                    b.Letters.RemoveAt(ndx);
+                }
+                else { break; }
+            }
+
+            while (drawnLetters.Count < count)
             {
                 if (!b.IsEmpty)
                 {
@@ -60,7 +73,32 @@ public static class LetterBagExtensions
                 }
                 break;
             }
+            if (skipJokers)
+            {
+                while (jokers.Count > 0 && drawnLetters.Count < inRackLetters)
+                {
+                    drawnLetters.Add(jokers[0]);
+                    jokers.RemoveAt(0);
+                }
+
+                while (jokers.Count > 0)
+                {
+                    b.Letters.Add(jokers[0]);
+                    jokers.RemoveAt(0);
+                }
+            }
+
             ok = b.IsValid(drawnLetters, null);
+
+            if (skipJokers)
+            {
+                var j = drawnLetters.Count(p => p.IsJoker);
+                if (j > 0)
+                {
+                    Console.WriteLine("hoho");
+                }
+            }
+
         } while (!ok);
         return drawnLetters;
 

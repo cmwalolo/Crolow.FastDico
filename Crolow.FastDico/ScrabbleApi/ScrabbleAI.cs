@@ -13,7 +13,7 @@ public class ScrabbleAI : IScrabbleAI
 {
     //public delegate void RoundIsReadyEvent();
 
-    public event RoundIsReadyEvent RoundIsReady;
+    public event RoundIsReadyEvent? RoundIsReady;
 
     private CurrentGame CurrentGame;
 
@@ -22,11 +22,11 @@ public class ScrabbleAI : IScrabbleAI
         this.CurrentGame = currentGame;
     }
 
-    public void StartGame()
+    public async void StartGame()
     {
         NextRound(true);
     }
-    public void NextRound(bool firstMove)
+    public async void NextRound(bool firstMove)
     {
         using (StopWatcher stopwatch = new StopWatcher("New round"))
         {
@@ -91,11 +91,11 @@ public class ScrabbleAI : IScrabbleAI
         }
         else
         {
-            WaitForNextRound();
+            SetRound();
         }
     }
 
-    public void WaitForNextRound()
+    public async void SetRound()
     {
         var selectedRound = CurrentGame.GameObjects.SelectedRound;
 

@@ -31,10 +31,12 @@ namespace Crolow.TopMachine.ComponentControls.Topping
 
         protected async void StartGame()
         {
-            currentGame.ControllersSetup.ScrabbleEngine.StartGame();
-            isStartGameButtonDisabled = true;
-            //startGameButton.Disabled = false;
-            StateHasChanged();
+            await InvokeAsync(async () =>
+            {
+                currentGame.ControllersSetup.ScrabbleEngine.StartGame();
+                isStartGameButtonDisabled = true;
+                StateHasChanged();
+            });
         }
 
         public bool isStartGameButtonDisabled = true;
