@@ -7,26 +7,26 @@ public static class BoardExtensions
 {
     public static Square GetSquare(this Board b, int grid, int x, int y)
     {
-        if (x < 0 || x >= b.CurrentBoard[grid].Grid.GetLength(0) ||
-            y < 0 || y >= b.CurrentBoard[grid].Grid.GetLength(1))
+        if (x < 0 || x >= b.CurrentBoard[grid].Grid.GetLength(1) ||
+            y < 0 || y >= b.CurrentBoard[grid].Grid.GetLength(0))
         {
             return null;
         }
-        return b.CurrentBoard[grid].Grid[x, y];
+        return b.CurrentBoard[grid].Grid[y, x];
     }
 
-    public static void SetTile(this Board b, int grid, int X, int Y, Tile tile, int status)
+    public static void SetTile(this Board b, int grid, int x, int y, Tile tile, int status)
     {
         // WE set definetly the tile on the rack
-        b.CurrentBoard[grid].Grid[X, Y].CurrentLetter = tile;
-        b.CurrentBoard[grid].Grid[X, Y].Status = status;
+        b.CurrentBoard[grid].Grid[y, x].CurrentLetter = tile;
+        b.CurrentBoard[grid].Grid[y, x].Status = status;
     }
 
-    public static void RemoveTile(this Board b, int grid, int X, int Y)
+    public static void RemoveTile(this Board b, int grid, int y, int x)
     {
         // WE set definetly the tile on the rack
-        b.CurrentBoard[grid].Grid[X, Y].CurrentLetter = new Tile();
-        b.CurrentBoard[grid].Grid[X, Y].Status = -1;
+        b.CurrentBoard[grid].Grid[y, x].CurrentLetter = new Tile();
+        b.CurrentBoard[grid].Grid[y, x].Status = -1;
     }
 
     public static void SetRound(this Board b, PlayableSolution round)

@@ -5,7 +5,7 @@ public class PlayableSolution
     public List<Tile> Tiles { get; set; }
     public Position Position { get; set; }
     public int Points { get; set; }
-    public int PlayedTime { get; set; }
+    public float PlayedTime { get; set; }
     public int Bonus { get; set; }
     public int Pivot { get; set; }
 

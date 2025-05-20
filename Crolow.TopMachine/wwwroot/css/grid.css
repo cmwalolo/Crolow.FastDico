@@ -53,8 +53,8 @@ div#grid {
     }
 
         div#grid table td {
-            border: solid 1px gray;
-            border-collapse: collapse;
+            outline: 1px solid black;
+            outline-offset: -1px;
             table-layout: fixed;
             text-align: center;
             vertical-align: middle;
@@ -66,6 +66,7 @@ div#grid {
             width: 50px;
             min-height: 50px;
             min-width: 50px;
+            position: relative;
         }
 
 
@@ -80,7 +81,7 @@ div#grid {
         border-collapse: collapse;
         font-weight: bold;
         color: Black;
-        font-size: 20px;
+        font-size: 35px;
     }
 
     div#grid td.cell0 {
@@ -112,3 +113,25 @@ div#grid {
     div#grid td.tile {
         background-color: #ffcc66;
     }
+
+.arrow-right::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-style: solid;
+    border-width: 15px 0 15px 30px; /* Top, Right, Bottom, Left */
+    border-color: transparent transparent transparent black;
+}
+
+.arrow-down::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-style: solid;
+    border-width: 30px 15px 0 15px; /* Top, Right, Bottom, Left */
+    border-color: black transparent transparent transparent;
+}

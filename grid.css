@@ -1,0 +1,105 @@
+﻿.rz-footer {
+    padding: 0;
+}
+
+
+body {
+    font: bold 12px artial, verdana;
+}
+
+#playgroundNav {
+    padding: 0px;
+}
+/* Rack Styling */
+div#rack {
+    padding: 0px;
+    text-align: center;
+    width: 100%;
+    height: 30px;
+}
+
+
+
+div#grid {
+    padding: 5px;
+}
+
+    /* Grid styling */
+    div#grid table {
+        table-layout: fixed;
+        margin: 0px;
+        padding: 0px;
+        background-color: #EEE;
+    }
+
+        div#grid table.board td {
+            border: solid 1px gray;
+            border-collapse: collapse;
+            table-layout: fixed;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: bold;
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+            height: 30px;
+            width: 30px;
+            color: black;
+        }
+
+
+    div#grid td.border {
+        font-size: 9px !important;
+        overflow: hidden;
+        color: White !important;
+        background-color: #CCC;
+    }
+
+    div#grid td.cell {
+        border: solid 1px gray;
+        border-collapse: collapse;
+        font-weight: bold;
+        color: White;
+    }
+
+    div#grid td.cell0 {
+        background-color: white;
+    }
+
+    div#grid td.cell2 {
+        background-color: Coral;
+    }
+
+    div#grid td.cell3 {
+        background-color: DarkRed;
+    }
+
+
+    div#grid td.cell-2 {
+        background-color: LightSteelBlue;
+    }
+
+    div#grid td.cell-3 {
+        background-color: DarkBlue;
+    }
+
+    div#grid td.tileJoker {
+        background-color: #ffcc66;
+        color: #FF3333 !important;
+    }
+
+    div#grid td.tile {
+        background-color: #ffcc66;
+        color: black;
+    }
+
+table.results {
+    font-size: 10pt;
+}
+
+    table.results td {
+        white-space: nowrap;
+        font-size: 10px;
+        width: auto;
+        height: auto;
+    }

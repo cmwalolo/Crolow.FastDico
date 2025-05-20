@@ -95,7 +95,7 @@ public static class LetterBagExtensions
                 var j = drawnLetters.Count(p => p.IsJoker);
                 if (j > 0)
                 {
-                    Console.WriteLine("hoho");
+                    Console.WriteLine("It's supposed no Joker");
                 }
             }
 

@@ -11,6 +11,7 @@ public struct Tile
 {
     public Tile()
     {
+        IsEmpty = true;
     }
 
     public Tile(ITileConfig tile, Square parent)
@@ -37,4 +38,5 @@ public struct Tile
     public byte Letter { get; set; }
     public int Points { get; set; }
     public bool IsJoker { get; set; }
+    public bool IsEmpty { get; set; }
 }

@@ -2,19 +2,21 @@
 class Grid {
     constructor(gameController) {
         this.controller = gameController;
+        this.currentCell = null;
     }
 
-    removeHandlers() {
+    RemoveHandlers() {
         var table = $(this.playGroundid).find("#grid table");
         table.find("td").unbind('click');
     }
 
-    init(clickable) {
+    Init(clickable) {
         this.board = this.controller.config.Board.CurrentBoard[0];
-        this.removeHandlers();
+        this.boards = this.controller.config.Board.CurrentBoard;
+        this.RemoveHandlers();
         this.clickable = clickable;
-        this.drawGrid();
-        this.scaleGrid();
+        this.DrawGrid();
+        this.ScaleGrid();
 
         const element = document.querySelector("#grid");
 
@@ -24,7 +26,7 @@ class Grid {
             for (let entry of entries) {
                 const { width, height } = entry.contentRect; // Get new dimensions
                 console.log(`Element resized to: ${width}px x ${height}px`);
-                grid.scaleGrid();
+                grid.ScaleGrid();
             }
         });
 
@@ -32,7 +34,7 @@ class Grid {
         resizeObserver.observe(element);
     }
 
-    drawGrid() {
+    DrawGrid() {
         // On réinitialise la grille en créant une nouvelle table!
         var grid = $("#grid");
         grid.html("");
@@ -78,70 +80,119 @@ class Grid {
         // la classe est "cell"+ le multiplicateur défini.
         for (var x = 1; x < this.board.SizeH - 1; x++) {
             for (var y = 1; y < this.board.SizeV - 1; y++) {
-                var lmul = -this.board.Grid[x][y].LetterMultiplier;
-                var vmul = this.board.Grid[x][y].WordMultiplier;
+                var sq = this.board.Grid[y][x];
+                var lmul = -sq.LetterMultiplier;
+                var vmul = sq.WordMultiplier;
                 var multiplier = lmul < -1 ? lmul : vmul > 1 ? vmul : 0;
                 var className = "cell" + multiplier;
-                table.find("tr:eq(" + y + ")").find("td:eq(" + x + ")")
+                var el = table.find("tr:eq(" + y + ")").find("td:eq(" + x + ")")
                     .addClass(className)
-                    .attr("multiplier", multiplier);
+                    .attr("multiplier", multiplier)
+                    .data("square", sq);
+
+                if (sq.Status != -1) {
+                    var c = "tile";
+                    if (sq.CurrentLetter.IsJoker) {
+                        c += "tile tileJoker";
+                    }
+                    el.addClass(c).text(this.controller.letterConfig.GetRackLetter(sq.CurrentLetter, true));
+                }
             }
         }
 
         // Si on est en mode jeu, alors il est possible de cliquer sur la grille
         // LE click est renvoyé au controleur de jeu.
+        var self = this;
         if (this.clickable) {
             table.find("td").click(
                 function () {
-                    //self.gameController.clickGrid(this.parentNode.rowIndex, this.cellIndex);
+                    var sq = $(this).data("square");
+                    if (sq && sq.Status != 1) {
+                        var pos = self.ClickGrid(this.parentNode.rowIndex, this.cellIndex);
+                        self.ResetPosition(this, pos);
+                    }
                 }
             );
         }
-
-        // On définit la taille des cases
-        //this.resizeGrid();
-
     }
-    /*
-    Est appelé à l'initialisation et par les événements de redimensionnement de la fenêtre ou 
-    du layout manager.
-    */
-    resizeGrid() {
-        // La taille de la grille est dynamique et est dépendante du container principal.
-        // Si pour une raison ou une autre on change la présentation, ou le container
-        // est redimensionné on peut redéfinir la taille des cases.
+
+    UpdateGrid() {
+        this.board = this.controller.config.Board.CurrentBoard[0];
+        this.boards = this.controller.config.Board.CurrentBoard;
+
         var grid = $("#grid");
-        var table = grid.find("table");
+        var table = grid.find("tbody");
+        for (var x = 1; x < this.board.SizeH - 1; x++) {
+            for (var y = 1; y < this.board.SizeV - 1; y++) {
+                var sq = this.board.Grid[y][x];
+                var lmul = -sq.LetterMultiplier;
+                var vmul = sq.WordMultiplier;
+                var multiplier = lmul < -1 ? lmul : vmul > 1 ? vmul : 0;
+                var className = "cell" + multiplier;
+                var el = table.find("tr:eq(" + y + ")").find("td:eq(" + x + ")")
+                    .addClass(className)
+                    .attr("multiplier", multiplier)
+                    .data("square", sq);
 
-        // On calcule donc la taille du div afin de calculer la taille des cases
-        var size = grid.width();
-        var h = grid.height();
-
-        // On prend la taille la plus petite et on calcule la taille minimal d'une case
-        if (size > h) size = h;
-
-        size = Math.round(size / (this.config.SizeH + 2));
-
-        table.find("td").width(size - 2);
-        table.find("td").height(size - 2);
-
-        // On change la taille de la police à 60% de la taille de la case pour toutes 
-        // Les cases de jeu => la class commence par cell.
-        this.currentFontSize = (Math.round(size * 60 / 100)) + "px";
-        table.find("td[class^='cell']").css('font-size', this.currentFontSize);
-
-        // Comme la taille de la grille ne correspond pas forcément à la taille de son parent
-        // Nous recentrons la grille dans celui-ci        
-        var table = grid.find("table");
-        var left = Math.round((grid.width() - table.width()) / 2);
-        table.css("margin-left", left + "px");
-
-        var top = Math.round((grid.height() - table.height()) / 2);
-        table.css("margin-top", top + "px");
-
+                if (sq.Status != -1) {
+                    var c = "tile";
+                    if (sq.CurrentLetter.IsJoker) {
+                        c += "tile tileJoker";
+                    }
+                    el.addClass(c).text(this.controller.letterConfig.GetRackLetter(sq.CurrentLetter, true));
+                }
+            }
+        }
     }
+
+    MoveGrid(h, v, changeDirection) {
+        var o = this.currentPosition;
+        var n = { x: o.x + h, y: o.y + v, d: o.d };
+        n.x = Math.max(1, n.x);
+        n.y = Math.max(1, n.y);
+        n.x = Math.min(this.board.SizeH - 2, n.x);
+        n.y = Math.min(this.board.SizeV - 2, n.y);
+
+        if (changeDirection) {
+            n.d = n.d == 1 ? 0 : 1;
+        }
+        this.currentPosition = n;
+        this.ResetPosition(null, this.currentPosition);
+    }
+
+    GetPosition() {
+        return this.currentPosition;
+    }
+
+    ClickGrid(row, col) {
+        if (this.currentPosition != null && this.currentPosition.x == col && this.currentPosition.y == row) {
+            this.currentPosition.d = this.currentPosition.d == 1 ? 0 : 1;
+        } else {
+            this.currentPosition = { x: col, y: row, d: 0 };
+        }
+        return this.currentPosition;
+    }
+
+    ResetPosition(el, pos) {
+        if (pos == null) {
+            pos = this.currentPosition;
+        } else {
+            this.currentPosition = { ...pos };
+        }
+
+        if (el == null) {
+            el = $("#grid table tr:eq(" + pos.y + ")").find("td:eq(" + pos.x + ")")[0]
+        }
+
+        this.currentCell = el;
+
+        $("#grid table td").removeClass("arrow-right");
+        $("#grid table td").removeClass("arrow-down");
+        $(el).addClass(pos.d == 0 ? "arrow-right" : "arrow-down");
+    }
+
     // Réinitialise la grille en vidant toutes les lettres 
-    clearGrid() {
+    ClearGrid() {
         var table = $("#grid table tbody");
         for (var x = 1; x <= this.config.SizeH; x++) {
             for (var y = 1; y <= this.config.SizeV; y++) {
@@ -155,10 +206,67 @@ class Grid {
                     .text("");
             }
         }
-
     }
 
-    scaleGrid() {
+    GetCurrentCell() {
+        return this.currentCell;
+    }
+
+    GetCell(x, y) {
+        var table = $("#grid table tbody");
+        var cell = table.find("tr:eq(" + y + ")").find("td:eq(" + x + ")")
+        return cell;
+    }
+
+    MoveBackward() {
+        var p = this.currentPosition;
+        if (p.x > 1 && p.d == 0) {
+            p.x--;
+        } else if (p.y > 1 && p.d == 1) {
+            p.y--;
+        } else {
+            return null;
+        }
+
+        return this.currentCell;
+    }
+
+    MoveForward() {
+        var p = this.currentPosition;
+        var maxH = this.board.SizeH - 2;
+        var maxV = this.board.SizeV - 2;
+
+        if ((p.x < maxH && p.d == 0)) {
+            p.x++;
+        } else if ((p.y < maxV && p.d == 1)) {
+            p.y++;
+        } else {
+            return null;
+        }
+        return this.currentCell;
+    }
+
+    SetLetter(cell, text) {
+        var sq = $(cell).data("square");
+        var c = "tile";
+        if (sq.CurrentLetter.IsJoker) {
+            c += "tile tileJoker";
+        }
+        $(cell).data("square", sq)
+            .addClass(c)
+            .text(this.controller.letterConfig.GetRackLetter(sq.CurrentLetter, true));
+    }
+
+    RemoveLetter(cell) {
+        var sq = $(cell).data("square");
+        sq.CurrentLetter = null;
+        sq.Status = -1;
+        $(cell).removeClass("tile")
+            .removeClass("tileJoker")
+            .data("square", sq).text("");
+    }
+
+    ScaleGrid() {
         const gridElement = document.querySelector('#grid table');
         const parentElement = document.querySelector('#grid');
 

@@ -14,12 +14,21 @@
         return word;
     }
 
-    GetRackLetter(letter) {
+    GetRackLetter(letter, processJoker) {
         // Process each letter
-        if (letter.IsJoker) return "?";
+        if (!processJoker && letter.IsJoker) return "?";
         const result = this.letterConfig.Letters.find(item => item.Letter === letter.Letter);
         if (result != undefined) {
             return result.Char;
+        }
+        return "";
+    }
+
+    GetLetterByte(letter) {
+        // Process each letter
+        const result = this.letterConfig.Letters.find(item => item.Char === letter);
+        if (result != undefined) {
+            return result.Letter;
         }
         return "";
     }

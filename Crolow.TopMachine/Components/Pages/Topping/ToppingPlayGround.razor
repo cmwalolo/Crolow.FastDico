@@ -5,12 +5,38 @@
 
 <RadzenLayout Style="height:100%;grid-template-columns: 1fr auto; grid-template-areas: 'rz-header rz-header' 'rz-body rz-sidebar'">
     <RadzenSidebar Style="width:400px" @bind-Expanded="@sidebar1Expanded">
-        <RadzenStack Orientation="Orientation.Horizontal">
+        <RadzenStack Orientation="Orientation.Vertical">
             <RadzenMenu>
-                <RadzenMenuItem @bind-disabled="isStartGameButtonDisabled" @ref="startGameButton" Text="Start game" Icon="grid_on" Click="StartGame">
-                </RadzenMenuItem>
+                <RadzenMenuItem @bind-disabled="isStartGameButtonDisabled" @ref="startGameButton" Text="Start game" Icon="play_arrow" Click="StartGame" />
+                <RadzenMenuItem Text="Next round" Icon="double_arrow" Click="NextRound" />
+                <RadzenMenuItem Text="Hint" Icon="info" Click="NextRound" />
             </RadzenMenu>
+            <div style="width:100%">
+                <table id="solutions">
+                    <tr><td colspan="3">Validated solution</td></tr>
+                    <tr><td></td><td></td><td></td></tr>
+                    <tr><td colspan="3">Current solution</td></tr>
+                    <tr><td></td><td></td><td></td></tr>
+                </table>
+            </div>
         </RadzenStack>
+        <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
+            <HeaderTemplate>
+                <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
+                    <b>History</b>
+                </RadzenText>
+            </HeaderTemplate>
+            <ChildContent></ChildContent>
+        </RadzenPanel>
+        <RadzenPanel AllowCollapse="true" class="rz-my-10 rz-mx-auto">
+            <HeaderTemplate>
+                <RadzenText TextStyle="TextStyle.H6" class="rz-display-flex rz-align-items-center rz-m-0">
+                    <b>Definition</b>
+                </RadzenText>
+            </HeaderTemplate>
+            <ChildContent></ChildContent>
+        </RadzenPanel>
+
     </RadzenSidebar>
     <RadzenBody Style="grid-area: rz-body; display: flex; flex-direction: column;">
         <div class="rz-p-1" style="flex: 1; display: flex; flex-direction: column; height: 100%;">

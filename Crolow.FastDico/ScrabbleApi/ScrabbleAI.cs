@@ -14,6 +14,8 @@ public class ScrabbleAI : IScrabbleAI
     //public delegate void RoundIsReadyEvent();
 
     public event RoundIsReadyEvent? RoundIsReady;
+    public event RoundSelectedEvent? RoundSelected;
+
 
     private CurrentGame CurrentGame;
 
@@ -26,7 +28,7 @@ public class ScrabbleAI : IScrabbleAI
     {
         NextRound(true);
     }
-    public async void NextRound(bool firstMove)
+    public async void NextRound(bool firstMove = false)
     {
         using (StopWatcher stopwatch = new StopWatcher("New round"))
         {
@@ -107,7 +109,14 @@ public class ScrabbleAI : IScrabbleAI
         CurrentGame.GameObjects.LetterBag.DebugBag(CurrentGame.GameObjects.Rack);
 #endif
 
-        NextRound(false);
+        if (RoundSelected != null)
+        {
+            RoundSelected.Invoke(selectedRound, selectedRound.Rack);
+        }
+        else
+        {
+            NextRound(false);
+        }
     }
 
     public void EndGame()
@@ -115,4 +124,8 @@ public class ScrabbleAI : IScrabbleAI
         CurrentGame.GameObjects.GameStatus = GameStatus.GameEnded;
     }
 
+    public async void ValidateRound(PlayableSolution solution)
+    {
+        Console.Write(solution.ToString());
+    }
 }

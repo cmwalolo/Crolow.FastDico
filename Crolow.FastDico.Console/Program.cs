@@ -1,17 +1,14 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
 using Crolow.FastDico.Common.Models.Common;
-using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.Console;
 using Crolow.FastDico.Dawg;
 using Crolow.FastDico.GadDag;
-using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.ScrabbleApi.Factories;
 using Crolow.FastDico.ScrabbleApi.Utils;
 using Crolow.FastDico.Utils;
 using Crolow.TopMachine.Core.Json;
 using Kalow.Apps.Common.JsonConverters;
 using Newtonsoft.Json;
-using System.Text;
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 {
@@ -41,76 +38,6 @@ using (StopWatcher stopwatch = new StopWatcher("Game started"))
 }
 PrintGame.PrintGrid(game);
 Console.ReadLine();
-
-public class PrintGame
-{
-    public static void PrintGrid(CurrentGame game)
-    {
-#if DEBUG
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine("<html>");
-        sb.AppendLine("<head>");
-        sb.AppendLine("<link rel=\"stylesheet\" href=\"grid.css\" />");
-        sb.AppendLine("</head>");
-
-        sb.AppendLine("<body><div id='grid'>");
-
-        sb.AppendLine("<table class='results' style='float:right'>");
-        sb.AppendLine("<tr><th>#</th><th>Rack</th><th>Word</th><th>pos</th><th>pts</th></tr>");
-        int ndx = 1;
-        foreach (var r in game.GameObjects.RoundsPlayed)
-        {
-            sb.AppendLine("<tr>");
-            sb.AppendLine($"<td>{ndx++}</td>");
-            sb.AppendLine($"<td>{r.Rack.GetString()}</td>");
-            sb.AppendLine($"<td>{r.GetWord(true)}</td>");
-            sb.AppendLine($"<td>{r.GetPosition()}</td>");
-            sb.AppendLine($"<td>{r.Points}</td>");
-            sb.AppendLine("</tr>");
-        }
-
-        sb.AppendLine("</table>");
-
-        sb.AppendLine("<table class='board'>");
-        sb.AppendLine("<tr><td></td>");
-        for (int col = 1; col < game.GameObjects.Board.CurrentBoard[0].SizeH - 1; col++)
-        {
-            sb.AppendLine($"<td class='border'>{col}</td>");
-        }
-        sb.AppendLine("</tr>");
-
-        for (int x = 1; x < game.GameObjects.Board.CurrentBoard[0].SizeH - 1; x++)
-        {
-            var cc = ((char)(x + 64));
-            sb.AppendLine($"<tr><td class='border'>{cc}</td>");
-            for (int y = 1; y < game.GameObjects.Board.CurrentBoard[0].SizeH - 1; y++)
-            {
-                var sq = game.GameObjects.Board.GetSquare(0, y, x);
-                var cclass = $"cell cell-{sq.LetterMultiplier} cell{sq.WordMultiplier}";
-
-                if (sq.Status == 1)
-                {
-                    cclass += sq.CurrentLetter.IsJoker ? " tileJoker" : " tile";
-                }
-
-                sb.AppendLine($"<td class='{cclass}'>");
-                if (sq.Status == 1)
-                {
-                    var c = (char)(sq.CurrentLetter.Letter + 97);
-                    sb.AppendLine(char.ToUpper(c).ToString());
-                }
-                sb.AppendLine("</td>");
-            }
-            sb.AppendLine("</tr>");
-        }
-        sb.AppendLine("</table>");
-
-        sb.AppendLine("</grid></body></html>");
-        System.IO.File.WriteAllText("output.html", sb.ToString());
-#endif
-        // We are done 
-    }
-}
 
 public class Tester
 {
