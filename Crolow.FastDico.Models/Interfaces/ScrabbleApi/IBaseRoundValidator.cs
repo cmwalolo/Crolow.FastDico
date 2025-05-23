@@ -5,6 +5,7 @@ namespace Crolow.FastDico.Common.Interfaces.ScrabbleApi
 {
     public interface IBaseRoundValidator
     {
+        bool CanRejectBagByDefault(LetterBag bag, PlayerRack rack);
         PlayableSolution FinalizeRound(PlayedRounds playedRounds);
         void Initialize();
         SolverFilters InitializeFilters();

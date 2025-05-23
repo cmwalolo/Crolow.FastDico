@@ -23,11 +23,17 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
         public virtual List<Tile> InitializeLetters()
         {
-            return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack);
+            var reject = CanRejectBagByDefault(currentGame.GameObjects.LetterBag, currentGame.GameObjects.Rack);
+            return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, reject: reject);
         }
         public virtual PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver)
         {
             return rounds;
+        }
+
+        public virtual bool CanRejectBagByDefault(LetterBag bag, PlayerRack rack)
+        {
+            return false;
         }
 
         public virtual SolverFilters InitializeFilters()
@@ -43,7 +49,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
             var rnd = Random.Shared.Next(playedRounds.Tops.Count);
             var selectedRound = playedRounds.Tops[rnd];
-
             // We remove letters played from the rack
             currentGame.GameObjects.LetterBag.ReturnLetters(currentGame.GameObjects.Rack);
             selectedRound.Rack = new PlayerRack(playedRounds.PlayerRack);

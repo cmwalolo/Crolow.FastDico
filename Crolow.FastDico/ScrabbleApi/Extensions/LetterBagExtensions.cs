@@ -3,6 +3,7 @@ using Crolow.FastDico.ScrabbleApi.Extensions;
 using Tile = Crolow.FastDico.Common.Models.ScrabbleApi.Game.Tile;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.Common.Models.Common;
+using System.Data;
 
 namespace Crolow.FastDico.ScrabbleApi.Extensions;
 
@@ -11,11 +12,17 @@ public static class LetterBagExtensions
     static Random RandomGen = Random.Shared;
 
     // Draw a specified number of letters from the bag
-    public static List<Tile> DrawLetters(this LetterBag b, PlayerRack rack, int totalLetters = 0, bool skipJokers = false)
+    public static List<Tile> DrawLetters(this LetterBag b, PlayerRack rack, int totalLetters = 0, bool skipJokers = false, bool reject = false)
     {
         int inRackLetters = ApplicationContext.CurrentGame.GameObjects.GameConfig.InRackLetters;
         int count = totalLetters == 0 ? inRackLetters : totalLetters;
         var drawnLetters = rack.GetTiles();
+
+        if (reject && !b.IsValid(drawnLetters, null))
+        {
+            b.ReturnLetters(rack, drawnLetters);
+            drawnLetters = rack.GetTiles();
+        }
 
         bool ok = true;
 

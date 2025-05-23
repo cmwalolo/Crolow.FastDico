@@ -62,9 +62,8 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         public const float RackRatioMult = 1;           // Multiplier
         public const float ScrabbleRatioDiv = 25;
         public const float RaccordsRatioMul = 1;
-        public const float CollageRatioDiv = 0.25f;
-        public const float CollageMotRatioDiv = 4;
-        public const float AppuiRatioDiv = 4;
+        public const float CollageRatioDiv = 2f;
+        public const float AppuiRatioDiv = 7f;
 
         public int ScrabbleFrequence = 60;
         public int AppuisFrequence = 80;
@@ -89,11 +88,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             RackFrequence = 40; //  cfg.Config.intRackFrequence; 
             if (currentGame.GameObjects.GameConfig.JokerMode)
             {
-                BoostFrequence = 25;
+                BoostFrequence = 30;
             }
             else
             {
-                BoostFrequence = 35;
+                BoostFrequence = 40;
             }
             SkipFrequence = 5;
         }
@@ -277,7 +276,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
         private void EvaluateScoreAppui(RatingRound rate, PlayableSolution round, string word)
         {
-            if (word.Length < 5)
+            if (round.Tiles.Count(p => p.Parent.Status != 1) < 5)
             {
                 return;
             }
@@ -302,6 +301,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
 
         private void EvaluateCollages(RatingRound rate, PlayableSolution round, string word)
         {
+            if (word.Length < 5)
+            {
+                return;
+            }
+
             int length = word.Length;
 
             int count = 0; // gc.GameBoard.evalRaccords(tround);
@@ -316,41 +320,16 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                         count += System.Math.Min(3, c);
                         words++;
                     }
-
-                    if (c > 3)
-                    {
-                        //  words++;
-                    }
                 }
-            }
-
-            if (words == 0)
-            {
-                words = 1;
-                count = count * 2;
             }
 
             if (count > 1 && words > 2)
             {
-                rate.scorecollage = count * words;
-                rate.scoreAll += ((float)rate.scorecollage * CollageRatioDiv);
+                rate.scorecollage = count;
+                rate.scorecollagemots = words;
+                rate.scoreAll += ((float)rate.scorecollage * rate.scorecollagemots * CollageRatioDiv);
             }
         }
-
-        /* private void EvaluateCollagesMots(RatingRound rate, PlayedRound round, string word)
-         {
-             int length = word.Length;
-
-             int count = 0; // ((CBoard)gc.GameBoard).evalRaccordsMots(tround);
-
-             if (count > 3)
-             {
-                 rate.scorecollagemots = count;
-                 rate.scoreAll += count / (CollageMotRatioDiv * rate.nbSolutions);
-             }
-
-         }*/
-
         private void EvaluateRaccords(RatingRound rate, PlayableSolution round, string word)
         {
             if (word.Length > 4)

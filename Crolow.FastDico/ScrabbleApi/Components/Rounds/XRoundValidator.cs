@@ -68,6 +68,11 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             return f;
         }
 
+        public override bool CanRejectBagByDefault(LetterBag bag, PlayerRack rack)
+        {
+            return bag.IsValid(null, rack.Tiles);
+        }
+
         public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver)
         {
             if (solver is null)
