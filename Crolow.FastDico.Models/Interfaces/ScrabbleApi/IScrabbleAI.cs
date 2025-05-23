@@ -12,10 +12,11 @@ namespace Crolow.FastDico.Common.Interfaces.ScrabbleApi
         event RoundSelectedEvent RoundSelected;
 
         void EndGame();
-        void NextRound(bool firstMove = false);
-        void StartGame();
+        Task<bool> NextRound(bool firstMove = false);
+        Task StartGame();
         void SetRound();
-        void ValidateRound(PlayableSolution solution);
+        Task<bool> ValidateRound(PlayableSolution solution);
+
 
     }
 }

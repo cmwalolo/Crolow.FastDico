@@ -22,9 +22,9 @@ namespace Crolow.FastDico.ScrabbleApi.Extensions
 
         }
 
-        public static bool GetPivot(this Square sq, Tile letter, int direction, byte joker)
+        public static bool GetPivot(this Square sq, Tile letter, int direction, byte joker, bool checkJoker = true)
         {
-            var c = letter.IsJoker ? joker : letter.Letter;
+            var c = letter.IsJoker && !checkJoker ? joker : letter.Letter;
             return (sq.Pivots[direction] & 1u << c) > 0;
         }
 

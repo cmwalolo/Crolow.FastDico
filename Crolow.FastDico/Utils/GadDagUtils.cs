@@ -1,14 +1,16 @@
 ﻿using Crolow.FastDico.Common.Interfaces.Dictionaries;
+using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.Dicos;
 
 namespace Crolow.FastDico.Utils
 {
     public class GadDagUtils
     {
-        public static LetterNode SearchWord(ILetterNode root, string word)
+        public static bool SearchWord(ILetterNode root, string word)
         {
             var bytes = TilesUtils.ConvertWordToBytes(word);
-            return null; // SearchWordRecursive(root, bytes, 0, false);
+            var node = SearchWordRecursive(root, bytes, 0, false);
+            return node != null;
         }
 
         private static ILetterNode SearchWordRecursive(ILetterNode currentNode, List<byte> word, int index, bool pastPivot)
@@ -63,6 +65,12 @@ namespace Crolow.FastDico.Utils
             return result;
         }
 
+        public static bool CheckWord(ILetterNode rootNode, List<Tile> tiles)
+        {
+            var bytes = tiles.Select(p => p.Letter).ToList();
+            var node = SearchWordRecursive(rootNode, bytes, 0, false);
+            return node != null;
+        }
 
     }
 }

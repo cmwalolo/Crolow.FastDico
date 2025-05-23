@@ -6,5 +6,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
     {
         void Initialize();
         PlayedRounds Solve(List<Tile> letters, SolverFilters filters = null);
+        bool ValidateRound(PlayableSolution solution);
     }
 }

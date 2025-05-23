@@ -6,6 +6,7 @@
         this.roundPosition = null;
         this.solutionHolder = $("#solutions")
         this.totalPoints = 0;
+        this.bestTotalPoints = 0;
     }
 
     GetPosition() {
@@ -67,6 +68,7 @@
 
             if (this.controller.config.Round == 0 && cx == mh && cy == mv) {
                 positionValid = true;
+                break;
             }
 
             if (cx != position.x || cy != position.y) {
@@ -107,7 +109,18 @@
             Points: this.totalPoints,
             FinalRound: true
         };
-        sendPlaygroundController("Validate", s);
+
+        sendPlaygroundController("Validate", s)
+            .then(result => {
+                if (result) {
+                    this.totalPoints = 0;
+                    this.SetSolution(false, true);
+                } else {
+                    if (this.bestTotalPoints < this.totalPoints) {
+                        this.SetSolution(true, true);
+                    }
+                }
+            });
     }
 
     ClearSolution() {

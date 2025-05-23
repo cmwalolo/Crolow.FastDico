@@ -16,7 +16,7 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
     ContractResolver = new CustomContractResolver()
 };
 
-var container = new ConfigReader().LoadConfig("FR 7/7 Difficile");
+var container = new ConfigReader().LoadConfig("FR 7/7 Joker");
 // We set the current Language to the selected config
 TilesUtils.configuration = ConfigLoader.ReadLetterConfig(container.LetterConfig);
 

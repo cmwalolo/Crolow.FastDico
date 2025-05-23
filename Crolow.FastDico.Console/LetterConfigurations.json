@@ -1,3 +1,252 @@
 ﻿[
-{"_id":{"$oid":"67f39486fc54350e78d4dcbf"},"Name":"FR","Letters":[{"Char":"A","Letter":0,"IsVowel":true,"IsConsonant":false,"TotalLetters":9,"Points":1,"IsJoker":false},{"Char":"B","Letter":1,"IsVowel":false,"IsConsonant":true,"TotalLetters":2,"Points":3,"IsJoker":false},{"Char":"C","Letter":2,"IsVowel":false,"IsConsonant":true,"TotalLetters":2,"Points":3,"IsJoker":false},{"Char":"D","Letter":3,"IsVowel":false,"IsConsonant":true,"TotalLetters":3,"Points":2,"IsJoker":false},{"Char":"E","Letter":4,"IsVowel":true,"IsConsonant":false,"TotalLetters":15,"Points":1,"IsJoker":false},{"Char":"F","Letter":5,"IsVowel":false,"IsConsonant":true,"TotalLetters":2,"Points":4,"IsJoker":false},{"Char":"G","Letter":6,"IsVowel":false,"IsConsonant":true,"TotalLetters":2,"Points":2,"IsJoker":false},{"Char":"H","Letter":7,"IsVowel":false,"IsConsonant":true,"TotalLetters":2,"Points":4,"IsJoker":false},{"Char":"I","Letter":8,"IsVowel":true,"IsConsonant":false,"TotalLetters":8,"Points":1,"IsJoker":false},{"Char":"J","Letter":9,"IsVowel":false,"IsConsonant":true,"TotalLetters":1,"Points":8,"IsJoker":false},{"Char":"K","Letter":10,"IsVowel":false,"IsConsonant":true,"TotalLetters":1,"Points":10,"IsJoker":false},{"Char":"L","Letter":11,"IsVowel":false,"IsConsonant":true,"TotalLetters":5,"Points":1,"IsJoker":false},{"Char":"M","Letter":12,"IsVowel":false,"IsConsonant":true,"TotalLetters":3,"Points":2,"IsJoker":false},{"Char":"N","Letter":13,"IsVowel":false,"IsConsonant":true,"TotalLetters":6,"Points":1,"IsJoker":false},{"Char":"O","Letter":14,"IsVowel":true,"IsConsonant":false,"TotalLetters":6,"Points":1,"IsJoker":false},{"Char":"P","Letter":15,"IsVowel":false,"IsConsonant":true,"TotalLetters":2,"Points":3,"IsJoker":false},{"Char":"Q","Letter":16,"IsVowel":false,"IsConsonant":true,"TotalLetters":1,"Points":8,"IsJoker":false},{"Char":"R","Letter":17,"IsVowel":false,"IsConsonant":true,"TotalLetters":6,"Points":1,"IsJoker":false},{"Char":"S","Letter":18,"IsVowel":false,"IsConsonant":true,"TotalLetters":6,"Points":1,"IsJoker":false},{"Char":"T","Letter":19,"IsVowel":false,"IsConsonant":true,"TotalLetters":6,"Points":1,"IsJoker":false},{"Char":"U","Letter":20,"IsVowel":true,"IsConsonant":false,"TotalLetters":6,"Points":1,"IsJoker":false},{"Char":"V","Letter":21,"IsVowel":false,"IsConsonant":true,"TotalLetters":2,"Points":4,"IsJoker":false},{"Char":"W","Letter":22,"IsVowel":false,"IsConsonant":true,"TotalLetters":1,"Points":10,"IsJoker":false},{"Char":"X","Letter":23,"IsVowel":false,"IsConsonant":true,"TotalLetters":1,"Points":10,"IsJoker":false},{"Char":"Y","Letter":24,"IsVowel":true,"IsConsonant":true,"TotalLetters":1,"Points":10,"IsJoker":false},{"Char":"Z","Letter":25,"IsVowel":false,"IsConsonant":true,"TotalLetters":1,"Points":10,"IsJoker":false},{"Char":"?","Letter":252,"IsVowel":true,"IsConsonant":true,"TotalLetters":2,"Points":0,"IsJoker":true}],"DictionaryId":{"$oid":"67eaa1ce4d13ea13292ab3ad"}}
+  {
+    "_id": { "$oid": "67f39486fc54350e78d4dcbf" },
+    "Name": "FR",
+    "Letters": [
+      {
+        "Char": "A",
+        "Letter": 0,
+        "IsVowel": true,
+        "IsConsonant": false,
+        "TotalLetters": 9,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "B",
+        "Letter": 1,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 3,
+        "IsJoker": false
+      },
+      {
+        "Char": "C",
+        "Letter": 2,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 3,
+        "IsJoker": false
+      },
+      {
+        "Char": "D",
+        "Letter": 3,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 3,
+        "Points": 2,
+        "IsJoker": false
+      },
+      {
+        "Char": "E",
+        "Letter": 4,
+        "IsVowel": true,
+        "IsConsonant": false,
+        "TotalLetters": 15,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "F",
+        "Letter": 5,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 4,
+        "IsJoker": false
+      },
+      {
+        "Char": "G",
+        "Letter": 6,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 2,
+        "IsJoker": false
+      },
+      {
+        "Char": "H",
+        "Letter": 7,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 4,
+        "IsJoker": false
+      },
+      {
+        "Char": "I",
+        "Letter": 8,
+        "IsVowel": true,
+        "IsConsonant": false,
+        "TotalLetters": 8,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "J",
+        "Letter": 9,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 1,
+        "Points": 8,
+        "IsJoker": false
+      },
+      {
+        "Char": "K",
+        "Letter": 10,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 1,
+        "Points": 10,
+        "IsJoker": false
+      },
+      {
+        "Char": "L",
+        "Letter": 11,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 5,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "M",
+        "Letter": 12,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 3,
+        "Points": 2,
+        "IsJoker": false
+      },
+      {
+        "Char": "N",
+        "Letter": 13,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 6,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "O",
+        "Letter": 14,
+        "IsVowel": true,
+        "IsConsonant": false,
+        "TotalLetters": 6,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "P",
+        "Letter": 15,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 3,
+        "IsJoker": false
+      },
+      {
+        "Char": "Q",
+        "Letter": 16,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 1,
+        "Points": 8,
+        "IsJoker": false
+      },
+      {
+        "Char": "R",
+        "Letter": 17,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 6,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "S",
+        "Letter": 18,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 6,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "T",
+        "Letter": 19,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 6,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "U",
+        "Letter": 20,
+        "IsVowel": true,
+        "IsConsonant": false,
+        "TotalLetters": 6,
+        "Points": 1,
+        "IsJoker": false
+      },
+      {
+        "Char": "V",
+        "Letter": 21,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 4,
+        "IsJoker": false
+      },
+      {
+        "Char": "W",
+        "Letter": 22,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 1,
+        "Points": 10,
+        "IsJoker": false
+      },
+      {
+        "Char": "X",
+        "Letter": 23,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 1,
+        "Points": 10,
+        "IsJoker": false
+      },
+      {
+        "Char": "Y",
+        "Letter": 24,
+        "IsVowel": true,
+        "IsConsonant": true,
+        "TotalLetters": 1,
+        "Points": 10,
+        "IsJoker": false
+      },
+      {
+        "Char": "Z",
+        "Letter": 25,
+        "IsVowel": false,
+        "IsConsonant": true,
+        "TotalLetters": 1,
+        "Points": 10,
+        "IsJoker": false
+      },
+      {
+        "Char": "?",
+        "Letter": 252,
+        "IsVowel": true,
+        "IsConsonant": true,
+        "TotalLetters": 2,
+        "Points": 0,
+        "IsJoker": true
+      }
+    ],
+    "DictionaryId": { "$oid": "67eaa1ce4d13ea13292ab3ad" }
+  }
 ]

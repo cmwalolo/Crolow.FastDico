@@ -305,6 +305,61 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
             }
         }
 
+        public bool ValidateRound(PlayableSolution solution)
+        {
+            var isValid = true;
+            var isPositionValId = false;
+            var isFirstRound = currentGame.GameObjects.Round == 0;
+            var grid = solution.Position.Direction;
+            var tilesFromRack = 0;
+
+            var pos = new Position()
+            {
+                X = grid == 0 ? solution.Position.X : solution.Position.Y,
+                Y = grid == 0 ? solution.Position.Y : solution.Position.X
+            };
+
+            Position middle = new Position((board.CurrentBoard[0].SizeH - 1) / 2, (board.CurrentBoard[0].SizeV - 1) / 2, grid);
+
+            // First we Validate the word
+            isValid = GadDagUtils.CheckWord(currentGame.ControllersSetup.Dico.Root, solution.Tiles);
+            if (isValid)
+            {
+                for (int x = 0; x < solution.Tiles.Count; x++)
+                {
+                    if (isFirstRound)
+                    {
+                        if (pos.Equals(middle))
+                        {
+                            isPositionValId = true;
+                            tilesFromRack++;
+                            break;
+                        }
+                        pos.X++;
+                    }
+                    else
+                    {
+                        if (CheckConnect(grid, pos.X + x, pos.Y))
+                        {
+                            isPositionValId = true;
+                        }
+                        var sq = board.GetSquare(grid, pos.X + x, pos.Y);
+                        if (sq.Status == 0)
+                        {
+                            var l = solution.Tiles[x];
+                            tilesFromRack++;
+                            if (!sq.GetPivot(l, grid, 0, false))
+                            {
+                                isValid = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return (isValid && isPositionValId && tilesFromRack > 0);
+        }
+
         private bool CheckConnect(int grid, int j, int i)
         {
             if (board.GetSquare(grid, j - 1, i).Status == 1
@@ -319,7 +374,4 @@ namespace Crolow.FastDico.ScrabbleApi.Components.BoardSolvers
         }
 
     }
-
-
-
 }

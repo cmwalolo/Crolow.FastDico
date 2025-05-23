@@ -26,7 +26,7 @@
     "TimeByTurn": 90,
     "JokerMode": true,
     "ToppingMode": true,
-    "DifficultMode": false,
+    "DifficultMode": true,
     "HelpAvailable": true,
     "ShowDictionary": true,
     "CheckDistributionRound": 15

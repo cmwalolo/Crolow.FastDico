@@ -126,8 +126,8 @@ window.setPlaygroundComponent = (ref) => {
 
 function sendPlaygroundController(fn, parameters) {
     if (window.playGroundComponentRef) {
-        window.playGroundComponentRef.invokeMethodAsync(fn, parameters)
-            .then(() => console.log('Instance method called!'))
-            .catch(err => console.error(err));
+        return window.playGroundComponentRef.invokeMethodAsync(fn, parameters);
+            //.then(() => console.log('Instance method called!'))
+            ///.catch(err => console.error(err));
     }
 }

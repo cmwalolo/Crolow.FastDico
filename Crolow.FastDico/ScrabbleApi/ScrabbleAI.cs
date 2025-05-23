@@ -24,11 +24,11 @@ public class ScrabbleAI : IScrabbleAI
         this.CurrentGame = currentGame;
     }
 
-    public async void StartGame()
+    public async Task StartGame()
     {
-        NextRound(true);
+        await NextRound();
     }
-    public async void NextRound(bool firstMove = false)
+    public async Task<bool> NextRound(bool firstMove = false)
     {
         using (StopWatcher stopwatch = new StopWatcher("New round"))
         {
@@ -51,7 +51,7 @@ public class ScrabbleAI : IScrabbleAI
                 if (letters == null)
                 {
                     EndGame();
-                    return;
+                    return true;
                 }
 
                 var filters = CurrentGame.ControllersSetup.Validator.InitializeFilters();
@@ -69,7 +69,7 @@ public class ScrabbleAI : IScrabbleAI
                 else
                 {
                     EndGame();
-                    return;
+                    return false;
                 }
 
                 CurrentGame.GameObjects.Rack = originalRack;
@@ -80,7 +80,7 @@ public class ScrabbleAI : IScrabbleAI
             if (selectedRound == null)
             {
                 EndGame();
-                return;
+                return false;
             }
 
             CurrentGame.GameObjects.SelectedRound = selectedRound;
@@ -95,6 +95,8 @@ public class ScrabbleAI : IScrabbleAI
         {
             SetRound();
         }
+
+        return false;
     }
 
     public async void SetRound()
@@ -124,8 +126,9 @@ public class ScrabbleAI : IScrabbleAI
         CurrentGame.GameObjects.GameStatus = GameStatus.GameEnded;
     }
 
-    public async void ValidateRound(PlayableSolution solution)
+    public async Task<bool> ValidateRound(PlayableSolution solution)
     {
-        Console.Write(solution.ToString());
+        var isValid = CurrentGame.ControllersSetup.BoardSolver.ValidateRound(solution);
+        return isValid;
     }
 }

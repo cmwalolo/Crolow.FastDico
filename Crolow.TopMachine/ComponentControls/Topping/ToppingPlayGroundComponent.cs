@@ -60,21 +60,17 @@ namespace Crolow.TopMachine.ComponentControls.Topping
         }
 
         [JSInvokable]
-        public async void Validate(InternalPlayableSolution solution)
+        public Task<bool> Validate(InternalPlayableSolution solution)
         {
-            await InvokeAsync(async () =>
+            PlayableSolution s = new PlayableSolution
             {
-                PlayableSolution s = new PlayableSolution
-                {
-                    Tiles = solution.Squares.Select(p => p.CurrentLetter).ToList(),
-                    Position = solution.Position,
-                    PlayedTime = solution.PlayedTime,
-                    Rack = solution.Rack,
-                };
-
-
-                //currentGame.ControllersSetup.ScrabbleEngine.V
-            });
+                Tiles = solution.Squares.Select(p => p.CurrentLetter).ToList(),
+                Position = solution.Position,
+                PlayedTime = solution.PlayedTime,
+                Rack = solution.Rack,
+            };
+            var result = currentGame.ControllersSetup.ScrabbleEngine.ValidateRound(s).Result;
+            return Task.FromResult(result);
         }
 
 
