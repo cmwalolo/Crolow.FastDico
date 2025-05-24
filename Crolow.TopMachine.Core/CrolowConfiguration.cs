@@ -60,55 +60,91 @@ namespace Crolow.TopMachine.Core
 
             mapper.RegisterType<IDictionaryModel>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<DictionaryModel>(bson.AsDocument)
                     );
 
             mapper.RegisterType<IWordEntryModel>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<WordEntryModel>(bson.AsDocument)
                     );
 
             mapper.RegisterType<IWordToDicoModel>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<WordToDicoModel>(bson.AsDocument)
                     );
 
             mapper.RegisterType<IDefinitionModel>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<DefinitionModel>(bson.AsDocument)
                     );
 
             mapper.RegisterType<IDictionaryLookup>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<DictionaryLookup>(bson.AsDocument)
                     );
 
             mapper.RegisterType<IBoardGridModel>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<BoardGridModel>(bson.AsDocument)
                     );
 
             mapper.RegisterType<IGameConfigModel>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<GameConfigModel>(bson.AsDocument)
                     );
 
             mapper.RegisterType<ILetterConfigModel>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<LetterConfigModel>(bson.AsDocument)
                     );
 
             mapper.RegisterType<IMultiplierData>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<MultiplierData>(bson.AsDocument)
                     );
 
@@ -120,7 +156,11 @@ namespace Crolow.TopMachine.Core
 
             mapper.RegisterType<IUser>
                     (
-                        (obj) => mapper.ToDocument(obj),
+                        (obj) =>
+                        {
+                            var concreteType = obj.GetType();
+                            return mapper.ToDocument(concreteType, obj);
+                        },
                         (bson) => mapper.ToObject<User>(bson.AsDocument)
                     );
 

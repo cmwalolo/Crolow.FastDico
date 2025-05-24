@@ -97,7 +97,7 @@ namespace Crolow.TopMachine.Data
         {
             try
             {
-                GetDynamicCollection(item).Insert(item);
+                Collection<T>().Insert(item);
             }
             catch (Exception ex)
             {
@@ -112,7 +112,7 @@ namespace Crolow.TopMachine.Data
             {
                 if (items.Any())
                 {
-                    GetDynamicCollection(items.First()).InsertBulk(items.Select(p => p as object));
+                    Collection<T>().InsertBulk(items);
                 }
             }
             catch (Exception ex)
@@ -139,7 +139,7 @@ namespace Crolow.TopMachine.Data
             try
             {
 
-                return GetDynamicCollection(item).Update(item);
+                return Collection<T>().Update(item);
             }
             catch (Exception ex)
             {
