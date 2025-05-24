@@ -70,13 +70,6 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
         public override bool CanRejectBagByDefault(LetterBag bag, PlayerRack rack)
         {
-#if DEBUG
-            if (rack.Tiles.Count > 0)
-            {
-                Console.WriteLine(rack.GetString());
-            }
-
-#endif
             return !bag.IsValid(null, rack.Tiles);
         }
 
