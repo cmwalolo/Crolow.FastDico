@@ -5,11 +5,6 @@ namespace Crolow.FastDico.ScrabbleApi.Extensions;
 
 public static class PlayerRackExtensions
 {
-    public static void SetTiles(this PlayerRack r, List<Tile> tiles)
-    {
-        r.Tiles = new List<Tile>();
-    }
-
     public static List<Tile> GetTiles(this PlayerRack r)
     {
         return r.Tiles;
@@ -34,6 +29,6 @@ public static class PlayerRackExtensions
     }
     public static void Clear(this PlayerRack r)
     {
-        r.Tiles = new List<Tile>();
+        r.Tiles = new List<Tile>(100);
     }
 }

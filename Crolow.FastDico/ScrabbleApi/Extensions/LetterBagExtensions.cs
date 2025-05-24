@@ -4,6 +4,7 @@ using Tile = Crolow.FastDico.Common.Models.ScrabbleApi.Game.Tile;
 using Crolow.FastDico.Common.Models.ScrabbleApi.Game;
 using Crolow.FastDico.Common.Models.Common;
 using System.Data;
+using static Crolow.FastDico.Search.WordResults;
 
 namespace Crolow.FastDico.ScrabbleApi.Extensions;
 
@@ -12,7 +13,41 @@ public static class LetterBagExtensions
     static Random RandomGen = Random.Shared;
 
     // Draw a specified number of letters from the bag
-    public static List<Tile> DrawLetters(this LetterBag b, PlayerRack rack, int totalLetters = 0, bool skipJokers = false, bool reject = false)
+
+    public static List<Tile> Filter(this LetterBag b, PlayerRack rack, int maxJokers = 0)
+    {
+        int inRackLetters = ApplicationContext.CurrentGame.GameObjects.GameConfig.InRackLetters;
+        var drawnLetters = rack.GetTiles();
+
+        var groups = rack.GetTiles().GroupBy(p => p.Letter);
+        foreach (var group in groups)
+        {
+            if (drawnLetters.Count <= inRackLetters)
+            {
+                break;
+            }
+            var values = group.Select(p => p).ToList();
+            while (values.Count > 2)
+            {
+                var tile = values.First();
+                drawnLetters.Remove(tile);
+                b.Letters.Add(tile);
+                values.Remove(tile);
+            }
+        }
+
+        var jokers = drawnLetters.Where(p => p.IsJoker).ToArray();
+        for (int i = 0; i > jokers.Count(); i++)
+        {
+            var tile = jokers[0];
+            drawnLetters.Remove(tile);
+            b.Letters.Add(tile);
+        }
+
+        return drawnLetters;
+    }
+
+    public static List<Tile> DrawLetters(this LetterBag b, PlayerRack rack, int totalLetters = 0, bool reject = false)
     {
         int inRackLetters = ApplicationContext.CurrentGame.GameObjects.GameConfig.InRackLetters;
         int count = totalLetters == 0 ? inRackLetters : totalLetters;
@@ -52,18 +87,6 @@ public static class LetterBagExtensions
                 }
             }
 
-            var jokers = new List<Tile>();
-            while (skipJokers && true)
-            {
-                var ndx = b.Letters.FindIndex(p => p.IsJoker);
-                if (ndx > 0)
-                {
-                    jokers.Add(b.Letters[ndx]);
-                    b.Letters.RemoveAt(ndx);
-                }
-                else { break; }
-            }
-
             while (drawnLetters.Count < count)
             {
                 if (!b.IsEmpty)
@@ -80,32 +103,8 @@ public static class LetterBagExtensions
                 }
                 break;
             }
-            if (skipJokers)
-            {
-                while (jokers.Count > 0 && drawnLetters.Count < inRackLetters)
-                {
-                    drawnLetters.Add(jokers[0]);
-                    jokers.RemoveAt(0);
-                }
-
-                while (jokers.Count > 0)
-                {
-                    b.Letters.Add(jokers[0]);
-                    jokers.RemoveAt(0);
-                }
-            }
 
             ok = b.IsValid(drawnLetters, null);
-
-            if (skipJokers)
-            {
-                var j = drawnLetters.Count(p => p.IsJoker);
-                if (j > 0)
-                {
-                    Console.WriteLine("It's supposed no Joker");
-                }
-            }
-
         } while (!ok);
         return drawnLetters;
 

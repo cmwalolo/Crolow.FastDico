@@ -14,7 +14,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         int maxLettersInRack = 100;
         int currentIteration = 0;
 
-        int[] maxIteration = new int[] { 50, 30, 30 };
+        int[] maxIteration = new int[] { 30, 10, 10 };
         int[] breakPoints = new int[] { 20, 15, 10 };
 
         private int boostNumberOfSolutions = 3000;
@@ -32,8 +32,8 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         public override void Initialize()
         {
             currentIteration = 0;
-            maxIteration = new int[] { 100, 50, 50 };
-            breakPoints = new int[] { 13, 11, 8 };
+            maxIteration = new int[] { 15 };
+            breakPoints = new int[] { 15 };
 
             evaluator.Initialize();
             bestRate = null;
@@ -49,13 +49,32 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
         {
             var reject = this.CanRejectBagByDefault(currentGame.GameObjects.LetterBag, currentGame.GameObjects.Rack);
 
+            // This one is only used for backup if no
+            // boosted solution found
             if (!evaluator.IsBoosted())
             {
                 return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, reject: reject);
             }
             else
             {
-                var letters = currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, maxLettersInRack, true, reject);
+                var min = currentGame.GameObjects.GameConfig.InRackLetters;
+                var max = min + currentGame.GameObjects.LetterBag.RemainingLetters;
+                max = Random.Shared.Next(min, max);
+
+#if DEBUG
+                Console.WriteLine($"Boosting with {max} letters");
+#endif 
+
+                var letters = currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, max, reject);
+                if (letters != null)
+                {
+                    // We filter letters to not have more then two same tile in the rack, and max 1 joker
+                    letters = currentGame.GameObjects.LetterBag.Filter(currentGame.GameObjects.Rack, 1);
+                    // if there is no enough letters in the rack we pass again through the back
+                    // To try more tiles
+                    letters = currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, 0, false);
+                }
+
                 return letters;
             }
         }
@@ -91,7 +110,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
                 if (rounds == null)
                 {
                     evaluator.BoostedOff();
-                    maxIteration = new int[] { 40, 10, 10 };
+                    maxIteration = new int[] { 15 };
                 }
 
                 return rounds;

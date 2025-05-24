@@ -13,7 +13,7 @@ public class PlayableSolution
 
     public PlayableSolution()
     {
-        Tiles = new List<Tile>();
+        Tiles = new List<Tile>(100);
         Position = new Position(0, 0, 0);
     }
     public PlayableSolution(PlayableSolution copy)

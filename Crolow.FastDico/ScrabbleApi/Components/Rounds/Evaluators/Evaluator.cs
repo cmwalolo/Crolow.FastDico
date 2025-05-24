@@ -63,7 +63,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
         public const float ScrabbleRatioDiv = 25;
         public const float RaccordsRatioMul = 1;
         public const float CollageRatioDiv = 2f;
-        public const float AppuiRatioDiv = 7f;
+        public const float AppuiRatioDiv = 10f;
 
         public int ScrabbleFrequence = 60;
         public int AppuisFrequence = 80;
@@ -88,7 +88,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                 AppuisFrequence = 100;  //cfg.Config.intAppuisFrequence;
                 RaccordsFrequence = 100; //  cfg.Config.intRaccordsFrequence;
                 RackFrequence = 0; //  cfg.Config.intRackFrequence; 
-                BoostFrequence = 40;
+                BoostFrequence = 80;
                 SkipFrequence = 0;
             }
             else
@@ -98,7 +98,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
                 AppuisFrequence = 100;  //cfg.Config.intAppuisFrequence;
                 RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
                 RackFrequence = 40; //  cfg.Config.intRackFrequence; 
-                BoostFrequence = 40;
+                BoostFrequence = 80;
                 SkipFrequence = 5;
             }
 
@@ -121,7 +121,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             doSkip = doRaccords = doRack = doBoost = false;
 
             int c = Random.Shared.Next(100);
-            if (c < BoostFrequence && currentGame.GameObjects.Round > 1)
+            if (c < BoostFrequence && currentGame.GameObjects.Round > 0)
             {
                 doBoost = true;
             }
