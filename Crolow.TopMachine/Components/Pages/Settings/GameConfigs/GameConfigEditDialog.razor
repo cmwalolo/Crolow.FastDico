@@ -35,7 +35,7 @@
                 <RadzenCheckBox @bind-Value="@GameConfig.ToppingMode" />
             </RadzenFormField>
             <RadzenFormField Text="Check rack distribution round" Variant="@variant">
-                <RadzenCheckBox @bind-Value="@GameConfig.CheckDistributionRound" />
+                <RadzenNumeric ShowUpDown="false" @bind-Value="@GameConfig.CheckDistributionRound" />
             </RadzenFormField>
             <RadzenFormField Text="is Boosted ?" Variant="@variant">
                 <RadzenCheckBox @bind-Value="@GameConfig.DifficultMode" />

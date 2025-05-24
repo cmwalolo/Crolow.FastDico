@@ -179,12 +179,12 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
             {
                 solutions = playedRounds.AllRounds
                     .Distinct()
-                    .Where(p => p.Tiles.Count > 4 && p.Tiles.Any(p => p.IsJoker)).ToList();
+                    .Where(p => p.Tiles.Count(t => t.Parent.Status != 1) > 4 && p.Tiles.Any(p => p.IsJoker)).ToList();
             }
 
             if (!solutions.Any())
             {
-                solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count > 4).OrderByDescending(p => p.Points).ToList();
+                solutions = playedRounds.AllRounds.Distinct().Where(p => p.Tiles.Count(t => t.Parent.Status != 1) > 4).OrderByDescending(p => p.Points).ToList();
             }
 
             solutions = solutions.OrderByDescending(p => p.Points)/*.Take(100000)*/.ToList();
