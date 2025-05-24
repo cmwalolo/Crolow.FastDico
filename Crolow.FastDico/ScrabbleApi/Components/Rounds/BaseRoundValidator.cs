@@ -23,7 +23,7 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
         public virtual List<Tile> InitializeLetters()
         {
-            var reject = CanRejectBagByDefault(currentGame.GameObjects.LetterBag, currentGame.GameObjects.Rack);
+            var reject = this.CanRejectBagByDefault(currentGame.GameObjects.LetterBag, currentGame.GameObjects.Rack);
             return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, reject: reject);
         }
         public virtual PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver)

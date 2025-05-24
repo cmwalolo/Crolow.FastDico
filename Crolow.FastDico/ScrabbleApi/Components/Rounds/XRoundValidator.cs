@@ -3,8 +3,6 @@ using Crolow.FastDico.ScrabbleApi.Components.BoardSolvers;
 using Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators;
 using Crolow.FastDico.ScrabbleApi.Extensions;
 using Crolow.FastDico.Utils;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using static Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators.Evaluator;
 
 namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
@@ -49,13 +47,15 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
         public override List<Tile> InitializeLetters()
         {
+            var reject = this.CanRejectBagByDefault(currentGame.GameObjects.LetterBag, currentGame.GameObjects.Rack);
+
             if (!evaluator.IsBoosted())
             {
-                return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack);
+                return currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, reject: reject);
             }
             else
             {
-                var letters = currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, maxLettersInRack, true);
+                var letters = currentGame.GameObjects.LetterBag.DrawLetters(currentGame.GameObjects.Rack, maxLettersInRack, true, reject);
                 return letters;
             }
         }
@@ -70,7 +70,14 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds
 
         public override bool CanRejectBagByDefault(LetterBag bag, PlayerRack rack)
         {
-            return bag.IsValid(null, rack.Tiles);
+#if DEBUG
+            if (rack.Tiles.Count > 0)
+            {
+                Console.WriteLine(rack.GetString());
+            }
+
+#endif
+            return !bag.IsValid(null, rack.Tiles);
         }
 
         public override PlayedRounds ValidateRound(PlayedRounds rounds, List<Tile> letters, IBoardSolver solver)

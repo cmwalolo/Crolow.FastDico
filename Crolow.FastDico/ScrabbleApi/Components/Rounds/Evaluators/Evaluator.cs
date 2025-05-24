@@ -81,20 +81,27 @@ namespace Crolow.FastDico.ScrabbleApi.Components.Rounds.Evaluators
             this.currentGame = currentGame;
             Random rnd = new Random();
 
-            ScrabbleFrequence = currentGame.GameObjects.GameConfig.JokerMode ? 0 : 20;  //cfg.Config.intScrabbleFrequence;
-            CollagesFrequence = 80;  //cfg.Config.intCollagesFrequence;
-            AppuisFrequence = 80;  //cfg.Config.intAppuisFrequence;
-            RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
-            RackFrequence = 40; //  cfg.Config.intRackFrequence; 
             if (currentGame.GameObjects.GameConfig.JokerMode)
             {
-                BoostFrequence = 30;
+                ScrabbleFrequence = 0; ;
+                CollagesFrequence = 100;  //cfg.Config.intCollagesFrequence;
+                AppuisFrequence = 100;  //cfg.Config.intAppuisFrequence;
+                RaccordsFrequence = 100; //  cfg.Config.intRaccordsFrequence;
+                RackFrequence = 0; //  cfg.Config.intRackFrequence; 
+                BoostFrequence = 40;
+                SkipFrequence = 0;
             }
             else
             {
+                ScrabbleFrequence = 20;  //cfg.Config.intScrabbleFrequence;
+                CollagesFrequence = 100;  //cfg.Config.intCollagesFrequence;
+                AppuisFrequence = 100;  //cfg.Config.intAppuisFrequence;
+                RaccordsFrequence = 80; //  cfg.Config.intRaccordsFrequence;
+                RackFrequence = 40; //  cfg.Config.intRackFrequence; 
                 BoostFrequence = 40;
+                SkipFrequence = 5;
             }
-            SkipFrequence = 5;
+
         }
 
         public bool IsBoosted()
